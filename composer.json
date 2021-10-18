@@ -1,0 +1,34 @@
+{
+    "name": "morphp/medas-entity-manager",
+    "description": "Medas entity manager",
+    "authors": [
+        {
+            "name": "Patrick Morpey",
+            "email": "patrick@morphp.nl"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "morphp/medas-core": "@dev",
+        "morphp/medas-service-manager": "@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../core"
+        },
+        {
+            "type": "path",
+            "url": "../service-container"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Medas\\EntityManager\\": "src/",
+            "Medas\\Test\\": "tests/"
+        }
+    }
+}
