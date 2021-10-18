@@ -18,8 +18,11 @@ class EntityManager
     public function get(string $className, mixed $id): object
     {
         $metaData = $this->getMetaData($className);
+        $idHash   = $this->getIdHash($id, $metaData);
 
-        $idHash = $this->getIdHash($id, $metaData);
+        if (!array_key_exists($className, $this->entities)) {
+            $this->entities[$className] = [];
+        }
 
         if (!array_key_exists($idHash, $this->entities[$className])) {
             $this->entities[$className][$idHash] = $entity = new $className();
@@ -34,10 +37,6 @@ class EntityManager
 
         if (!$class->getAttributes(Entity::class)) {
             throw new ClassIsNotAnEntityException($className);
-        }
-
-        if (!array_key_exists($className, $this->entities)) {
-            $this->entities[$className] = [];
         }
 
         return MetaData::forClass($className);
