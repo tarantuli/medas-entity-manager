@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EntityManager\Exceptions;
+namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
@@ -10,7 +10,7 @@ class EntityDoesNotDefineIdPropertiesException extends BaseException
 {
     public function __construct(string $className)
     {
-        parent::__construct($$className);
+        parent::__construct($className);
     }
 
     public function getPattern(): string

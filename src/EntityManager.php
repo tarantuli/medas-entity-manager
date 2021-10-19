@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace EntityManager;
+namespace Medas\EntityManager;
 
-use EntityManager\Attributes\Entity;
-use EntityManager\Exceptions\ClassIsNotAnEntityException;
-use EntityManager\Exceptions\EntityDoesNotDefineIdPropertiesException;
-use EntityManager\Exceptions\IdValueNotGivenException;
+use Medas\EntityManager\Exceptions\IdValueNotGivenException;
+use Medas\EntityManager\Hydration\ValueSetter;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -15,60 +13,70 @@ class EntityManager
 {
     private array $entities = [];
 
+    public function __construct(
+        private PropertyAccessibleMaker $propertyAccessibleMaker,
+        private ValueSetter             $valueSetter
+    )
+    {
+    }
+
     public function get(string $className, mixed $id): object
     {
-        $metaData = $this->getMetaData($className);
-        $idHash   = $this->getIdHash($id, $metaData);
+        $metaData = MetaData::forClass($className);
+        $idHash = $this->getIdHash($id, $metaData);
 
         if (!array_key_exists($className, $this->entities)) {
             $this->entities[$className] = [];
+            $this->propertyAccessibleMaker->makeAccessible($metaData);
         }
 
         if (!array_key_exists($idHash, $this->entities[$className])) {
             $this->entities[$className][$idHash] = $entity = new $className();
+            $this->setIdValues($metaData, $entity, $id);
         }
 
         return $this->entities[$className][$idHash];
     }
 
-    private function getMetaData(string $className): mixed
-    {
-        $class = new \ReflectionClass($className);
-
-        if (!$class->getAttributes(Entity::class)) {
-            throw new ClassIsNotAnEntityException($className);
-        }
-
-        return MetaData::forClass($className);
-    }
-
     private function getIdHash(mixed $id, MetaData $metaData): string
     {
-        $idPropertyNames = $metaData->getIdPropertyNames();
-
-        if (count($idPropertyNames) === 0) {
-            throw new EntityDoesNotDefineIdPropertiesException($metaData->getClassName());
-        }
-
-        if (count($idPropertyNames) === 1) {
+        if (!$metaData->hasCompositeId()) {
             return (string) $id;
         }
 
-        return $this->getComplexIdHash($id, $idPropertyNames);
+        return $this->getComplexIdHash($id, $metaData);
     }
 
-    private function getComplexIdHash(array $id, array $idPropertyNames): string|false
+    private function getComplexIdHash(array $idValues, MetaData $metaData): string
     {
+        return json_encode($this->getIdValues($idValues, $metaData));
+    }
+
+    private function getIdValues(array $idValues, MetaData $metaData): array
+    {
+        $idProperties = $metaData->getIdProperties();
+
         $values = [];
 
-        foreach ($idPropertyNames as $idPropertyName) {
-            if (!array_key_exists($idPropertyName, $id)) {
-                throw new IdValueNotGivenException($idPropertyName);
+        foreach ($idProperties as $idProperty) {
+            if (!array_key_exists($idProperty, $idValues)) {
+                throw new IdValueNotGivenException($idProperty->name);
             }
 
-            $values[] = $id[$idPropertyName];
+            $values[] = $idValues[$idProperty->name];
+        }
+        return $values;
+    }
+
+    private function setIdValues(MetaData $metaData, object $entity, mixed $id)
+    {
+        if ($metaData->hasCompositeId()) {
+            $idValues = $this->getIdValues($id, $metaData);
+        }
+        else {
+            $idValues = [$metaData->getIdProperty()->name => $id];
         }
 
-        return json_encode($values);
+        $this->valueSetter->setValues($metaData, $entity, $idValues);
     }
 }

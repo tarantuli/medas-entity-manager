@@ -2,67 +2,117 @@
 
 declare(strict_types=1);
 
-namespace EntityManager;
+namespace Medas\EntityManager;
 
-use EntityManager\Attributes\Id;
+use Medas\EntityManager\Attributes\Entity;
+use Medas\EntityManager\Attributes\Id;
+use Medas\EntityManager\Attributes\Stored;
+use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
+use Medas\EntityManager\Exceptions\EntityDoesNotDefineIdPropertiesException;
+use Medas\EntityManager\Exceptions\PropertyDoesNotExistException;
 
 class MetaData
 {
     private static array $instances = [];
 
-    public static function forClass(string $className)
+    public static function forClass(string $className): self
     {
-        if (!array_key_exists($className, self::$instances)) {
-            self::$instances[$className] = new self($className);
+        if (array_key_exists($className, self::$instances)) {
+            return self::$instances[$className];
         }
 
-        return self::$instances[$className];
+        $class = new \ReflectionClass($className);
+
+        if (!$class->getAttributes(Entity::class)) {
+            throw new ClassIsNotAnEntityException($className);
+        }
+
+        return self::$instances[$className] = new self($className, $class);
     }
 
-    private \ReflectionClass $class;
+    private ?\ReflectionProperty $idProperty;
 
     /**
-     * @var array<string, \ReflectionProperty>
+     * @var array<\ReflectionProperty>
      */
     private array $idProperties;
 
-    private function __construct(private string $className)
+    /**
+     * @var array<\ReflectionProperty>
+     */
+    private array $properties;
+
+    private function __construct(private string $className, private \ReflectionClass $class)
     {
-        $this->class = new \ReflectionClass($this->className);
+        $this->determineProperties();
+        $this->determineIdProperties();
     }
 
-    public function getIdProperties(): array
+    private function determineProperties()
     {
-        if (!isset($this->idProperties)) {
-            $this->determineIdProperties();
+        foreach ($this->class->getProperties() as $property) {
+            if ($property->getAttributes(Stored::class, \ReflectionAttribute::IS_INSTANCEOF)) {
+                $this->properties[] = $property;
+            }
         }
-
-        return $this->idProperties;
     }
 
     private function determineIdProperties(): void
     {
         $this->idProperties = [];
-        foreach ($this->class->getProperties() as $property) {
+
+        foreach ($this->getProperties() as $property) {
             if ($property->getAttributes(Id::class)) {
-                $this->idProperties[$property->name] = $property;
+                $this->idProperties[] = $property;
+                $this->idProperty = $property;
             }
         }
 
-        ksort($this->idProperties);
-    }
-
-    public function getIdPropertyNames(): array
-    {
-        if (!isset($this->idProperties)) {
-            $this->determineIdProperties();
+        if (count($this->idProperties) === 0) {
+            throw new EntityDoesNotDefineIdPropertiesException($this->className);
         }
 
-        return array_keys($this->idProperties);
+        if (count($this->idProperties) > 1) {
+            $this->idProperty = null;
+        }
+    }
+
+    /**
+     * @return array<\ReflectionProperty>
+     */
+    public function getProperties(): array
+    {
+        return $this->properties;
     }
 
     public function getClassName(): string
     {
-        $this->className;
+        return $this->className;
+    }
+
+    public function hasCompositeId(): bool
+    {
+        return $this->idProperty === null;
+    }
+
+    public function getIdProperty(): ?\ReflectionProperty
+    {
+        return $this->idProperty;
+    }
+
+    public function getIdProperties(): array
+    {
+        return $this->idProperties;
+    }
+
+    public function getProperty(string $propertyName): \ReflectionProperty
+    {
+        foreach ($this->properties as $property) {
+            if ($property->name === $propertyName) {
+                return $property;
+            }
+        }
+
+        throw new PropertyDoesNotExistException($this->className, $propertyName);
     }
 }
