@@ -35,6 +35,5 @@ class Integer extends Stored
         public int $maxValue = self::UNSIGNED_8_BYTE_MAX
     )
     {
-        parent::__construct();
     }
 }

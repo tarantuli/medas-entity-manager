@@ -8,7 +8,7 @@ use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\Attributes\Id;
 use Medas\EntityManager\Attributes\Stored;
 use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
-use Medas\EntityManager\Exceptions\EntityDoesNotDefineIdPropertiesException;
+use Medas\EntityManager\Exceptions\EntityHasNoIdPropertyException;
 use Medas\EntityManager\Exceptions\PropertyDoesNotExistException;
 
 class MetaData
@@ -69,7 +69,7 @@ class MetaData
         }
 
         if (count($this->idProperties) === 0) {
-            throw new EntityDoesNotDefineIdPropertiesException($this->className);
+            throw new EntityHasNoIdPropertyException($this->className);
         }
 
         if (count($this->idProperties) > 1) {

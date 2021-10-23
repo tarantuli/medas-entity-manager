@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class IdValueNotGivenException extends BaseException
+class MissingIdValueException extends BaseException
 {
     public function __construct(string $propertyName)
     {

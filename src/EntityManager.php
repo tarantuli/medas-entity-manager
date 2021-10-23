@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Exceptions\IdValueNotGivenException;
+use Medas\EntityManager\Exceptions\MissingIdValueException;
+use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
+use Medas\EntityManager\Exceptions\IdValueShouldBeAScalarException;
 use Medas\EntityManager\Hydration\ValueSetter;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -41,7 +43,15 @@ class EntityManager
     private function getIdHash(mixed $id, MetaData $metaData): string
     {
         if (!$metaData->hasCompositeId()) {
+            if (!is_scalar($id)) {
+                throw new IdValueShouldBeAScalarException($metaData->getClassName(), gettype($id));
+            }
+
             return (string) $id;
+        }
+
+        if (!is_array($id)) {
+            throw new IdValueShouldBeAnArrayException($metaData->getClassName(), gettype($id));
         }
 
         return $this->getComplexIdHash($id, $metaData);
@@ -59,11 +69,11 @@ class EntityManager
         $values = [];
 
         foreach ($idProperties as $idProperty) {
-            if (!array_key_exists($idProperty, $idValues)) {
-                throw new IdValueNotGivenException($idProperty->name);
+            if (!array_key_exists($idProperty->name, $idValues)) {
+                throw new MissingIdValueException($idProperty->name);
             }
 
-            $values[] = $idValues[$idProperty->name];
+            $values[$idProperty->name] = $idValues[$idProperty->name];
         }
         return $values;
     }

@@ -13,6 +13,11 @@ class PropertyAccessibleMaker
 
     public function makeAccessible(MetaData $metaData): void
     {
+        // Properties are accessible by default starting with PHP version 8.1
+        if (version_compare(PHP_VERSION, '8.1') >= 0) {
+            return;
+        }
+
         if (array_key_exists($metaData->getClassName(), $this->processedClasses)) {
             return;
         }
