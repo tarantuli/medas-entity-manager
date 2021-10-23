@@ -10,8 +10,8 @@ use Medas\EntityManager\Attributes\Stored;
 class DateTime extends Stored
 {
     public function __construct(
-        public ?\DateTimeImmutable $minValue = null,
-        public ?\DateTimeImmutable $maxValue = null,
+        public ?\DateTimeInterface $minValue = null,
+        public ?\DateTimeInterface $maxValue = null,
         public ?\DateTimeZone      $timeZone = null
     )
     {
