@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\Core\PropertyTypeNormalizer;
 use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
@@ -12,6 +11,12 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class ValueSetter
 {
+    public function __construct(
+        private PropertyTypeNormalizer $propertyTypeNormalizer
+    )
+    {
+    }
+
     public function setValues(MetaData $metaData, object $entity, array $values): void
     {
         foreach ($values as $propertyName => $value) {
@@ -23,10 +28,10 @@ class ValueSetter
     {
         $property = $metaData->getProperty($propertyName);
 
-        if (!PropertyTypeNormalizer::allowsType($property, get_debug_type($value))) {
+        if (!$this->propertyTypeNormalizer->allowsType($property, get_debug_type($value))) {
             throw new InvalidPropertyTypeException(
                 $metaData->getClassName(), $propertyName,
-                gettype($value), PropertyTypeNormalizer::getNames($property)
+                gettype($value), $this->propertyTypeNormalizer->getNames($property)
             );
         }
 

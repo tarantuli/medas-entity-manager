@@ -9,13 +9,12 @@ use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAScalarException;
 use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
-use Medas\ServiceManager\ServiceManager;
+use Medas\Test\BaseTestCase;
 use Medas\Test\MockUps\MockEntity;
 use Medas\Test\MockUps\MockEntityCompositeId;
 use Medas\Test\MockUps\MockNotAnEntity;
-use PHPUnit\Framework\TestCase;
 
-class EntityManagerTest extends TestCase
+class EntityManagerTest extends BaseTestCase
 {
     public function testNotAnEntityManager(): void
     {
@@ -23,15 +22,6 @@ class EntityManagerTest extends TestCase
 
         $this->expectException(ClassIsNotAnEntityException::class);
         $entityManager->get(MockNotAnEntity::class, 1);
-    }
-
-    private function getEntityManager(): EntityManager
-    {
-        $serviceManager = ServiceManager::get();
-        $serviceManager->addSourceDirectory(realpath(__DIR__ . '/../../src'));
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $serviceManager->resolve(EntityManager::class);
     }
 
     public function testEntityManager(): void

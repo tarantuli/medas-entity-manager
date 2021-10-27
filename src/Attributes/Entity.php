@@ -8,6 +8,7 @@ namespace Medas\EntityManager\Attributes;
 class Entity
 {
     public function __construct(
+        public ?string $table = null,
         public ?string $db = null
     )
     {
