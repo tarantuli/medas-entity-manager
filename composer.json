@@ -11,10 +11,10 @@
     "require": {
         "morphp/medas-core": "@dev",
         "morphp/medas-service-manager": "@dev",
-        "morphp/medas-env-manager": "@dev",
         "ext-pdo": "*"
     },
     "require-dev": {
+        "morphp/medas-env-manager": "@dev",
         "phpunit/phpunit": "^9.5"
     },
     "repositories": [

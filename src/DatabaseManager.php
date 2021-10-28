@@ -23,7 +23,6 @@ class DatabaseManager
 
     private function declareGlobalHelper(): void
     {
-        $GLOBALS['DatabaseManager'] = $this;
         require_once 'GlobalFunctions.php';
     }
 
