@@ -18,15 +18,15 @@ class PropertyAccessibleMaker
             return;
         }
 
-        if (array_key_exists($metaData->getClassName(), $this->processedClasses)) {
+        if (array_key_exists($metaData->className, $this->processedClasses)) {
             return;
         }
 
-        foreach ($metaData->getProperties() as $property) {
-            $property->setAccessible(true);
+        foreach ($metaData->properties as $property) {
+            $property->reflection->setAccessible(true);
         }
 
-        $this->processedClasses[$metaData->getClassName()] = true;
+        $this->processedClasses[$metaData->className] = true;
 
     }
 }

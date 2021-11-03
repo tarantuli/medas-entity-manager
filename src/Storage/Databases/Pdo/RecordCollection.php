@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-use Medas\EntityManager\Storage\Interfaces\Record;
-
-class RecordCollection implements \Medas\EntityManager\Storage\Interfaces\RecordCollection
+class RecordCollection implements \Medas\ServiceManager\Interfaces\Storage\RecordCollection
 {
+    public function __construct(array $records)
+    {
+    }
 
     public function next()
     {

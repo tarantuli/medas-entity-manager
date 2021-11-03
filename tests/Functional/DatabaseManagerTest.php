@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\EntityManager\Storage\Interfaces\Database;
-use Medas\EntityManager\Storage\Interfaces\Table;
+use Medas\ServiceManager\Interfaces\Storage\Database;
+use Medas\ServiceManager\Interfaces\Storage\Table;
 use Medas\Test\BaseTestCase;
 use function db;
 

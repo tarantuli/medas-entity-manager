@@ -32,7 +32,7 @@ class Integer extends Stored
 
     public function __construct(
         public int $minValue = 0,
-        public int $maxValue = self::UNSIGNED_8_BYTE_MAX
+        public int $maxValue = self::SIGNED_8_BYTE_MAX
     )
     {
     }

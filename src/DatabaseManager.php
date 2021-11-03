@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Interfaces\Storage\Database;
 
 #[Service]
 class DatabaseManager
 {
     /**
-     * @var Storage\Interfaces\Database[]
+     * @var Database[]
      */
     private array $storages = [];
 
@@ -26,7 +27,7 @@ class DatabaseManager
         require_once 'GlobalFunctions.php';
     }
 
-    public function add(Storage\Interfaces\Database $database, string $name = 'default', bool $isDefault = false)
+    public function add(Database $database, string $name = 'default', bool $isDefault = false)
     {
         $this->storages[$name] = $database;
 
@@ -35,7 +36,7 @@ class DatabaseManager
         }
     }
 
-    public function get(string $name = null): Storage\Interfaces\Database
+    public function get(string $name = null): Database
     {
         return $this->storages[$name ?? $this->default];
     }

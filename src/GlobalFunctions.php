@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 use Medas\EntityManager\DatabaseManager;
 use Medas\EntityManager\EntityManager;
-use Medas\EntityManager\Storage\Interfaces\Database;
+use Medas\ServiceManager\Interfaces\Storage\Database;
 use Medas\ServiceManager\ServiceManager;
 
 function db(): Database

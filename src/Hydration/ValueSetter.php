@@ -11,12 +11,6 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class ValueSetter
 {
-    public function __construct(
-        private PropertyTypeNormalizer $propertyTypeNormalizer
-    )
-    {
-    }
-
     public function setValues(MetaData $metaData, object $entity, array $values): void
     {
         foreach ($values as $propertyName => $value) {
@@ -27,14 +21,15 @@ class ValueSetter
     public function setValue(MetaData $metaData, object $entity, string $propertyName, mixed $value): void
     {
         $property = $metaData->getProperty($propertyName);
+        $valueType = get_debug_type($value);
 
-        if (!$this->propertyTypeNormalizer->allowsType($property, get_debug_type($value))) {
+        if (!$property->allowsPhpType($valueType)) {
             throw new InvalidPropertyTypeException(
-                $metaData->getClassName(), $propertyName,
-                gettype($value), $this->propertyTypeNormalizer->getNames($property)
+                $metaData->className, $propertyName,
+                $valueType, $property->phpTypes
             );
         }
 
-        $property->setValue($entity, $value);
+        $property->reflection->setValue($entity, $value);
     }
 }

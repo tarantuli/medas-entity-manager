@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Exceptions\MissingIdValueException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAScalarException;
+use Medas\EntityManager\Exceptions\MissingIdValueException;
 use Medas\EntityManager\Hydration\ValueSetter;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -17,14 +17,15 @@ class EntityManager
 
     public function __construct(
         private PropertyAccessibleMaker $propertyAccessibleMaker,
-        private ValueSetter             $valueSetter
+        private ValueSetter             $valueSetter,
+        private MetaDataManager         $metadataManager,
     )
     {
     }
 
     public function get(string $className, mixed $id): object
     {
-        $metaData = MetaData::forClass($className);
+        $metaData = $this->metadataManager->get($className);
         $idHash = $this->getIdHash($id, $metaData);
 
         if (!array_key_exists($className, $this->entities)) {
@@ -42,16 +43,16 @@ class EntityManager
 
     private function getIdHash(mixed $id, MetaData $metaData): string
     {
-        if (!$metaData->hasCompositeId()) {
+        if (!$metaData->hasCompositeId) {
             if (!is_scalar($id)) {
-                throw new IdValueShouldBeAScalarException($metaData->getClassName(), gettype($id));
+                throw new IdValueShouldBeAScalarException($metaData->className, gettype($id));
             }
 
             return (string) $id;
         }
 
         if (!is_array($id)) {
-            throw new IdValueShouldBeAnArrayException($metaData->getClassName(), gettype($id));
+            throw new IdValueShouldBeAnArrayException($metaData->className, gettype($id));
         }
 
         return $this->getComplexIdHash($id, $metaData);
@@ -64,7 +65,7 @@ class EntityManager
 
     private function getIdValues(array $idValues, MetaData $metaData): array
     {
-        $idProperties = $metaData->getIdProperties();
+        $idProperties = $metaData->idProperties;
 
         $values = [];
 
@@ -80,11 +81,11 @@ class EntityManager
 
     private function setIdValues(MetaData $metaData, object $entity, mixed $id)
     {
-        if ($metaData->hasCompositeId()) {
+        if ($metaData->hasCompositeId) {
             $idValues = $this->getIdValues($id, $metaData);
         }
         else {
-            $idValues = [$metaData->getIdProperty()->name => $id];
+            $idValues = [$metaData->idProperty->name => $id];
         }
 
         $this->valueSetter->setValues($metaData, $entity, $idValues);

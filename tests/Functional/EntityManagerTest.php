@@ -13,6 +13,7 @@ use Medas\Test\BaseTestCase;
 use Medas\Test\MockUps\MockEntity;
 use Medas\Test\MockUps\MockEntityCompositeId;
 use Medas\Test\MockUps\MockNotAnEntity;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class EntityManagerTest extends BaseTestCase
 {

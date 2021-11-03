@@ -7,4 +7,5 @@ namespace Medas\EntityManager\Storage\Databases\Pdo\Queries;
 interface Queries
 {
 
+    public function getByValues(string $tableName, array $values): array;
 }
