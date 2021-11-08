@@ -44,7 +44,7 @@
             "dist": {
                 "type": "path",
                 "url": "../service-manager",
-                "reference": "ffb77351768318134569c1dfeccfcdded0307f69"
+                "reference": "5dbd538d1640507fe770013809a35b6176cb6ff5"
             },
             "require": {
                 "morphp/medas-core": "@dev"
@@ -1028,16 +1028,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.3.7",
+            "version": "v5.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "8d224396e28d30f81969f083a58763b8b9ceb0a5"
+                "reference": "d70c35bb20bbca71fc4ab7921e3c6bda1a82a60c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/8d224396e28d30f81969f083a58763b8b9ceb0a5",
-                "reference": "8d224396e28d30f81969f083a58763b8b9ceb0a5",
+                "url": "https://api.github.com/repos/symfony/string/zipball/d70c35bb20bbca71fc4ab7921e3c6bda1a82a60c",
+                "reference": "d70c35bb20bbca71fc4ab7921e3c6bda1a82a60c",
                 "shasum": ""
             },
             "require": {
@@ -1091,7 +1091,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.3.7"
+                "source": "https://github.com/symfony/string/tree/v5.3.10"
             },
             "funding": [
                 {
@@ -1107,7 +1107,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-26T08:00:08+00:00"
+            "time": "2021-10-27T18:21:46+00:00"
         },
         {
             "name": "symfony/var-exporter",
@@ -1259,7 +1259,7 @@
             "dist": {
                 "type": "path",
                 "url": "../env-manager",
-                "reference": "516fcae1c386bd2bc9111b3dd25ca199c1232b69"
+                "reference": "b11463c2dc8b3ee598e489b036b52651851ad431"
             },
             "require": {
                 "morphp/medas-core": "@dev",

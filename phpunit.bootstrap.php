@@ -11,14 +11,14 @@ use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 
 $sm = ServiceManager::get();
-$sm->addSources([
+$sm->addPackages([
     EntityManager::class,
     EnvManager::class,
 ]);
 
 $cache = new ApcuAdapter('entity-manager');
 $cache->clear();
-$sm->bindService($cache, [CacheInterface::class]);
+$sm->bindService($cache, CacheInterface::class);
 
 $env = $sm->resolve(EnvManager::class);
 $env->setRoot(__DIR__);
