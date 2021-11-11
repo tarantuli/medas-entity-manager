@@ -7,7 +7,6 @@ namespace Medas\Test\Functional;
 use Medas\ServiceManager\Interfaces\Storage\Database;
 use Medas\ServiceManager\Interfaces\Storage\Table;
 use Medas\Test\BaseTestCase;
-use function db;
 
 class DatabaseManagerTest extends BaseTestCase
 {

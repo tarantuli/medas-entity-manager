@@ -25,11 +25,13 @@ class Creator
 
     public function create(string $className, \ReflectionClass $class): MetaData
     {
-        if (!$class->getAttributes(Entity::class)) {
+        if (!$attributes = $class->getAttributes(Entity::class)) {
             throw new ClassIsNotAnEntityException($className);
         }
 
-        $metaData = new MetaData($className);
+        $metaData = new MetaData($className, $class);
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $metaData->entity = $attributes[0]->newInstance();
         $metaData->sourceFileDate = filemtime($class->getFileName());
 
         $this->determineProperties($class, $metaData);

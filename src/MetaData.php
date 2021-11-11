@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\Exceptions\PropertyDoesNotExistException;
 
 class MetaData
 {
+    public Entity $entity;
 
     /** @var MetaData\Property[] */
     public array $properties;
@@ -19,7 +21,7 @@ class MetaData
 
     public int $sourceFileDate;
 
-    public function __construct(public string $className)
+    public function __construct(public string $className, public \ReflectionClass $reflection)
     {
     }
 

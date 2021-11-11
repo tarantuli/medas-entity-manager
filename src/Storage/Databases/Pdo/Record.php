@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-class Record implements \Medas\ServiceManager\Interfaces\Storage\Record
+class Record
 {
 
     public function offsetExists($offset)

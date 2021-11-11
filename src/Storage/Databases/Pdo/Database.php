@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
 use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\DriverNotImplementedException;
-use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueries;
-use Medas\EntityManager\Storage\Databases\Pdo\Queries\Queries;
-use Medas\ServiceManager\Attributes\EnvValue;
+use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
+use Medas\ServiceManager\Attributes\ConfigValue;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Interfaces\Storage\TableBlueprint;
 
@@ -16,14 +15,20 @@ class Database implements \Medas\ServiceManager\Interfaces\Storage\Database
 {
     private array $tables = [];
 
-    private Queries $queries;
+    private MysqlQueryBuilder $queryBuilder;
     private \PDO $pdo;
 
     public function __construct(
-        #[EnvValue('db.pdo.dns')] private string $dns,
-        #[EnvValue('db.pdo.username')] private string $username,
-        #[EnvValue('db.pdo.password')] private string $password,
+        #[ConfigValue('db.pdo.dns')] private string $dns,
+        #[ConfigValue('db.pdo.username')] private string $username,
+        #[ConfigValue('db.pdo.password')] private string $password,
     )
+    {
+        $this->initializePdo();
+        $this->initializeQueryBuilder();
+    }
+
+    private function initializePdo(): void
     {
         $options = [
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -32,38 +37,29 @@ class Database implements \Medas\ServiceManager\Interfaces\Storage\Database
         ];
 
         $this->pdo = new \PDO($this->dns, $this->username, $this->password, $options);
-
-        $this->loadQueries();
     }
 
-    private function loadQueries(): void
+    private function initializeQueryBuilder(): void
     {
         $driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
-        $this->queries = match ($driver) {
-            'mysql' => new MysqlQueries(),
+        $this->queryBuilder = match ($driver) {
+            'mysql' => new MysqlQueryBuilder(),
             default => throw new DriverNotImplementedException($driver)
         };
     }
 
-    public function queries(): Queries
+    public function queryBuilder(): MysqlQueryBuilder
     {
-        return $this->queries;
+        return $this->queryBuilder;
     }
 
-    public function createTable(TableBlueprint $blueprint): void
+    public function createTable(TableBlueprint $blueprint): Table
     {
-        // TODO: Implement createTable() method.
-    }
+        $query = $this->queryBuilder->createTable($blueprint);
+        $this->execute($query);
 
-    public function updateTable(TableBlueprint $blueprint): void
-    {
-        // TODO: Implement updateTable() method.
-    }
-
-    public function deleteTable(string $name): void
-    {
-        // TODO: Implement deleteTable() method.
+        return $this->getTable($blueprint->name());
     }
 
     public function getTable(string $name): Table
@@ -78,5 +74,19 @@ class Database implements \Medas\ServiceManager\Interfaces\Storage\Database
     public function pdo(): \PDO
     {
         return $this->pdo;
+    }
+
+    public function execute(Queries\Query $query): \PDOStatement
+    {
+        try {
+            $statement = $this->pdo->prepare($query->getQuery());
+            $statement->execute($query->getArguments());
+        }
+        catch (\PDOException $e) {
+            var_dump($query->getQuery(), $query->getArguments());
+            throw $e;
+        }
+
+        return $statement;
     }
 }

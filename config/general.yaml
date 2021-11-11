@@ -1,0 +1,7 @@
+env: dev
+
+db:
+  pdo:
+    dns: $env(DB_PDO_DNS)
+    username: $env(DB_PDO_USERNAME)
+    password: $env(DB_PDO_PASSWORD)

@@ -28,7 +28,7 @@ class MetaDataManager
             return $this->creator->create($className, $class);
         });
 
-        if (env('env') === 'dev' && $metaData->sourceFileDate !== filemtime($class->getFileName())) {
+        if (config('env') === 'dev' && $metaData->sourceFileDate !== filemtime($class->getFileName())) {
             $this->cache->delete($key);
             $metaData = $this->get($className);
         }

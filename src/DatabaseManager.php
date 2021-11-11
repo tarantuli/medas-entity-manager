@@ -10,9 +10,7 @@ use Medas\ServiceManager\Interfaces\Storage\Database;
 #[Service]
 class DatabaseManager
 {
-    /**
-     * @var Database[]
-     */
+    /** @var Database[] */
     private array $storages = [];
 
     private string $default;
@@ -31,7 +29,7 @@ class DatabaseManager
     {
         $this->storages[$name] = $database;
 
-        if ($isDefault === true || count($this->storages) === 1) {
+        if ($isDefault || count($this->storages) === 1) {
             $this->default = $name;
         }
     }

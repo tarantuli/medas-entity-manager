@@ -7,6 +7,7 @@ namespace Medas\EntityManager;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAScalarException;
 use Medas\EntityManager\Exceptions\MissingIdValueException;
+use Medas\EntityManager\Hydration\Hydrator;
 use Medas\EntityManager\Hydration\ValueSetter;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -19,6 +20,7 @@ class EntityManager
         private PropertyAccessibleMaker $propertyAccessibleMaker,
         private ValueSetter             $valueSetter,
         private MetaDataManager         $metadataManager,
+        private Hydrator                $hydrator,
     )
     {
     }
@@ -36,6 +38,10 @@ class EntityManager
         if (!array_key_exists($idHash, $this->entities[$className])) {
             $this->entities[$className][$idHash] = $entity = new $className();
             $this->setIdValues($metaData, $entity, $id);
+
+            if ($metaData->entity->table) {
+                $this->hydrator->hydrate($entity, $metaData);
+            }
         }
 
         return $this->entities[$className][$idHash];

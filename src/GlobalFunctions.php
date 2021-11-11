@@ -6,22 +6,23 @@ declare(strict_types=1);
 
 use Medas\EntityManager\DatabaseManager;
 use Medas\EntityManager\EntityManager;
-use Medas\ServiceManager\Interfaces\Storage\Database;
 use Medas\ServiceManager\ServiceManager;
 
-function db(): Database
+function db(string $name = null): \Medas\EntityManager\Storage\Databases\Pdo\Database
 {
+    /** @var DatabaseManager $dm */
     static $dm;
 
     if (!isset($dm)) {
         $dm = ServiceManager::get()->resolve(DatabaseManager::class);
     }
 
-    return $dm->get();
+    return $dm->get($name);
 }
 
 function em(): EntityManager
 {
+    /** @var EntityManager $em */
     static $em;
 
     if (!isset($em)) {
