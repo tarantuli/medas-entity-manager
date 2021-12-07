@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\Functional;
 
-use Medas\ServiceManager\Interfaces\Storage\Database;
-use Medas\ServiceManager\Interfaces\Storage\Table;
+use Medas\EntityManager\Storage\Databases\Pdo\Database;
+use Medas\EntityManager\Storage\Databases\Pdo\Table;
 use Medas\Test\BaseTestCase;
 
 class DatabaseManagerTest extends BaseTestCase

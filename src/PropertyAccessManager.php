@@ -7,7 +7,7 @@ namespace Medas\EntityManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class PropertyAccessibleMaker
+class PropertyAccessManager
 {
     private array $processedClasses = [];
 
