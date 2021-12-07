@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\MetaData\Creator;
+use Medas\EntityManager\MetaData\Compiler;
 use Medas\ServiceManager\Attributes\Service;
 use Symfony\Contracts\Cache\CacheInterface;
 
@@ -13,7 +13,7 @@ class MetaDataManager
 {
     public function __construct(
         private CacheInterface $cache,
-        private Creator $creator
+        private Compiler $compiler
     )
     {
     }
@@ -25,7 +25,7 @@ class MetaDataManager
 
         /** @var MetaData $metaData */
         $metaData = $this->cache->get($key, function () use ($className, $class) {
-            return $this->creator->create($className, $class);
+            return $this->compiler->compile($className, $class);
         });
 
         if (config('env') === 'dev' && $metaData->sourceFileDate !== filemtime($class->getFileName())) {

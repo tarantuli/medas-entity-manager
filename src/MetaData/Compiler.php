@@ -17,13 +17,13 @@ use Medas\EntityManager\{Attributes,
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Creator
+class Compiler
 {
     public function __construct(private PropertyTypeNormalizer $propertyTypeNormalizer)
     {
     }
 
-    public function create(string $className, \ReflectionClass $class): MetaData
+    public function compile(string $className, \ReflectionClass $class): MetaData
     {
         if (!$attributes = $class->getAttributes(Entity::class)) {
             throw new ClassIsNotAnEntityException($className);

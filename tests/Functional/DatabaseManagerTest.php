@@ -6,9 +6,9 @@ namespace Medas\Test\Functional;
 
 use Medas\EntityManager\Storage\Databases\Pdo\Database;
 use Medas\EntityManager\Storage\Databases\Pdo\Table;
-use Medas\Test\BaseTestCase;
+use Medas\Test\BaseTest;
 
-class DatabaseManagerTest extends BaseTestCase
+class DatabaseManagerTest extends BaseTest
 {
     public function testConnect(): void
     {

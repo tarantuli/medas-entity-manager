@@ -16,4 +16,9 @@ class DateTime extends Stored
     )
     {
     }
+
+    public function deserialize(mixed $value): \DateTime
+    {
+        return new \DateTime($value);
+    }
 }

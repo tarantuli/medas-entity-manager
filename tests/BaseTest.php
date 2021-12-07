@@ -8,7 +8,7 @@ use Medas\EntityManager\EntityManager;
 use Medas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
-abstract class BaseTestCase extends TestCase
+abstract class BaseTest extends TestCase
 {
     protected function getEntityManager(): EntityManager
     {

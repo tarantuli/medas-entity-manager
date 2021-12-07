@@ -9,12 +9,12 @@ use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAScalarException;
 use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
-use Medas\Test\BaseTestCase;
+use Medas\Test\BaseTest;
 use Medas\Test\MockUps\MockEntity;
 use Medas\Test\MockUps\MockEntityCompositeId;
 use Medas\Test\MockUps\MockNotAnEntity;
 
-class EntityManagerTest extends BaseTestCase
+class EntityManagerTest extends BaseTest
 {
     public function testNotAnEntityManager(): void
     {
@@ -51,11 +51,10 @@ class EntityManagerTest extends BaseTestCase
     {
         $entityManager = $this->getEntityManager();
         $this->expectException(InvalidPropertyTypeException::class);
-        $entityManager->get(MockEntity::class, 'test');
+        $entityManager->get(MockEntity::class, 'non-existing property');
     }
 
     public function testCompositeGetEntity(): void
-
     {
         $entityManager = $this->getEntityManager();
 

@@ -20,9 +20,18 @@ class Hydrator
 
     public function hydrate(MetaData $metaData, object $entity): void
     {
-        $data = db($metaData->entity->db)->getTable($metaData->entity->table)
+        $record = db($metaData->entity->db)->getTable($metaData->entity->table)
             ->getRecord(filters: $this->getValues($entity, $metaData->idProperties));
-        funcdump($data);
+
+        foreach ($metaData->properties as $property) {
+            $value = $record->get($property->name);
+
+            if ($value !== null) {
+                $value = $property->type->deserialize($value);
+            }
+
+            $this->valueSetter->set($metaData, $entity, $property->name, $value);
+        }
     }
 
     /** @param MetaData\Property[] $fields */

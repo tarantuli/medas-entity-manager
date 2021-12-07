@@ -6,5 +6,5 @@ namespace Medas\EntityManager\Attributes\Interfaces;
 
 interface Type
 {
-
+    public function deserialize(mixed $value): mixed;
 }
