@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Attributes\Types;
 
-use Medas\EntityManager\Attributes\Stored;
+use Medas\EntityManager\Attributes\BaseType;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class Integer extends Stored
+class Integer extends BaseType
 {
     const UNSIGNED_1_BYTE_MAX = 255;
     const UNSIGNED_2_BYTE_MAX = 65535;

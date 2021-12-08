@@ -8,27 +8,49 @@ use Medas\EntityManager\Storage\Databases\Pdo\Table;
 
 class MysqlQueryBuilder
 {
+    private string $query;
+    private array $arguments;
 
     /** @param Table[] $tables */
     public function select(array $tables, array $filters): Query
     {
-        $query = 'select * from ';
-        $arguments = [];
+        $this->arguments = [];
+        $this->query = 'select * from ';
+
         foreach ($tables as $table) {
-            $query .= $table->name . ',';
+            $this->query .= $table->name . ',';
         }
-        $query = substr($query, 0, -1);
+
+        $this->query = substr($this->query, 0, -1);
 
         if ($filters) {
-            $query .= ' where ';
-            foreach ($filters as $field => $value) {
-                $query .= $field . '=? and ';
-                $arguments[] = $value;
-            }
-
-            $query = substr($query, 0, -5);
+            $this->query .= ' where ';
+            $this->appendParameters($filters);
         }
 
-        return new Query($query, $arguments);
+        return new Query($this->query, $this->arguments);
+    }
+
+    private function appendParameters(array $filters, string $separator = 'and'): void
+    {
+        foreach ($filters as $field => $value) {
+            $this->query .= $field . '=? ' . $separator . ' ';
+            $this->arguments[] = $value;
+        }
+
+        $this->query = substr($this->query, 0, -2 - strlen($separator));
+    }
+
+    public function update(Table $table, array $updates, array $conditions): Query
+    {
+        $this->arguments = [];
+
+        $this->query = 'update ' . $table->name . ' set ';
+        $this->appendParameters($updates);
+
+        $this->query .= ' where ';
+        $this->appendParameters($conditions);
+
+        return new Query($this->query, $this->arguments);
     }
 }

@@ -16,9 +16,9 @@ class SnapshotManager
     {
     }
 
-    public function getDiff(object $entity, Snapshot $initial): array
+    public function getDiff(object $entity, Snapshot|null $initial): array
     {
-        return array_diff($this->forEntity($entity)->data, $initial->data);
+        return array_diff($this->forEntity($entity)->data, $initial === null ? [] : $initial->data);
     }
 
     public function forEntity(object $entity): Snapshot

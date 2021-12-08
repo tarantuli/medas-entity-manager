@@ -17,7 +17,7 @@ class EntityInitializer
     {
     }
 
-    public function initializeEntity(string $className, mixed $id): object
+    public function initialize(string $className, mixed $id): object
     {
         $metaData = $this->metaDataManager->get($className);
         $entity = new $className();

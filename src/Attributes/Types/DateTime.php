@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Attributes\Types;
 
-use Medas\EntityManager\Attributes\Stored;
+use Medas\EntityManager\Attributes\BaseType;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class DateTime extends Stored
+class DateTime extends BaseType
 {
     public function __construct(
         public ?\DateTimeInterface $minValue = null,
@@ -17,8 +17,8 @@ class DateTime extends Stored
     {
     }
 
-    public function deserialize(mixed $value): \DateTime
+    public function deserialize(mixed $value): \DateTime|null
     {
-        return new \DateTime($value);
+        return $value === null ? null : new \DateTime($value);
     }
 }

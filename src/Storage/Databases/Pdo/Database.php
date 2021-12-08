@@ -75,4 +75,19 @@ class Database
     {
         return $this->queryBuilder;
     }
+
+    public function beginTransaction(): void
+    {
+        $this->pdo->beginTransaction();
+    }
+
+    public function commitTransaction(): void
+    {
+        $this->pdo->commit();
+    }
+
+    public function rollbackTransaction(): void
+    {
+        $this->pdo->rollBack();
+    }
 }

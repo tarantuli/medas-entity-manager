@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Attributes\Types;
 
-use Medas\EntityManager\Attributes\Stored;
+use Medas\EntityManager\Attributes\BaseType;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class Binary extends Stored
+class Binary extends BaseType
 {
     const MAX_1_BYTE_LENGTH = 255;
     const MAX_2_BYTE_LENGTH = 65535;

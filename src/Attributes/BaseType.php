@@ -7,9 +7,14 @@ namespace Medas\EntityManager\Attributes;
 use Medas\EntityManager\Attributes\Interfaces\Type;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-abstract class Stored implements Type
+abstract class BaseType implements Type
 {
     public function deserialize(mixed $value): mixed
+    {
+        return $value;
+    }
+
+    public function serialize(mixed $value): mixed
     {
         return $value;
     }
