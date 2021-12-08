@@ -11,13 +11,15 @@ use Medas\ServiceManager\Attributes\Service;
 class EntityInitializer
 {
     public function __construct(
-        private Hydrator $hydrator,
+        private Hydrator        $hydrator,
+        private MetaDataManager $metaDataManager
     )
     {
     }
 
-    public function initializeEntity(string $className, MetaData $metaData, mixed $id): object
+    public function initializeEntity(string $className, mixed $id): object
     {
+        $metaData = $this->metaDataManager->get($className);
         $entity = new $className();
         $this->hydrator->setIdValues($metaData, $entity, $id);
 

@@ -32,9 +32,9 @@ class SnapshotTest extends BaseTest
         $initialSnapshot = $snapshotManager->forEntity($entity);
 
         $entity->name = 'changed name';
-        $diff = $snapshotManager->makeDiff($entity, $initialSnapshot);
+        $diff = $snapshotManager->getDiff($entity, $initialSnapshot);
 
-        self::assertInstanceOf(Snapshot::class, $diff);
-        self::assertEquals(['name' => 'changed name'], $diff->data);
+        self::assertIsArray($diff);
+        self::assertEquals(['name' => 'changed name'], $diff);
     }
 }

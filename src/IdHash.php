@@ -13,12 +13,15 @@ class IdHash
 {
     public function __construct(
         private IdValues $idValues,
+        private MetaDataManager $metaDataManager,
     )
     {
     }
 
-    public function get(mixed $id, MetaData $metaData): string
+    public function get(string $className, mixed $id): string
     {
+        $metaData = $this->metaDataManager->get($className);
+
         if (!$metaData->hasCompositeId) {
             if (!is_scalar($id)) {
                 throw new IdValueShouldBeAScalarException($metaData->className, gettype($id));
