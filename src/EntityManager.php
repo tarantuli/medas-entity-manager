@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\EntityManager\Storage\UnitOfWork;
-use Medas\EntityManager\Storage\UnitOfWorkExecutor;
+use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
+use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkExecutor;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class EntityManager
 {
-    private array $entities = [];
+    private array $entities;
     private \SplObjectStorage $persistedStates;
 
     public function __construct(

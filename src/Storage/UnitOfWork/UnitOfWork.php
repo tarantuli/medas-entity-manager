@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager\Storage;
+namespace Medas\EntityManager\Storage\UnitOfWork;
 
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\Query;
 

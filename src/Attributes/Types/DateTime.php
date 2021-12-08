@@ -21,4 +21,10 @@ class DateTime extends BaseType
     {
         return $value === null ? null : new \DateTime($value);
     }
+
+    /** @param \DateTime|null $value */
+    public function serialize(mixed $value): string|null
+    {
+        return $value instanceof \DateTime ? $value->format(DATE_ISO8601) : $value;
+    }
 }

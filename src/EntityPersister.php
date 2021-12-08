@@ -7,8 +7,8 @@ namespace Medas\EntityManager;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\Snapshots\Snapshot;
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\EntityManager\Storage\UnitOfWork;
-use Medas\EntityManager\Storage\UnitOfWorkManager;
+use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
+use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
