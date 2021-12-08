@@ -13,7 +13,8 @@ class MetaDataManager
 {
     public function __construct(
         private CacheInterface $cache,
-        private Compiler $compiler
+        private Compiler $compiler,
+        private PropertyAccessManager $propertyAccessManager,
     )
     {
     }
@@ -32,6 +33,8 @@ class MetaDataManager
             $this->cache->delete($key);
             $metaData = $this->get($className);
         }
+
+        $this->propertyAccessManager->makeAccessible($metaData);
 
         return $metaData;
     }

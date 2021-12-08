@@ -9,8 +9,6 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class PropertyAccessManager
 {
-    private array $processedClasses = [];
-
     public function makeAccessible(MetaData $metaData): void
     {
         // Properties are accessible by default starting with PHP version 8.1
@@ -18,15 +16,8 @@ class PropertyAccessManager
             return;
         }
 
-        if (array_key_exists($metaData->className, $this->processedClasses)) {
-            return;
-        }
-
         foreach ($metaData->properties as $property) {
             $property->reflection->setAccessible(true);
         }
-
-        $this->processedClasses[$metaData->className] = true;
-
     }
 }

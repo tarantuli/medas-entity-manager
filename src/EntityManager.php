@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Hydration\Hydrator;
+use Medas\EntityManager\Snapshots\Snapshot;
+use Medas\EntityManager\Snapshots\SnapshotManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class EntityManager
 {
     private array $entities = [];
+    /** @var Snapshot[] */
+    private array $initialStates = [];
 
     public function __construct(
-        private GlobalFunctionsDefiner $globalFunctionsDefiner,
-        private Hydrator               $hydrator,
-        private IdHash                 $idHash,
-        private MetaDataManager        $metadataManager,
-        private PropertyAccessManager  $propertyAccessManager,
+        private EntityInitializer     $entityInitializer,
+        private IdHash                $idHash,
+        private MetaDataManager       $metadataManager,
+        private SnapshotManager       $snapshotManager,
     )
     {
     }
@@ -29,19 +31,14 @@ class EntityManager
 
         if (!array_key_exists($className, $this->entities)) {
             $this->entities[$className] = [];
-            $this->propertyAccessManager->makeAccessible($metaData);
         }
 
         if (!array_key_exists($idHash, $this->entities[$className])) {
-            $this->entities[$className][$idHash] = $entity = new $className();
-            $this->hydrator->setIdValues($metaData, $entity, $id);
-
-            if ($metaData->entity->table) {
-                $this->hydrator->hydrate($metaData, $entity);
-            }
+            $entity = $this->entityInitializer->initializeEntity($className, $metaData, $id);
+            $this->initialStates[spl_object_id($entity)] = $this->snapshotManager->forEntity($entity);
+            $this->entities[$className][$idHash] = $entity;
         }
 
         return $this->entities[$className][$idHash];
     }
-
 }

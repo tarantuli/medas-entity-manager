@@ -15,9 +15,9 @@ class HydratorTest extends BaseTest
 
         $entity = $entityManager->get(StoredEntity::class, 1);
 
-        $this->assertInstanceOf(StoredEntity::class, $entity);
-        $this->assertEquals(1, $entity->id());
-        $this->assertEquals('First entity', $entity->name);
-        $this->assertNull($entity->createdAt);
+        self::assertInstanceOf(StoredEntity::class, $entity);
+        self::assertEquals(1, $entity->id());
+        self::assertEquals('First entity', $entity->name);
+        self::assertNull($entity->createdAt);
     }
 }

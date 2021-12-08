@@ -28,7 +28,7 @@ class EntityManagerTest extends BaseTest
     {
         $entityManager = $this->getEntityManager();
 
-        $this->assertInstanceOf(EntityManager::class, $entityManager);
+        self::assertInstanceOf(EntityManager::class, $entityManager);
     }
 
     public function testGetEntity(): void
@@ -36,8 +36,8 @@ class EntityManagerTest extends BaseTest
         $entityManager = $this->getEntityManager();
 
         $entity = $entityManager->get(MockEntity::class, 1);
-        $this->assertInstanceOf(MockEntity::class, $entity);
-        $this->assertEquals(1, $entity->getId());
+        self::assertInstanceOf(MockEntity::class, $entity);
+        self::assertEquals(1, $entity->getId());
     }
 
     public function testTooComplexId(): void
@@ -51,7 +51,7 @@ class EntityManagerTest extends BaseTest
     {
         $entityManager = $this->getEntityManager();
         $this->expectException(InvalidPropertyTypeException::class);
-        $entityManager->get(MockEntity::class, 'non-existing property');
+        $entityManager->get(MockEntity::class, 'string value');
     }
 
     public function testCompositeGetEntity(): void
@@ -59,8 +59,8 @@ class EntityManagerTest extends BaseTest
         $entityManager = $this->getEntityManager();
 
         $entity = $entityManager->get(MockEntityCompositeId::class, ['id' => 1, 'name' => 'test']);
-        $this->assertInstanceOf(MockEntityCompositeId::class, $entity);
-        $this->assertEquals(1, $entity->getId());
+        self::assertInstanceOf(MockEntityCompositeId::class, $entity);
+        self::assertEquals(1, $entity->getId());
     }
 
     public function testTooSimpleId(): void
