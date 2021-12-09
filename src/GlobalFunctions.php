@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 use Medas\EntityManager\DatabaseManager;
 use Medas\EntityManager\EntityManager;
-use Medas\EntityManager\Storage\Databases\Pdo\Database;
+use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\ServiceManager\ServiceManager;
 
-function db(string $name = null): Database
+function db(string $name = null): Storage
 {
     /** @var DatabaseManager $dm */
     static $dm;

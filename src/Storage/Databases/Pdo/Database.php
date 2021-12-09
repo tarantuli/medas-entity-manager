@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-use Medas\EntityManager\Exceptions\DatabaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\DriverNotImplementedException;
+use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
+use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\ServiceManager\Attributes\ConfigValue;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class Database
+class Database implements Storage
 {
     /** @var Table[] */
     private array $tables = [];
@@ -50,7 +51,7 @@ class Database
         };
     }
 
-    public function getTable(string $name): Table
+    public function getStore(string $name): Table
     {
         if (!isset($this->tables[$name])) {
             $this->tables[$name] = new Table($this, $name);
@@ -67,15 +68,15 @@ class Database
             $this->lastStatement->execute($query->arguments);
         }
         catch (\PDOException $e) {
-            throw new DatabaseException($e->getMessage(), $query);
+            throw new PdoDatabaseException($e->getMessage(), $query);
         }
 
-        if ($onComplete = $query->onComplete) {
+        if ($onComplete = $query->onComplete()) {
             $onComplete($this);
         }
     }
 
-    public function queryBuilder(): MysqlQueryBuilder
+    public function actionBuilder(): MysqlQueryBuilder
     {
         return $this->queryBuilder;
     }

@@ -4,25 +4,25 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\UnitOfWork;
 
-use Medas\EntityManager\Storage\Databases;
+use Medas\EntityManager\Storage\Interfaces\Store;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class UnitOfWorkManager
 {
-    public function queueUpdate(UnitOfWork $unitOfWork, Databases\Pdo\Table $table, array $updates, array $conditions)
+    public function queueUpdate(UnitOfWork $unitOfWork, Store $store, array $updates, array $conditions)
     {
         $unitOfWork->addUpdate(
-            $table->database->queryBuilder()->update($table, $updates, $conditions)
-                ->database($table->database)
+            $store->database->actionBuilder()->update($store, $updates, $conditions)
+                ->setStorage($store->database)
         );
     }
 
-    public function queueCreate(UnitOfWork $unitOfWork, Databases\Pdo\Table $table, array $values, \Closure $onComplete = null)
+    public function queueCreate(UnitOfWork $unitOfWork, Store $store, array $values, \Closure $onComplete = null)
     {
         $unitOfWork->addCreate(
-        $table->database->queryBuilder()->create($table, $values)
-            ->onComplete($onComplete)->database($table->database)
+            $store->database->actionBuilder()->create($store, $values)
+                ->setOnComplete($onComplete)->setStorage($store->database)
         );
     }
 }

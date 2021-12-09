@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-class Table
+use Medas\EntityManager\Storage\Interfaces\Store;
+
+class Table implements Store
 {
     public function __construct(
         public Database $database,
@@ -15,9 +17,10 @@ class Table
 
     public function getRecord(array $filters): Record
     {
-        $this->database->execute(query: $this->database->queryBuilder()->select(
-            tables: [$this],
-            filters: $filters)
+        $query = $this->database->actionBuilder()->select(
+            stores: [$this],
+            filters: $filters);
+        $this->database->execute(query: $query
         );
 
         return new Record($this->database->lastStatement()->fetch());

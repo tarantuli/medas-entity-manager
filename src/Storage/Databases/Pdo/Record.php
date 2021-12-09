@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-class Record
+use Medas\EntityManager\Storage\Interfaces\StoreRecord;
+
+class Record implements StoreRecord
 {
     public function __construct(private array $data)
     {

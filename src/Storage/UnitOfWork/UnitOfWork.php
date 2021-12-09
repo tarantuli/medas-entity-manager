@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\UnitOfWork;
 
-use Medas\EntityManager\Storage\Databases\Pdo\Queries\Query;
+use Medas\EntityManager\Storage\Interfaces\Action;
 
 class UnitOfWork
 {
-    /** @var Query[] */
+    /** @var Action[] */
     public array $creates = [];
 
-    /** @var Query[] */
+    /** @var Action[] */
     public array $updates = [];
 
-    public array $databases = [];
+    public array $storages = [];
 
-    public function addUpdate(Query $update)
+    public function addUpdate(Action $update)
     {
-        if (!in_array($update->database, $this->databases)) {
-            $this->databases[] = $update->database;
+        if (!in_array($update->storage(), $this->storages)) {
+            $this->storages[] = $update->storage();
         }
 
         $this->updates[] = $update;
     }
 
-    public function addCreate(Query $create)
+    public function addCreate(Action $create)
     {
-        if (!in_array($create->database, $this->databases)) {
-            $this->databases[] = $create->database;
+        if (!in_array($create->storage(), $this->storages)) {
+            $this->storages[] = $create->storage();
         }
 
         $this->creates[] = $create;

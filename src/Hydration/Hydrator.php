@@ -21,7 +21,7 @@ class Hydrator
 
     public function hydrate(MetaData $metaData, object $entity): void
     {
-        $record = $metaData->getTable()->getRecord(
+        $record = $metaData->getStore()->getRecord(
             filters: $this->valueGetter->getValues($entity, $metaData->idProperties)
         );
 

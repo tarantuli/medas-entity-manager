@@ -11,28 +11,28 @@ class UnitOfWorkExecutor
 {
     public function execute(UnitOfWork $unitOfWork): bool
     {
-        foreach ($unitOfWork->databases as $database) {
-            $database->beginTransaction();
+        foreach ($unitOfWork->storages as $storage) {
+            $storage->beginTransaction();
         }
 
         try {
             foreach ($unitOfWork->creates as $create) {
-                $create->database->execute($create);
+                $create->execute();
             }
 
             foreach ($unitOfWork->updates as $update) {
-                $update->database->execute($update);
+                $update->execute();
             }
         }
         catch (\Exception) {
-            foreach ($unitOfWork->databases as $database) {
-                $database->rollbackTransaction();
+            foreach ($unitOfWork->storages as $storage) {
+                $storage->rollbackTransaction();
             }
             return false;
         }
 
-        foreach ($unitOfWork->databases as $database) {
-            $database->commitTransaction();
+        foreach ($unitOfWork->storages as $storage) {
+            $storage->commitTransaction();
         }
 
         return true;
