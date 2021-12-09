@@ -20,4 +20,9 @@ class UnitOfWorkManager
         $unitOfWork->updates[] = $this->database->queryBuilder()->update($table, $updates, $conditions);
     }
 
+    public function queueCreate(UnitOfWork $unitOfWork, Databases\Pdo\Table $table, array $values, \Closure $onComplete = null)
+    {
+        $unitOfWork->creates[] = $this->database->queryBuilder()->create($table, $values)
+            ->onComplete($onComplete);
+    }
 }

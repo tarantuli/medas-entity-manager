@@ -51,6 +51,7 @@ class Compiler
                     name: $property->name,
                     type: $type,
                     isId: !empty($property->getAttributes(Id::class)),
+                    isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
                     isNullable: !empty($property->getAttributes(IsNullable::class)),
                     isUnique: !empty($property->getAttributes(IsUnique::class)),
                     phpTypes: $this->propertyTypeNormalizer->getNames($property),

@@ -53,4 +53,14 @@ class MysqlQueryBuilder
 
         return new Query($this->query, $this->arguments);
     }
+
+    public function create(Table $table, array $values): Query
+    {
+        $this->arguments = [];
+
+        $this->query = 'insert into ' . $table->name . ' set ';
+        $this->appendParameters($values);
+
+        return new Query($this->query, $this->arguments);
+    }
 }

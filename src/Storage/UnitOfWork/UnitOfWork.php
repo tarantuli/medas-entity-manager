@@ -9,5 +9,7 @@ use Medas\EntityManager\Storage\Databases\Pdo\Queries\Query;
 class UnitOfWork
 {
     /** @var Query[] */
+    public array $creates = [];
+    /** @var Query[] */
     public array $updates = [];
 }

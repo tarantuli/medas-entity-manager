@@ -16,7 +16,9 @@ class ValueGetter
         $values = [];
 
         foreach ($fields as $field) {
-            $values[$field->name] = $field->reflection->getValue($entity);
+            if ($field->reflection->isInitialized($entity)) {
+                $values[$field->name] = $field->reflection->getValue($entity);
+            }
         }
 
         return $values;

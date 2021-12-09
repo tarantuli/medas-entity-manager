@@ -7,6 +7,7 @@ namespace Medas\EntityManager;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\Snapshots\Snapshot;
 use Medas\EntityManager\Snapshots\SnapshotManager;
+use Medas\EntityManager\Storage\Databases\Pdo\Database;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkManager;
 use Medas\ServiceManager\Attributes\Service;
@@ -23,14 +24,55 @@ class EntityPersister
     {
     }
 
-    public function persist(object $entity, Snapshot|null $initialState, UnitOfWork $unitOfWork): void
+    public function prepare(object $entity, Snapshot|null $initialState, UnitOfWork $unitOfWork): void
     {
+        if ($initialState === null) {
+            $this->prepareCreate($entity, $unitOfWork);
+            return;
+        }
+
         $changedValues = $this->snapshotManager->getDiff($entity, $initialState);
 
         if ($changedValues === []) {
             return;
         }
 
+        $this->prepareUpdate($entity, $changedValues, $unitOfWork);
+    }
+
+    private function prepareCreate(object $entity, UnitOfWork $unitOfWork): void
+    {
+        $metaData = $this->metaDataManager->get($entity::class);
+        $serializedValues = [];
+
+        foreach ($metaData->properties as $property) {
+            if ($property->reflection->isInitialized($entity)) {
+                $value = $property->reflection->getValue($entity);
+                $serializedValues[$property->name] = $property->type->serialize($value);
+            }
+        }
+
+        $onComplete = $this->generatedValueSetter($metaData, $entity);
+
+        $this->unitOfWorkManager->queueCreate(
+            $unitOfWork,
+            $metaData->getTable(),
+            $serializedValues,
+            $onComplete
+        );
+    }
+
+    private function generatedValueSetter(MetaData $metaData, object $entity): ?\Closure
+    {
+        if (!$metaData->idProperty?->isGeneratedValue) {
+            return null;
+        }
+
+        return fn(Database $database) => $metaData->idProperty->reflection->setValue($entity, $database->lastInsertId());
+    }
+
+    private function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void
+    {
         $metaData = $this->metaDataManager->get($entity::class);
         $serializedValues = [];
 

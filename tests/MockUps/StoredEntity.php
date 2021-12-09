@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsNullable, IsUnique, Types as Type};
+use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsNullable, IsUnique, Types as Type};
 
 #[Entity(table: 'stored_entities')]
 class StoredEntity
 {
     #[Id]
+    #[IsGeneratedValue]
     #[Type\Integer]
     private int $id;
 
@@ -21,8 +22,8 @@ class StoredEntity
     #[IsNullable]
     public ?\DateTime $createdAt;
 
-    public function id(): int
+    public function id(): int|null
     {
-        return $this->id;
+        return $this->id ?? null;
     }
 }

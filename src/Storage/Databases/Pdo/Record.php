@@ -14,4 +14,9 @@ class Record
     {
         return $this->data[$name];
     }
+
+    public function data(): array
+    {
+        return $this->data;
+    }
 }

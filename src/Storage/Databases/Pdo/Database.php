@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
+use Medas\EntityManager\Exceptions\DatabaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\DriverNotImplementedException;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
 use Medas\ServiceManager\Attributes\ConfigValue;
@@ -64,8 +65,11 @@ class Database
             $statement->execute($query->arguments);
         }
         catch (\PDOException $e) {
-            var_dump($query->query, $query->arguments);
-            throw $e;
+            throw new DatabaseException($e->getMessage(), $query);
+        }
+
+        if ($onComplete = $query->onComplete) {
+            $onComplete($this);
         }
 
         return $statement;
@@ -89,5 +93,12 @@ class Database
     public function rollbackTransaction(): void
     {
         $this->pdo->rollBack();
+    }
+
+    public function lastInsertId(): int|null
+    {
+        $id = $this->pdo->lastInsertId();
+
+        return $id === false ? null : (int) $id;
     }
 }

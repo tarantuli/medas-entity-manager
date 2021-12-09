@@ -33,15 +33,8 @@ class Hydrator
         }
     }
 
-    public function setIdValues(MetaData $metaData, object $entity, mixed $id)
+    public function setIdValues(MetaData $metaData, object $entity, array $idValues)
     {
-        if ($metaData->hasCompositeId) {
-            $idValues = $this->idValues->get($id, $metaData);
-        }
-        else {
-            $idValues = [$metaData->idProperty->name => $id];
-        }
-
         $this->valueSetter->setValues($metaData, $entity, $idValues);
     }
 }

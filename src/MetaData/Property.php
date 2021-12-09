@@ -12,6 +12,7 @@ class Property
         public string              $name,
         public Type                $type,
         public bool                $isId,
+        public bool                $isGeneratedValue,
         public bool                $isNullable,
         public bool                $isUnique,
         public array               $phpTypes,

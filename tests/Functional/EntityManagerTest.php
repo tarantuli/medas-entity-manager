@@ -7,8 +7,8 @@ namespace Medas\Test\Functional;
 use Medas\EntityManager\EntityManager;
 use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
-use Medas\EntityManager\Exceptions\IdValueShouldBeAScalarException;
 use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
+use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
 use Medas\Test\BaseTest;
 use Medas\Test\MockUps\MockEntity;
 use Medas\Test\MockUps\MockEntityCompositeId;
@@ -43,7 +43,7 @@ class EntityManagerTest extends BaseTest
     public function testTooComplexId(): void
     {
         $entityManager = $this->getEntityManager();
-        $this->expectException(IdValueShouldBeAScalarException::class);
+        $this->expectException(NonIdPropertyGivenException::class);
         $entityManager->get(MockEntity::class, ['id' => 1, 'name' => 'test']);
     }
 

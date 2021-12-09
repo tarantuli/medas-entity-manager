@@ -21,6 +21,10 @@ class UnitOfWorkExecutor
         $this->database->beginTransaction();
 
         try {
+            foreach ($unitOfWork->creates as $create) {
+                $this->database->execute($create);
+            }
+
             foreach ($unitOfWork->updates as $update) {
                 $this->database->execute($update);
             }

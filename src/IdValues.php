@@ -4,24 +4,56 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Exceptions\MissingIdValueException;
+use Medas\EntityManager\Exceptions\IdPropertyNotGivenException;
+use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
+use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class IdValues
 {
-    public function get(array $idValues, MetaData $metaData): array
+    public function __construct(
+        private MetaDataManager $metaDataManager,
+    )
     {
-        $idProperties = $metaData->idProperties;
-        $values = [];
+    }
 
-        foreach ($idProperties as $idProperty) {
-            if (!array_key_exists($idProperty->name, $idValues)) {
-                throw new MissingIdValueException($idProperty->name);
+    public function normalize(string $className, mixed $id): array
+    {
+        $metaData = $this->metaDataManager->get($className);
+
+        if (is_scalar($id)) {
+            if ($metaData->hasCompositeId) {
+                throw new IdValueShouldBeAnArrayException($className, get_debug_type($id));
             }
 
-            $values[$idProperty->name] = $idValues[$idProperty->name];
+            return [$metaData->idProperty->name => $id];
         }
-        return $values;
+
+        $idValues = $this->extract($id, $metaData);
+
+        if ($superfluousValues = array_diff_key($id, $idValues)) {
+            throw new NonIdPropertyGivenException(
+                $className,
+                implode(', ', array_keys($superfluousValues))
+            );
+        }
+
+        return $idValues;
+    }
+
+    public function extract(array $values, MetaData $metaData): array
+    {
+        $idProperties = $metaData->idProperties;
+        $idValues = [];
+
+        foreach ($idProperties as $idProperty) {
+            if (!array_key_exists($idProperty->name, $values)) {
+                throw new IdPropertyNotGivenException($metaData->className, $idProperty->name);
+            }
+
+            $idValues[$idProperty->name] = $values[$idProperty->name];
+        }
+        return $idValues;
     }
 }
