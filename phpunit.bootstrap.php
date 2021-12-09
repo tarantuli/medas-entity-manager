@@ -27,4 +27,4 @@ $config->addDirectory(__DIR__ . '/config');
 
 /** @var DatabaseManager $dm */
 $dm = $sm->resolve(DatabaseManager::class);
-$dm->add($sm->resolve(Database::class));
+$dm->add($sm->instantiate(Database::class));

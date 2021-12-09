@@ -9,9 +9,7 @@ use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
 use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\ServiceManager\Attributes\ConfigValue;
-use Medas\ServiceManager\Attributes\Service;
 
-#[Service]
 class Database implements Storage
 {
     /** @var Table[] */
