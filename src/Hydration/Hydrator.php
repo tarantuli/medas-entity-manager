@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\EntityManager\IdValues;
+use Medas\EntityManager\Entities\IdValues;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
 

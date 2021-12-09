@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Entities;
 
 use Medas\EntityManager\Hydration\ValueGetter;
+use Medas\EntityManager\MetaData;
+use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Snapshots\Snapshot;
 use Medas\EntityManager\Snapshots\SnapshotManager;
 use Medas\EntityManager\Storage\Databases\Pdo\Database;
@@ -13,7 +15,7 @@ use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class EntityPersister
+class Persister
 {
     public function __construct(
         private MetaDataManager   $metaDataManager,

@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\EntityManager\Entities\Flusher;
+use Medas\EntityManager\Entities\IdValues;
+use Medas\EntityManager\Entities\Initializer;
+use Medas\EntityManager\Entities\KeyMaker;
+use Medas\EntityManager\Repositories\Repository;
 use Medas\EntityManager\Snapshots\SnapshotManager;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -14,10 +19,10 @@ class EntityManager
     private \SplObjectStorage $savedStates;
 
     public function __construct(
-        private EntityFlusher     $entityFlusher,
-        private EntityInitializer $entityInitializer,
-        private EntityKeyMaker    $entityKeyMaker,
+        private Flusher           $flusher,
         private IdValues          $idValues,
+        private Initializer       $initializer,
+        private KeyMaker          $keyMaker,
         private RepositoryManager $repositoryManager,
         private SnapshotManager   $snapshotManager,
     )
@@ -39,10 +44,10 @@ class EntityManager
     public function get(string $className, mixed $id): object
     {
         $id = $this->idValues->normalize($className, $id);
-        $key = $this->entityKeyMaker->get($className, $id);
+        $key = $this->keyMaker->get($className, $id);
 
         if (!array_key_exists($key, $this->entities)) {
-            $entity = $this->entityInitializer->initialize($className, $id);
+            $entity = $this->initializer->initialize($className, $id);
             $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
             $this->entities[$key] = $entity;
         }
@@ -52,7 +57,7 @@ class EntityManager
 
     public function flush(): void
     {
-        if ($this->entityFlusher->flush($this->entities, $this->savedStates)) {
+        if ($this->flusher->flush($this->entities, $this->savedStates)) {
             $this->updateEntityStates();
         }
     }
@@ -73,7 +78,7 @@ class EntityManager
     public function resetKey(object $entity): void
     {
         $id = $this->idValues->fromEntity($entity);
-        $newKey = $this->entityKeyMaker->get($entity::class, $id);
+        $newKey = $this->keyMaker->get($entity::class, $id);
         $oldKey = array_search($entity, $this->entities);
 
         $this->entities[$newKey] = $entity;

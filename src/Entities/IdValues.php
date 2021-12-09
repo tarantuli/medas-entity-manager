@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Entities;
 
 use Medas\EntityManager\Exceptions\IdPropertyNotGivenException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
 use Medas\EntityManager\Hydration\ValueGetter;
+use Medas\EntityManager\MetaData;
+use Medas\EntityManager\MetaDataManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Entities;
 
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkExecutor;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class EntityFlusher
+class Flusher
 {
     public function __construct(
-        private EntityPersister    $entityPersister,
+        private Persister          $entityPersister,
         private UnitOfWorkExecutor $unitOfWorkExecutor,
     )
     {

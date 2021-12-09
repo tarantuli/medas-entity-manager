@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Repositories;
+
+use Medas\EntityManager\Entities\IdValues;
+use Medas\EntityManager\MetaData;
 
 class Repository
 {

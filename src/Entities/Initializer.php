@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Entities;
 
 use Medas\EntityManager\Hydration\Hydrator;
+use Medas\EntityManager\MetaDataManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class EntityInitializer
+class Initializer
 {
     public function __construct(
         private Hydrator        $hydrator,

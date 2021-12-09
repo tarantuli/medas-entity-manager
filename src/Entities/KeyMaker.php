@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Entities;
 
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class EntityKeyMaker
+class KeyMaker
 {
     public function get(string $className, array $id): string
     {

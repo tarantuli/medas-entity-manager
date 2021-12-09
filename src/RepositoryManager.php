@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\EntityManager\Entities\IdValues;
+use Medas\EntityManager\Repositories\Repository;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
