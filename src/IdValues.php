@@ -7,6 +7,7 @@ namespace Medas\EntityManager;
 use Medas\EntityManager\Exceptions\IdPropertyNotGivenException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
+use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -14,6 +15,7 @@ class IdValues
 {
     public function __construct(
         private MetaDataManager $metaDataManager,
+        private ValueGetter     $valueGetter,
     )
     {
     }
@@ -55,5 +57,12 @@ class IdValues
             $idValues[$idProperty->name] = $values[$idProperty->name];
         }
         return $idValues;
+    }
+
+    public function fromEntity(object $entity): array
+    {
+        $metaData = $this->metaDataManager->get($entity::class);
+
+        return $this->valueGetter->getValues($entity, $metaData->idProperties);
     }
 }

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
-use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkExecutor;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -16,13 +14,12 @@ class EntityManager
     private \SplObjectStorage $savedStates;
 
     public function __construct(
-        private EntityInitializer  $entityInitializer,
-        private EntityPersister    $entityPersister,
-        private IdHash             $idHash,
-        private IdValues           $idValues,
-        private RepositoryManager  $repositoryManager,
-        private SnapshotManager    $snapshotManager,
-        private UnitOfWorkExecutor $unitOfWorkExecutor,
+        private EntityFlusher     $entityFlusher,
+        private EntityInitializer $entityInitializer,
+        private EntityKeyMaker    $entityKeyMaker,
+        private IdValues          $idValues,
+        private RepositoryManager $repositoryManager,
+        private SnapshotManager   $snapshotManager,
     )
     {
         $this->clear();
@@ -42,7 +39,7 @@ class EntityManager
     public function get(string $className, mixed $id): object
     {
         $id = $this->idValues->normalize($className, $id);
-        $key = $className . ':' . $this->idHash->get($id);
+        $key = $this->entityKeyMaker->get($className, $id);
 
         if (!array_key_exists($key, $this->entities)) {
             $entity = $this->entityInitializer->initialize($className, $id);
@@ -55,17 +52,7 @@ class EntityManager
 
     public function flush(): void
     {
-        $unitOfWork = new UnitOfWork();
-
-        foreach ($this->entities as $entity) {
-            $this->entityPersister->prepare(
-                $entity,
-                $this->savedStates[$entity] ?? null,
-                $unitOfWork
-            );
-        }
-
-        if ($this->unitOfWorkExecutor->execute($unitOfWork)) {
+        if ($this->entityFlusher->flush($this->entities, $this->savedStates)) {
             $this->updateEntityStates();
         }
     }
@@ -81,5 +68,15 @@ class EntityManager
     {
         $key = $entity::class . ':new:' . mt_rand();
         $this->entities[$key] = $entity;
+    }
+
+    public function resetKey(object $entity): void
+    {
+        $id = $this->idValues->fromEntity($entity);
+        $newKey = $this->entityKeyMaker->get($entity::class, $id);
+        $oldKey = array_search($entity, $this->entities);
+
+        $this->entities[$newKey] = $entity;
+        unset($this->entities[$oldKey]);
     }
 }

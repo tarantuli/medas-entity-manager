@@ -31,7 +31,7 @@ class EntityPersister
             return;
         }
 
-        $changedValues = $this->snapshotManager->getDiff($entity, $initialState);
+        $changedValues = $this->snapshotManager->getChanges($entity, $initialState);
 
         if ($changedValues === []) {
             return;
@@ -68,7 +68,10 @@ class EntityPersister
             return null;
         }
 
-        return fn(Database $database) => $metaData->idProperty->reflection->setValue($entity, $database->lastInsertId());
+        return function (Database $database) use ($metaData, $entity) {
+            $metaData->idProperty->reflection->setValue($entity, $database->lastInsertId());
+            em()->resetKey($entity);
+        };
     }
 
     private function prepareUpdate(object $entity, array $changedValues, UnitOfWork $unitOfWork): void

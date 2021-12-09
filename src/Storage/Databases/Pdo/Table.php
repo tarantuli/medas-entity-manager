@@ -15,11 +15,11 @@ class Table
 
     public function getRecord(array $filters): Record
     {
-        $statement = $this->database->execute(query: $this->database->queryBuilder()->select(
+        $this->database->execute(query: $this->database->queryBuilder()->select(
             tables: [$this],
             filters: $filters)
         );
 
-        return new Record($statement->fetch());
+        return new Record($this->database->lastStatement()->fetch());
     }
 }

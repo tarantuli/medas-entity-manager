@@ -17,6 +17,7 @@ class Database
     private array $tables = [];
     private MysqlQueryBuilder $queryBuilder;
     private \PDO $pdo;
+    private \PDOStatement $lastStatement;
 
     public function __construct(
         #[ConfigValue('db.pdo.dns')] private string $dns,
@@ -58,11 +59,12 @@ class Database
         return $this->tables[$name];
     }
 
-    public function execute(Queries\Query $query): \PDOStatement
+    public function execute(Queries\Query $query): void
     {
+        $this->lastStatement = $this->pdo->prepare($query->query);
+
         try {
-            $statement = $this->pdo->prepare($query->query);
-            $statement->execute($query->arguments);
+            $this->lastStatement->execute($query->arguments);
         }
         catch (\PDOException $e) {
             throw new DatabaseException($e->getMessage(), $query);
@@ -71,8 +73,6 @@ class Database
         if ($onComplete = $query->onComplete) {
             $onComplete($this);
         }
-
-        return $statement;
     }
 
     public function queryBuilder(): MysqlQueryBuilder
@@ -100,5 +100,10 @@ class Database
         $id = $this->pdo->lastInsertId();
 
         return $id === false ? null : (int) $id;
+    }
+
+    public function lastStatement(): \PDOStatement
+    {
+        return $this->lastStatement;
     }
 }

@@ -7,10 +7,10 @@ namespace Medas\EntityManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class IdHash
+class EntityKeyMaker
 {
-    public function get(array $id): string
+    public function get(string $className, array $id): string
     {
-        return json_encode($id);
+        return $className . ':' . json_encode($id);
     }
 }
