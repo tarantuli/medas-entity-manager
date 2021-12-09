@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps;
 
-use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\Attributes\Id;
-use Medas\EntityManager\Attributes\Types as Type;
+use Medas\EntityManager\Attributes\{Entity, Id};
+use Medas\EntityManager\Types as Type;
 
 #[Entity]
 class MockEntityCompositeId

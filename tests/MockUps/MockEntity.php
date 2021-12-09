@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsUnique, Types as Type};
+use Medas\EntityManager\Attributes\{Entity, Id, IsUnique};
+use Medas\EntityManager\Types as Type;
 
-#[Entity()]
+#[Entity]
 class MockEntity
 {
     #[Id]

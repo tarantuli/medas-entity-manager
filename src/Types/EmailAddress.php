@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager\Attributes\Types;
+namespace Medas\EntityManager\Types;
 
 use Medas\EntityManager\Attributes\ValueValidator;
 

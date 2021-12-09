@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager\Attributes;
+namespace Medas\EntityManager\Types;
 
 use Medas\EntityManager\Attributes\Interfaces\Type;
 

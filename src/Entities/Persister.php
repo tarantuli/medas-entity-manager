@@ -71,7 +71,7 @@ class Persister
         }
 
         return function (Database $database) use ($metaData, $entity) {
-            $metaData->idProperty->reflection->setValue($entity, $database->lastInsertId());
+            $metaData->idProperty->reflection->setValue($entity, $database->lastGeneratedValue());
             em()->resetKey($entity);
         };
     }

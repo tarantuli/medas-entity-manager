@@ -95,7 +95,7 @@ class Database
         $this->pdo->rollBack();
     }
 
-    public function lastInsertId(): int|null
+    public function lastGeneratedValue(): int|null
     {
         $id = $this->pdo->lastInsertId();
 
