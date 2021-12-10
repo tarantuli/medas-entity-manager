@@ -17,13 +17,13 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
     }
 
-    /** @param Table[] $stores */
-    public function select(array $stores, array $filters): Query
+    /** @param Table[] $tables */
+    public function select(array $tables, array $filters): Query
     {
         $this->arguments = [];
         $this->query = 'select * from ';
 
-        foreach ($stores as $table) {
+        foreach ($tables as $table) {
             $this->query .= $table->name . ',';
         }
 
@@ -47,11 +47,11 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->query = substr($this->query, 0, -2 - strlen($separator));
     }
 
-    public function update(Store $store, array $updates, array $conditions): Query
+    public function update(Store $table, array $updates, array $conditions): Query
     {
         $this->arguments = [];
 
-        $this->query = 'update ' . $store->name . ' set ';
+        $this->query = 'update ' . $table->name . ' set ';
         $this->appendParameters($updates);
 
         $this->query .= ' where ';
@@ -60,13 +60,18 @@ class BaseSqlQueryBuilder implements QueryBuilder
         return new Query($this->query, $this->arguments, $this->storage);
     }
 
-    public function create(Store $store, array $values): Query
+    public function create(Store $table, array $values): Query
     {
         $this->arguments = [];
 
-        $this->query = 'insert into ' . $store->name . ' set ';
+        $this->query = 'insert into ' . $table->name . ' set ';
         $this->appendParameters($values);
 
         return new Query($this->query, $this->arguments, $this->storage);
+    }
+
+    public function showCreate(Table $table): Query
+    {
+        return new Query('show create table ' . $table->name, [], $this->storage);
     }
 }

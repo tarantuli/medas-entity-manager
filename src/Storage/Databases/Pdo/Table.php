@@ -37,4 +37,10 @@ class Table implements Store
     {
         return $this->database->actionBuilder()->update($this, $updates, $conditions);
     }
+
+    public function getStructure(): string
+    {
+        $this->database->actionBuilder()->showCreate($this)->execute();
+        return $this->database->lastStatement()->fetchColumn(1);
+    }
 }
