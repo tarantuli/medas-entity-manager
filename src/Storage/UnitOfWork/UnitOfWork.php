@@ -5,32 +5,42 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Storage\UnitOfWork;
 
 use Medas\EntityManager\Storage\Interfaces\Action;
+use Medas\EntityManager\Storage\Interfaces\Storage;
 
 class UnitOfWork
 {
+    /** @var Storage[]|\SplObjectStorage */
+    public array|\SplObjectStorage $storages;
+
     /** @var Action[] */
     public array $creates = [];
 
     /** @var Action[] */
     public array $updates = [];
 
-    public array $storages = [];
+    /** @var Action[] */
+    public array $additionalActions = [];
 
-    public function addUpdate(Action $update)
+    public function __construct()
     {
-        if (!in_array($update->storage(), $this->storages)) {
-            $this->storages[] = $update->storage();
-        }
+        $this->storages = new \SplObjectStorage();
+    }
 
+    public function addUpdate(Action $update): void
+    {
+        $this->storages->attach($update->storage());
         $this->updates[] = $update;
     }
 
-    public function addCreate(Action $create)
+    public function addCreate(Action $create): void
     {
-        if (!in_array($create->storage(), $this->storages)) {
-            $this->storages[] = $create->storage();
-        }
-
+        $this->storages->attach($create->storage());
         $this->creates[] = $create;
+    }
+
+    public function addAction(Action $create): void
+    {
+        $this->storages->attach($create->storage());
+        $this->additionalActions[] = $create;
     }
 }

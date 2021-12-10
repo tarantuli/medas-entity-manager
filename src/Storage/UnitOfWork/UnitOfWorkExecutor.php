@@ -23,6 +23,10 @@ class UnitOfWorkExecutor
             foreach ($unitOfWork->updates as $update) {
                 $update->execute();
             }
+
+            foreach ($unitOfWork->additionalActions as $action) {
+                $action->execute();
+            }
         }
         catch (\Exception) {
             foreach ($unitOfWork->storages as $storage) {
