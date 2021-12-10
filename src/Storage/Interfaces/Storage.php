@@ -15,6 +15,4 @@ interface Storage
     public function commitTransaction(): void;
 
     public function lastGeneratedValue(): int|null;
-
-    public function actionBuilder(): ActionBuilder;
 }

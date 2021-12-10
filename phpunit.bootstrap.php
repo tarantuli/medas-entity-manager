@@ -28,3 +28,10 @@ $config->addDirectory(__DIR__ . '/config');
 /** @var DatabaseManager $dm */
 $dm = $sm->resolve(DatabaseManager::class);
 $dm->add($sm->instantiate(Database::class));
+
+$sqliteFile = sys_get_temp_dir() . '/entity-manager-test.sqlite3';
+if (file_exists($sqliteFile)) {
+    unlink($sqliteFile);
+}
+
+$dm->add(new Database('sqlite:' . $sqliteFile, '', ''), 'sqlite3');

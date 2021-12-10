@@ -13,16 +13,14 @@ class UnitOfWorkManager
     public function queueUpdate(UnitOfWork $unitOfWork, Store $store, array $updates, array $conditions)
     {
         $unitOfWork->addUpdate(
-            $store->database->actionBuilder()->update($store, $updates, $conditions)
-                ->setStorage($store->database)
+            $store->prepareUpdate($updates, $conditions)
         );
     }
 
     public function queueCreate(UnitOfWork $unitOfWork, Store $store, array $values, \Closure $onComplete = null)
     {
         $unitOfWork->addCreate(
-            $store->database->actionBuilder()->create($store, $values)
-                ->setOnComplete($onComplete)->setStorage($store->database)
+            $store->prepareCreate($values)->setOnComplete($onComplete)
         );
     }
 }

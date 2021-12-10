@@ -6,7 +6,9 @@ namespace Medas\EntityManager\Storage\Databases\Pdo;
 
 use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\DriverNotImplementedException;
 use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
+use Medas\EntityManager\Storage\Databases\Pdo\Queries\BaseSqlQueryBuilder;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
+use Medas\EntityManager\Storage\Databases\Pdo\Queries\QueryBuilder;
 use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\ServiceManager\Attributes\ConfigValue;
 
@@ -14,7 +16,7 @@ class Database implements Storage
 {
     /** @var Table[] */
     private array $tables = [];
-    private MysqlQueryBuilder $queryBuilder;
+    private QueryBuilder $queryBuilder;
     private \PDO $pdo;
     private \PDOStatement $lastStatement;
 
@@ -44,7 +46,8 @@ class Database implements Storage
         $driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         $this->queryBuilder = match ($driver) {
-            'mysql' => new MysqlQueryBuilder(),
+            'mysql' => new MysqlQueryBuilder($this),
+            'sqlite' => new BaseSqlQueryBuilder($this),
             default => throw new DriverNotImplementedException($driver)
         };
     }
@@ -74,7 +77,7 @@ class Database implements Storage
         }
     }
 
-    public function actionBuilder(): MysqlQueryBuilder
+    public function actionBuilder(): QueryBuilder
     {
         return $this->queryBuilder;
     }

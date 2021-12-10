@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager\Storage\Interfaces;
+namespace Medas\EntityManager\Storage\Databases\Pdo\Queries;
 
-interface ActionBuilder
+use Medas\EntityManager\Storage\Interfaces\Action;
+use Medas\EntityManager\Storage\Interfaces\Store;
+
+interface QueryBuilder
 {
     public function create(Store $store, array $values): Action;
 
