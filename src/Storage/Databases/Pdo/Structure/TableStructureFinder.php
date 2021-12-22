@@ -52,7 +52,7 @@ class TableStructureFinder
             return;
         }
 
-        $index = new Blueprint\Index('PRIMARY');
+        $index = new \Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint\Index('PRIMARY');
         $index->fields = $blueprint->getFields($this->getNames($match[1]));
         $index->isUnique = true;
 
@@ -79,7 +79,7 @@ class TableStructureFinder
         }
 
         foreach ($matches as $match) {
-            $index = new Blueprint\Index($match['name']);
+            $index = new \Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint\Index($match['name']);
             $index->fields = $blueprint->getFields($this->getNames($match['fields']));
             $index->isUnique = isset($match['isUnique']);
 

@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Medas\EntityManager\Storage\Databases\Pdo\Structure\TypeHandlers;
+
+use Medas\EntityManager\MetaData\Property;
+use Medas\EntityManager\Types\Integer;
+use Medas\EntityManager\Types\Text;
+use Medas\ServiceManager\Attributes\Service;
+
+#[Service]
+class TextHandler implements TypeHandler
+{
+    public function getFieldType(Property $property): string
+    {
+        /** @var Text $type */
+        $type = $property->type;
+
+        return match (true) {
+            $type->minLength >= 0 && $type->maxLength <= Integer::UNSIGNED_1_BYTE_MAX => sprintf('varchar(%s)', $type->maxLength),
+            default => 'text'
+        };
+    }
+}
