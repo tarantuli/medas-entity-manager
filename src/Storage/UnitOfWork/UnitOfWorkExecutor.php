@@ -32,6 +32,7 @@ class UnitOfWorkExecutor
             foreach ($unitOfWork->storages as $storage) {
                 $storage->rollbackTransaction();
             }
+
             return false;
         }
 
