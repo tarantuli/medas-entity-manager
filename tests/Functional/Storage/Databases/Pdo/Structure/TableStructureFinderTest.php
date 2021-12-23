@@ -15,7 +15,8 @@ class TableStructureFinderTest extends BaseTest
         $structure = $tsf->find(db()->getStore('stored_entities'));
 
         self::assertEquals('stored_entities', $structure->name);
-        self::assertEquals('datetime', $structure->fields['createdAt']->type);
+        self::assertEquals('datetime', $structure->fields['createdAt']->definition);
         self::assertEquals('id', $structure->indexes['PRIMARY']->fields[0]->name);
+        self::assertEquals('name', $structure->indexes['name']->fields[0]->name);
     }
 }

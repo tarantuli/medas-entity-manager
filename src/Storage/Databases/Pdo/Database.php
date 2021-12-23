@@ -77,7 +77,7 @@ class Database implements Storage
         }
     }
 
-    public function actionBuilder(): QueryBuilder
+    public function queryBuilder(): QueryBuilder
     {
         return $this->queryBuilder;
     }
@@ -107,5 +107,10 @@ class Database implements Storage
     public function lastStatement(): \PDOStatement
     {
         return $this->lastStatement;
+    }
+
+    public function quote(string $identifier): string
+    {
+        return $this->queryBuilder->quote($identifier);
     }
 }

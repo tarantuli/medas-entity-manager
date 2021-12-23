@@ -6,6 +6,7 @@ namespace Medas\EntityManager\Storage\Databases\Pdo\Structure;
 
 use Medas\EntityManager\Storage\Databases\Pdo\Database;
 use Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint\Field;
+use Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint\Index;
 use Medas\EntityManager\Storage\Databases\Pdo\Table;
 
 class TableStructureFinder
@@ -52,7 +53,7 @@ class TableStructureFinder
             return;
         }
 
-        $index = new \Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint\Index('PRIMARY');
+        $index = new Index('PRIMARY');
         $index->fields = $blueprint->getFields($this->getNames($match[1]));
         $index->isUnique = true;
 
@@ -79,7 +80,7 @@ class TableStructureFinder
         }
 
         foreach ($matches as $match) {
-            $index = new \Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint\Index($match['name']);
+            $index = new Index($match['name']);
             $index->fields = $blueprint->getFields($this->getNames($match['fields']));
             $index->isUnique = isset($match['isUnique']);
 

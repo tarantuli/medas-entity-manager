@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Storage\Databases\Pdo\Queries;
 
 use Medas\EntityManager\Storage\Databases\Pdo\Database;
+use Medas\EntityManager\Storage\Databases\Pdo\Structure\Blueprint;
+use Medas\EntityManager\Storage\Databases\Pdo\Structure\Changes;
 use Medas\EntityManager\Storage\Databases\Pdo\Table;
 use Medas\EntityManager\Storage\Interfaces\Store;
 
@@ -13,7 +15,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
     private string $query;
     private array $arguments;
 
-    public function __construct(private Database $storage)
+    public function __construct(private Database $database)
     {
     }
 
@@ -34,7 +36,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
             $this->appendParameters($filters);
         }
 
-        return new Query($this->query, $this->arguments, $this->storage);
+        return new Query($this->query, $this->arguments, $this->database);
     }
 
     private function appendParameters(array $filters, string $separator = 'and'): void
@@ -57,7 +59,7 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->query .= ' where ';
         $this->appendParameters($conditions);
 
-        return new Query($this->query, $this->arguments, $this->storage);
+        return new Query($this->query, $this->arguments, $this->database);
     }
 
     public function create(Store $table, array $values): Query
@@ -67,11 +69,26 @@ class BaseSqlQueryBuilder implements QueryBuilder
         $this->query = 'insert into ' . $table->name . ' set ';
         $this->appendParameters($values);
 
-        return new Query($this->query, $this->arguments, $this->storage);
+        return new Query($this->query, $this->arguments, $this->database);
     }
 
     public function showCreate(Table $table): Query
     {
-        return new Query('show create table ' . $table->name, [], $this->storage);
+        return new Query('show create table ' . $table->name, [], $this->database);
+    }
+
+    public function createTable(Blueprint $blueprint): Query
+    {
+        return (new CreateTableBuilder($blueprint))->create($this->database);
+    }
+
+    public function alterTable(Changes $changes): Query
+    {
+        return (new AlterTableBuilder($changes))->create($this->database);
+    }
+
+    public function quote(string $identifier): string
+    {
+        return '"' . $identifier . '"';
     }
 }

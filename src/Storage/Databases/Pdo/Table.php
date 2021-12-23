@@ -25,22 +25,22 @@ class Table implements Store
 
     public function prepareGet(array $filters): Action
     {
-        return $this->database->actionBuilder()->select([$this], $filters);
+        return $this->database->queryBuilder()->select([$this], $filters);
     }
 
     public function prepareCreate(array $values): Action
     {
-        return $this->database->actionBuilder()->create($this, $values);
+        return $this->database->queryBuilder()->create($this, $values);
     }
 
     public function prepareUpdate(array $updates, array $conditions): Action
     {
-        return $this->database->actionBuilder()->update($this, $updates, $conditions);
+        return $this->database->queryBuilder()->update($this, $updates, $conditions);
     }
 
     public function getCreateTable(): string
     {
-        $this->database->actionBuilder()->showCreate($this)->execute();
+        $this->database->queryBuilder()->showCreate($this)->execute();
         return $this->database->lastStatement()->fetchColumn(1);
     }
 }

@@ -18,7 +18,7 @@ class IntegerHandler implements TypeHandler
 
         return match (true) {
             $type->minValue >= 0 && $type->maxValue <= Integer::UNSIGNED_1_BYTE_MAX => 'tinyint unsigned',
-            default => 'integer unsigned'
+            default => 'int unsigned'
         };
     }
 }
