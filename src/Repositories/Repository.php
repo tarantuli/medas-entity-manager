@@ -18,7 +18,7 @@ class Repository
 
     public function findOne(array $conditions): object
     {
-        $record = $this->metaData->getTable()->getRecord($conditions);
+        $record = $this->metaData->getStore()->getRecord($conditions);
         $idValues = $this->idValues->extract($record->data(), $this->metaData);
 
         return em()->get($this->metaData->className, $idValues);

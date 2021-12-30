@@ -8,13 +8,16 @@
         }
     ],
     "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "morphp/medas-service-manager": "@dev",
+        "morphp/medas-config-manager": "@dev",
+        "morphp/medas-file-builder": "@dev",
         "ext-pdo": "*",
         "symfony/cache": "^5.3"
     },
     "require-dev": {
-        "morphp/medas-config-manager": "@dev",
         "phpunit/phpunit": "^9.5"
     },
     "repositories": [
@@ -29,6 +32,18 @@
         {
             "type": "path",
             "url": "../config-manager"
+        },
+        {
+            "type": "path",
+            "url": "../file-builder"
+        },
+        {
+            "type": "path",
+            "url": "../php-reformatter"
+        },
+        {
+            "type": "path",
+            "url": "../filesystem"
         }
     ],
     "autoload": {

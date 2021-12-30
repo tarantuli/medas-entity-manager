@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-use Medas\EntityManager\Exceptions\DatabaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\DriverNotImplementedException;
+use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
+use Medas\EntityManager\Storage\Databases\Pdo\Queries\BaseSqlQueryBuilder;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
+use Medas\EntityManager\Storage\Databases\Pdo\Queries\QueryBuilder;
+use Medas\EntityManager\Storage\Databases\Pdo\Structure\TableMigrationBuilder;
+use Medas\EntityManager\Storage\Interfaces\Storage;
+use Medas\EntityManager\Storage\Migrations\MigrationBuilder;
 use Medas\ServiceManager\Attributes\ConfigValue;
-use Medas\ServiceManager\Attributes\Service;
 
-#[Service]
-class Database
+class Database implements Storage
 {
+    private string $name;
     /** @var Table[] */
     private array $tables = [];
-    private MysqlQueryBuilder $queryBuilder;
+    private QueryBuilder $queryBuilder;
     private \PDO $pdo;
     private \PDOStatement $lastStatement;
+    private TableMigrationBuilder $migrationBuilder;
 
     public function __construct(
         #[ConfigValue('db.pdo.dns')] private string $dns,
@@ -26,7 +31,7 @@ class Database
     )
     {
         $this->initializePdo();
-        $this->initializeQueryBuilder();
+        $this->initializeBuilders();
     }
 
     private function initializePdo(): void
@@ -40,23 +45,37 @@ class Database
         $this->pdo = new \PDO($this->dns, $this->username, $this->password, $options);
     }
 
-    private function initializeQueryBuilder(): void
+    private function initializeBuilders(): void
     {
         $driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
         $this->queryBuilder = match ($driver) {
-            'mysql' => new MysqlQueryBuilder(),
+            'mysql' => new MysqlQueryBuilder($this),
+            'sqlite' => new BaseSqlQueryBuilder($this),
             default => throw new DriverNotImplementedException($driver)
         };
+
+        $this->migrationBuilder = sm()->instantiate(TableMigrationBuilder::class);
+        $this->migrationBuilder->setDatabase($this);
     }
 
-    public function getTable(string $name): Table
+    public function stores(): array
+    {
+        return $this->tables;
+    }
+
+    public function store(string $name): Table
     {
         if (!isset($this->tables[$name])) {
             $this->tables[$name] = new Table($this, $name);
         }
 
         return $this->tables[$name];
+    }
+
+    public function deleteStore(string $name): void
+    {
+        $this->execute($this->queryBuilder->dropTable($name));
     }
 
     public function execute(Queries\Query $query): void
@@ -67,15 +86,15 @@ class Database
             $this->lastStatement->execute($query->arguments);
         }
         catch (\PDOException $e) {
-            throw new DatabaseException($e->getMessage(), $query);
+            throw new PdoDatabaseException($e->getMessage(), $query);
         }
 
-        if ($onComplete = $query->onComplete) {
+        if ($onComplete = $query->onComplete()) {
             $onComplete($this);
         }
     }
 
-    public function queryBuilder(): MysqlQueryBuilder
+    public function queryBuilder(): QueryBuilder
     {
         return $this->queryBuilder;
     }
@@ -87,12 +106,16 @@ class Database
 
     public function commitTransaction(): void
     {
-        $this->pdo->commit();
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->commit();
+        }
     }
 
     public function rollbackTransaction(): void
     {
-        $this->pdo->rollBack();
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->rollBack();
+        }
     }
 
     public function lastGeneratedValue(): int|null
@@ -105,5 +128,25 @@ class Database
     public function lastStatement(): \PDOStatement
     {
         return $this->lastStatement;
+    }
+
+    public function quote(string $identifier): string
+    {
+        return $this->queryBuilder->quote($identifier);
+    }
+
+    public function migrationBuilder(): MigrationBuilder
+    {
+        return $this->migrationBuilder;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }

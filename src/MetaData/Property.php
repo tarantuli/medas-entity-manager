@@ -11,6 +11,7 @@ class Property
     public function __construct(
         public string              $name,
         public Type                $type,
+        public mixed               $default,
         public bool                $isId,
         public bool                $isGeneratedValue,
         public bool                $isNullable,

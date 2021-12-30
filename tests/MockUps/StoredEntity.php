@@ -7,7 +7,7 @@ namespace Medas\Test\MockUps;
 use Medas\EntityManager\Attributes\{Entity, Id, IsGeneratedValue, IsNullable, IsUnique};
 use Medas\EntityManager\Types as Type;
 
-#[Entity(table: 'stored_entities')]
+#[Entity(store: 'stored_entities')]
 class StoredEntity
 {
     #[Id]

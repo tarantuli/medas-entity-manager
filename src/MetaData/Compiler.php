@@ -43,22 +43,34 @@ class Compiler
     private function determineProperties(\ReflectionClass $class, MetaData $metaData)
     {
         foreach ($class->getProperties() as $property) {
-            if ($attributes = $property->getAttributes(Attributes\Interfaces\Type::class, \ReflectionAttribute::IS_INSTANCEOF)) {
-                /** @var Attributes\Interfaces\Type $type */
-                $type = $attributes[0]->newInstance();
-
-                $metaData->properties[] = new Property(
-                    name: $property->name,
-                    type: $type,
-                    isId: !empty($property->getAttributes(Id::class)),
-                    isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
-                    isNullable: !empty($property->getAttributes(IsNullable::class)),
-                    isUnique: !empty($property->getAttributes(IsUnique::class)),
-                    phpTypes: $this->propertyTypeNormalizer->getNames($property),
-                    reflection: $property
-                );
-            }
+            $this->processProperty($property, $metaData);
         }
+    }
+
+    private function processProperty(\ReflectionProperty $property, MetaData $metaData): void
+    {
+        $attributes = $property->getAttributes(
+            Attributes\Interfaces\Type::class,
+            \ReflectionAttribute::IS_INSTANCEOF
+        );
+
+        if (!$attributes) {
+            return;
+        }
+        /** @var Attributes\Interfaces\Type $type */
+        $type = $attributes[0]->newInstance();
+
+        $metaData->properties[] = new Property(
+            name: $property->name,
+            type: $type,
+            default: $property->hasDefaultValue() ? $property->getDefaultValue() : null,
+            isId: !empty($property->getAttributes(Id::class)),
+            isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
+            isNullable: !empty($property->getAttributes(IsNullable::class)),
+            isUnique: !empty($property->getAttributes(IsUnique::class)),
+            phpTypes: $this->propertyTypeNormalizer->getNames($property),
+            reflection: $property
+        );
     }
 
     private function determineIdProperties(MetaData $metaData): void

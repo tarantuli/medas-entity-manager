@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager\Exceptions;
+namespace Medas\EntityManager\Storage\Databases\Pdo\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\Query;
 
-class DatabaseException extends BaseException
+class PdoDatabaseException extends BaseException
 {
     public function __construct(string $message, Query $query)
     {

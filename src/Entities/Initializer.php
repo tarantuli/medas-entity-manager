@@ -24,7 +24,7 @@ class Initializer
         $entity = new $className();
         $this->hydrator->setIdValues($metaData, $entity, $id);
 
-        if ($metaData->entity->table) {
+        if ($metaData->entity->store) {
             $this->hydrator->hydrate($metaData, $entity);
         }
 

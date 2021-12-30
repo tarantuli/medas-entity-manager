@@ -4,31 +4,22 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo\Queries;
 
-use Medas\EntityManager\Storage\Databases\Pdo\Database;
+use Medas\EntityManager\Storage\BaseAction;
+use Medas\EntityManager\Storage\Interfaces\Storage;
 
-class Query
+class Query extends BaseAction
 {
-    public Database $database;
-    public \Closure|null $onComplete = null;
-
     public function __construct(
         public string $query,
-        public array  $arguments
+        public array  $arguments,
+        Storage       $storage
     )
     {
+        $this->storage = $storage;
     }
 
-    public function onComplete(\Closure|null $onComplete): self
+    public function execute(): void
     {
-        $this->onComplete = $onComplete;
-
-        return $this;
-    }
-
-    public function database(Database $database): self
-    {
-        $this->database = $database;
-
-        return $this;
+        $this->storage->execute($this);
     }
 }

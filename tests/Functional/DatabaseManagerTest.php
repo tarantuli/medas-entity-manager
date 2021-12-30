@@ -17,7 +17,7 @@ class DatabaseManagerTest extends BaseTest
 
     public function testGetTable(): void
     {
-        $table = db()->getTable('database_manager_test');
+        $table = db()->store('database_manager_test');
         self::assertInstanceOf(Table::class, $table);
     }
 }

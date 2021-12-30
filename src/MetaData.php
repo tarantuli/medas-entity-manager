@@ -6,7 +6,7 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\Exceptions\PropertyDoesNotExistException;
-use Medas\EntityManager\Storage\Databases\Pdo\Table;
+use Medas\EntityManager\Storage\Interfaces\Store;
 
 class MetaData
 {
@@ -37,8 +37,8 @@ class MetaData
         throw new PropertyDoesNotExistException($this->className, $propertyName);
     }
 
-    public function getTable(): Table
+    public function getStore(): Store
     {
-        return db($this->entity->db)->getTable($this->entity->table);
+        return db($this->entity->storage)->store($this->entity->store);
     }
 }

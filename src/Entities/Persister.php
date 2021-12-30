@@ -9,7 +9,7 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Snapshots\Snapshot;
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\EntityManager\Storage\Databases\Pdo\Database;
+use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkManager;
 use Medas\ServiceManager\Attributes\Service;
@@ -58,7 +58,7 @@ class Persister
 
         $this->unitOfWorkManager->queueCreate(
             $unitOfWork,
-            $metaData->getTable(),
+            $metaData->getStore(),
             $serializedValues,
             $onComplete
         );
@@ -70,8 +70,8 @@ class Persister
             return null;
         }
 
-        return function (Database $database) use ($metaData, $entity) {
-            $metaData->idProperty->reflection->setValue($entity, $database->lastGeneratedValue());
+        return function (Storage $storage) use ($metaData, $entity) {
+            $metaData->idProperty->reflection->setValue($entity, $storage->lastGeneratedValue());
             em()->resetKey($entity);
         };
     }
@@ -88,7 +88,7 @@ class Persister
 
         $this->unitOfWorkManager->queueUpdate(
             $unitOfWork,
-            $metaData->getTable(),
+            $metaData->getStore(),
             $serializedValues,
             $this->valueGetter->getValues($entity, $metaData->idProperties)
         );

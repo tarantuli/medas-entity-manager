@@ -4,33 +4,43 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\UnitOfWork;
 
-use Medas\EntityManager\Storage\Databases\Pdo\Queries\Query;
+use Medas\EntityManager\Storage\Interfaces\Action;
+use Medas\EntityManager\Storage\Interfaces\Storage;
 
 class UnitOfWork
 {
-    /** @var Query[] */
+    /** @var Storage[]|\SplObjectStorage */
+    public array|\SplObjectStorage $storages;
+
+    /** @var Action[] */
     public array $creates = [];
 
-    /** @var Query[] */
+    /** @var Action[] */
     public array $updates = [];
 
-    public array $databases = [];
+    /** @var Action[] */
+    public array $additionalActions = [];
 
-    public function addUpdate(Query $update)
+    public function __construct()
     {
-        if (!in_array($update->database, $this->databases)) {
-            $this->databases[] = $update->database;
-        }
+        $this->storages = new \SplObjectStorage();
+    }
 
+    public function addUpdate(Action $update): void
+    {
+        $this->storages->attach($update->storage());
         $this->updates[] = $update;
     }
 
-    public function addCreate(Query $create)
+    public function addCreate(Action $create): void
     {
-        if (!in_array($create->database, $this->databases)) {
-            $this->databases[] = $create->database;
-        }
-
+        $this->storages->attach($create->storage());
         $this->creates[] = $create;
+    }
+
+    public function addAction(Action $create): void
+    {
+        $this->storages->attach($create->storage());
+        $this->additionalActions[] = $create;
     }
 }

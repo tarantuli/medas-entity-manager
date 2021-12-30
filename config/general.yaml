@@ -5,3 +5,6 @@ db:
     dns: $env(DB_PDO_DNS)
     username: $env(DB_PDO_USERNAME)
     password: $env(DB_PDO_PASSWORD)
+
+validator:
+  path_to_php: $env(PATH_TO_PHP)

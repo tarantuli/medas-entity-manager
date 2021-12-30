@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
-class Table
+use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
+use Medas\EntityManager\Storage\Interfaces\Action;
+use Medas\EntityManager\Storage\Interfaces\Store;
+
+class Table implements Store
 {
     public function __construct(
         public Database $database,
@@ -13,13 +17,44 @@ class Table
     {
     }
 
-    public function getRecord(array $filters): Record
+    public function storage(): Database
     {
-        $this->database->execute(query: $this->database->queryBuilder()->select(
-            tables: [$this],
-            filters: $filters)
-        );
+        return $this->database;
+    }
 
-        return new Record($this->database->lastStatement()->fetch());
+    public function getRecord(array $filters): Record|null
+    {
+        $this->database->execute($this->prepareGet($filters));
+
+        $data = $this->database->lastStatement()->fetch();
+        return is_array($data) ? new Record($data) : null;
+    }
+
+    public function prepareGet(array $filters): Action
+    {
+        return $this->database->queryBuilder()->select([$this], $filters);
+    }
+
+    public function prepareCreate(array $values): Action
+    {
+        return $this->database->queryBuilder()->create($this, $values);
+    }
+
+    public function prepareUpdate(array $updates, array $conditions): Action
+    {
+        return $this->database->queryBuilder()->update($this, $updates, $conditions);
+    }
+
+    public function getCreateTable(): string|null
+    {
+
+        try {
+            $this->database->queryBuilder()->showCreate($this)->execute();
+            return $this->database->lastStatement()->fetchColumn(1);
+        }
+            /** @noinspection PhpRedundantCatchClauseInspection */
+        catch (PdoDatabaseException) {
+            return null;
+        }
     }
 }
