@@ -6,7 +6,9 @@ namespace Medas\EntityManager\Storage\Interfaces;
 
 interface Store
 {
-    public function getRecord(array $filters): StoreRecord;
+    public function storage(): Storage;
+
+    public function getRecord(array $filters): StoreRecord|null;
 
     public function prepareCreate(array $values): Action;
 

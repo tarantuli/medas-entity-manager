@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Databases\Pdo;
 
+use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
 use Medas\EntityManager\Storage\Interfaces\Action;
 use Medas\EntityManager\Storage\Interfaces\Store;
 
@@ -16,11 +17,17 @@ class Table implements Store
     {
     }
 
-    public function getRecord(array $filters): Record
+    public function storage(): Database
+    {
+        return $this->database;
+    }
+
+    public function getRecord(array $filters): Record|null
     {
         $this->database->execute($this->prepareGet($filters));
 
-        return new Record($this->database->lastStatement()->fetch());
+        $data = $this->database->lastStatement()->fetch();
+        return is_array($data) ? new Record($data) : null;
     }
 
     public function prepareGet(array $filters): Action
@@ -38,9 +45,16 @@ class Table implements Store
         return $this->database->queryBuilder()->update($this, $updates, $conditions);
     }
 
-    public function getCreateTable(): string
+    public function getCreateTable(): string|null
     {
-        $this->database->queryBuilder()->showCreate($this)->execute();
-        return $this->database->lastStatement()->fetchColumn(1);
+
+        try {
+            $this->database->queryBuilder()->showCreate($this)->execute();
+            return $this->database->lastStatement()->fetchColumn(1);
+        }
+            /** @noinspection PhpRedundantCatchClauseInspection */
+        catch (PdoDatabaseException) {
+            return null;
+        }
     }
 }

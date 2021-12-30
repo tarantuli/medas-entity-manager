@@ -91,4 +91,9 @@ class BaseSqlQueryBuilder implements QueryBuilder
     {
         return '"' . $identifier . '"';
     }
+
+    public function dropTable(string $name): Query
+    {
+        return new Query('DROP TABLE IF EXISTS ' . $name, [], $this->database);
+    }
 }

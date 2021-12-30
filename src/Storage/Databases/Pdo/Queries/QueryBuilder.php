@@ -24,4 +24,6 @@ interface QueryBuilder
     public function alterTable(Changes $changes): Query;
 
     public function quote(string $identifier): string;
+
+    public function dropTable(string $name): Query;
 }

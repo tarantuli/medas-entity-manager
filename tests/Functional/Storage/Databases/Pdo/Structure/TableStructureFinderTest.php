@@ -12,10 +12,10 @@ class TableStructureFinderTest extends BaseTest
     public function testFindStructure(): void
     {
         $tsf = new TableStructureFinder(db());
-        $structure = $tsf->find(db()->getStore('stored_entities'));
+        $structure = $tsf->find(db()->store('stored_entities'));
 
         self::assertEquals('stored_entities', $structure->name);
-        self::assertEquals('datetime', $structure->fields['createdAt']->definition);
+        self::assertEquals('datetime DEFAULT NULL', $structure->fields['createdAt']->definition);
         self::assertEquals('id', $structure->indexes['PRIMARY']->fields[0]->name);
         self::assertEquals('name', $structure->indexes['name']->fields[0]->name);
     }

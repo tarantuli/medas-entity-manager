@@ -17,8 +17,12 @@ class TextHandler implements TypeHandler
         /** @var Text $type */
         $type = $property->type;
 
+        /** @noinspection PhpDuplicateMatchArmBodyInspection */
         return match (true) {
-            $type->minLength >= 0 && $type->maxLength <= Integer::UNSIGNED_1_BYTE_MAX => sprintf('varchar(%s)', $type->maxLength),
+            $type->maxLength <= Integer::UNSIGNED_1_BYTE_MAX => sprintf('varchar(%s)', $type->maxLength),
+            $type->maxLength <= Integer::UNSIGNED_2_BYTE_MAX => 'text',
+            $type->maxLength <= Integer::UNSIGNED_3_BYTE_MAX => 'mediumtext',
+            $type->maxLength <= Integer::UNSIGNED_4_BYTE_MAX => 'longtext',
             default => 'text'
         };
     }

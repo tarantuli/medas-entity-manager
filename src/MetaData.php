@@ -39,6 +39,6 @@ class MetaData
 
     public function getStore(): Store
     {
-        return db($this->entity->storage)->getStore($this->entity->store);
+        return db($this->entity->storage)->store($this->entity->store);
     }
 }

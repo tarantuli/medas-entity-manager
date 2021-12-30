@@ -16,7 +16,7 @@ class EntityStructureFinderTest extends BaseTest
         $structure = $esf->find(StoredEntity::class);
 
         self::assertEquals('stored_entities', $structure->name);
-        self::assertEquals('datetime', $structure->fields['createdAt']->definition);
+        self::assertEquals('datetime DEFAULT NULL', $structure->fields['createdAt']->definition);
         self::assertEquals('id', $structure->indexes['PRIMARY']->fields[0]->name);
         self::assertEquals('name', $structure->indexes['name']->fields[0]->name);
     }

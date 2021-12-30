@@ -9,16 +9,20 @@ use Medas\EntityManager\Storage\Databases\Pdo\Exceptions\PdoDatabaseException;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\BaseSqlQueryBuilder;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\MysqlQueryBuilder;
 use Medas\EntityManager\Storage\Databases\Pdo\Queries\QueryBuilder;
+use Medas\EntityManager\Storage\Databases\Pdo\Structure\TableMigrationBuilder;
 use Medas\EntityManager\Storage\Interfaces\Storage;
+use Medas\EntityManager\Storage\Migrations\MigrationBuilder;
 use Medas\ServiceManager\Attributes\ConfigValue;
 
 class Database implements Storage
 {
+    private string $name;
     /** @var Table[] */
     private array $tables = [];
     private QueryBuilder $queryBuilder;
     private \PDO $pdo;
     private \PDOStatement $lastStatement;
+    private TableMigrationBuilder $migrationBuilder;
 
     public function __construct(
         #[ConfigValue('db.pdo.dns')] private string $dns,
@@ -27,7 +31,7 @@ class Database implements Storage
     )
     {
         $this->initializePdo();
-        $this->initializeQueryBuilder();
+        $this->initializeBuilders();
     }
 
     private function initializePdo(): void
@@ -41,7 +45,7 @@ class Database implements Storage
         $this->pdo = new \PDO($this->dns, $this->username, $this->password, $options);
     }
 
-    private function initializeQueryBuilder(): void
+    private function initializeBuilders(): void
     {
         $driver = $this->pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
 
@@ -50,15 +54,28 @@ class Database implements Storage
             'sqlite' => new BaseSqlQueryBuilder($this),
             default => throw new DriverNotImplementedException($driver)
         };
+
+        $this->migrationBuilder = sm()->instantiate(TableMigrationBuilder::class);
+        $this->migrationBuilder->setDatabase($this);
     }
 
-    public function getStore(string $name): Table
+    public function stores(): array
+    {
+        return $this->tables;
+    }
+
+    public function store(string $name): Table
     {
         if (!isset($this->tables[$name])) {
             $this->tables[$name] = new Table($this, $name);
         }
 
         return $this->tables[$name];
+    }
+
+    public function deleteStore(string $name): void
+    {
+        $this->execute($this->queryBuilder->dropTable($name));
     }
 
     public function execute(Queries\Query $query): void
@@ -89,12 +106,16 @@ class Database implements Storage
 
     public function commitTransaction(): void
     {
-        $this->pdo->commit();
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->commit();
+        }
     }
 
     public function rollbackTransaction(): void
     {
-        $this->pdo->rollBack();
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->rollBack();
+        }
     }
 
     public function lastGeneratedValue(): int|null
@@ -112,5 +133,20 @@ class Database implements Storage
     public function quote(string $identifier): string
     {
         return $this->queryBuilder->quote($identifier);
+    }
+
+    public function migrationBuilder(): MigrationBuilder
+    {
+        return $this->migrationBuilder;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 }

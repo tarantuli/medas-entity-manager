@@ -8,7 +8,7 @@ use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
-class DatabaseManager
+class StorageManager
 {
     /** @var Storage[] */
     private array $storages = [];
@@ -18,6 +18,8 @@ class DatabaseManager
     {
         $this->storages[$name] = $storage;
 
+        $storage->setName($name);
+
         if ($isDefault || count($this->storages) === 1) {
             $this->default = $name;
         }
@@ -26,5 +28,11 @@ class DatabaseManager
     public function get(string $name = null): Storage
     {
         return $this->storages[$name ?? $this->default];
+    }
+
+    /** @return Storage[] */
+    public function storages(): array
+    {
+        return $this->storages;
     }
 }

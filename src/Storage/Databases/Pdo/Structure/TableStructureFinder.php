@@ -15,10 +15,14 @@ class TableStructureFinder
     {
     }
 
-    public function find(Table $table): Blueprint
+    public function find(Table $table): Blueprint|null
     {
         $blueprint = new Blueprint();
         $createTable = $table->getCreateTable();
+
+        if ($createTable === null) {
+            return null;
+        }
 
         $this->findName($createTable, $blueprint);
         $this->findFields($createTable, $blueprint);
@@ -39,11 +43,16 @@ class TableStructureFinder
 
     private function findFields(string $createTable, Blueprint $blueprint): void
     {
-        if (!preg_match_all('/^ +`([^`]+)` ([^ `]+)/ms', $createTable, $matches, PREG_SET_ORDER)) {
+        if (!preg_match_all('/^ +`([^`]+)` (.+?),?$/m', $createTable, $matches, PREG_SET_ORDER)) {
             return;
         }
         foreach ($matches as $match) {
-            $blueprint->addField(new Field($match[1], $match[2]));
+            $definition = $match[2];
+
+            // Strip collation
+            $definition = preg_replace('/ COLLATE \w+/', '', $definition);
+
+            $blueprint->addField(new Field($match[1], $definition));
         }
     }
 
