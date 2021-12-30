@@ -13,7 +13,7 @@ class EntityHasNoIdPropertyException extends BaseException
         parent::__construct($className);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'entity class %s does not define id properties';
     }

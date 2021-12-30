@@ -36,7 +36,7 @@ class EntityManager
         $this->savedStates = new \SplObjectStorage();
     }
 
-    public function getRepository(string $className): Repository
+    public function repository(string $className): Repository
     {
         return $this->repositoryManager->forClass($className);
     }

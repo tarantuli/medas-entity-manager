@@ -10,10 +10,9 @@ use PHPUnit\Framework\TestCase;
 
 abstract class BaseTest extends TestCase
 {
-    protected function getEntityManager(): EntityManager
+    protected function entityManager(): EntityManager
     {
         $serviceManager = ServiceManager::get();
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $serviceManager->resolve(EntityManager::class);
     }
 }

@@ -13,7 +13,7 @@ class IdValueShouldBeAnArrayException extends BaseException
         parent::__construct($className, $givenType);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'class %s has a complex id field, %s given';
     }

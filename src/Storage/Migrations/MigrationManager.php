@@ -40,7 +40,7 @@ class MigrationManager
     {
         $migrations = [];
         foreach (get_declared_classes() as $className) {
-            if (null === $migration = $this->getMigration($className, $directory)) {
+            if (null === $migration = $this->createMigration($className, $directory)) {
                 continue;
             }
 
@@ -51,7 +51,7 @@ class MigrationManager
 
     }
 
-    private function getMigration(string $className, string $directory): Migration|null
+    private function createMigration(string $className, string $directory): Migration|null
     {
         $class = new \ReflectionClass($className);
 

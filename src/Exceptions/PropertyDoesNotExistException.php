@@ -13,7 +13,7 @@ class PropertyDoesNotExistException extends BaseException
         parent::__construct($className, $propertyName);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'class %s does not have a stored property named %s';
     }

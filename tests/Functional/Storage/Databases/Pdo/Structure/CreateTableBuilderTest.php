@@ -14,7 +14,7 @@ class CreateTableBuilderTest extends BaseTest
     {
         $esf = service(EntityStructureFinder::class);
         $structure = $esf->find(StoredEntity::class);
-        $query = db()->queryBuilder()->createTable($structure);
+        $query = storage()->queryBuilder()->createTable($structure);
 
         $expected = <<<EXPECTED
 CREATE TABLE `stored_entities` (

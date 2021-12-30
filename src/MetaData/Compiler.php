@@ -68,7 +68,7 @@ class Compiler
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
             isNullable: !empty($property->getAttributes(IsNullable::class)),
             isUnique: !empty($property->getAttributes(IsUnique::class)),
-            phpTypes: $this->propertyTypeNormalizer->getNames($property),
+            phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property
         );
     }

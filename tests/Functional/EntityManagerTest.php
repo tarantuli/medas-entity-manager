@@ -18,7 +18,7 @@ class EntityManagerTest extends BaseTest
 {
     public function testNotAnEntityManager(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         $this->expectException(ClassIsNotAnEntityException::class);
         $entityManager->get(MockNotAnEntity::class, 1);
@@ -26,46 +26,46 @@ class EntityManagerTest extends BaseTest
 
     public function testEntityManager(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         self::assertInstanceOf(EntityManager::class, $entityManager);
     }
 
     public function testGetEntity(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         $entity = $entityManager->get(MockEntity::class, 1);
         self::assertInstanceOf(MockEntity::class, $entity);
-        self::assertEquals(1, $entity->getId());
+        self::assertEquals(1, $entity->id());
     }
 
     public function testTooComplexId(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
         $this->expectException(NonIdPropertyGivenException::class);
         $entityManager->get(MockEntity::class, ['id' => 1, 'name' => 'test']);
     }
 
     public function testWrongIdType(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
         $this->expectException(InvalidPropertyTypeException::class);
         $entityManager->get(MockEntity::class, 'string value');
     }
 
     public function testCompositeGetEntity(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         $entity = $entityManager->get(MockEntityCompositeId::class, ['id' => 1, 'name' => 'test']);
         self::assertInstanceOf(MockEntityCompositeId::class, $entity);
-        self::assertEquals(1, $entity->getId());
+        self::assertEquals(1, $entity->id());
     }
 
     public function testTooSimpleId(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         $this->expectException(IdValueShouldBeAnArrayException::class);
         $entityManager->get(MockEntityCompositeId::class, 1);

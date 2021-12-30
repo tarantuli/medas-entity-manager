@@ -13,7 +13,7 @@ class NonIdPropertyGivenException extends BaseException
         parent::__construct($property, $className);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'properties %s of class %s are not id properties';
     }

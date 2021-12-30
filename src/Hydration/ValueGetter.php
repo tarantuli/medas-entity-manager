@@ -11,7 +11,7 @@ use Medas\ServiceManager\Attributes\Service;
 class ValueGetter
 {
     /** @param MetaData\Property[] $fields */
-    public function getValues(object $entity, array $fields): array
+    public function get(object $entity, array $fields): array
     {
         $values = [];
 

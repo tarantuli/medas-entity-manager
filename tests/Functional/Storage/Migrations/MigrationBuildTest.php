@@ -32,8 +32,8 @@ class MigrationBuildTest extends BaseTest
         $fileName = $directory . DIRECTORY_SEPARATOR . 'migration.php';
 
         // Prepare database by deleting the table if it exists
-        $store = db()->store($newStoreName);
-        db()->deleteStore($newStoreName);
+        $store = storage()->store($newStoreName);
+        storage()->deleteStore($newStoreName);
 
         // Prepare the migration test directory
         if (!file_exists($directory)) {
@@ -48,7 +48,7 @@ class MigrationBuildTest extends BaseTest
         $manager->migrate($directory);
 
         // The table should exist and be empty
-        $record = $store->getRecord([]);
+        $record = $store->fetchRecord([]);
         self::assertNull($record);
     }
 }

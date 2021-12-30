@@ -12,11 +12,9 @@ abstract class BaseAction implements Action
     protected Storage $storage;
     private \Closure|null $onComplete = null;
 
-    public function setOnComplete(\Closure|null $onComplete): self
+    public function storage(): Storage
     {
-        $this->onComplete = $onComplete;
-
-        return $this;
+        return $this->storage;
     }
 
     public function setStorage(Storage $database): self
@@ -26,13 +24,15 @@ abstract class BaseAction implements Action
         return $this;
     }
 
-    public function storage(): Storage
-    {
-        return $this->storage;
-    }
-
     public function onComplete(): ?\Closure
     {
         return $this->onComplete;
+    }
+
+    public function setOnComplete(\Closure|null $onComplete): self
+    {
+        $this->onComplete = $onComplete;
+
+        return $this;
     }
 }

@@ -8,5 +8,5 @@ use Medas\EntityManager\MetaData\Property;
 
 interface TypeHandler
 {
-    public function getFieldType(Property $property): string;
+    public function fieldType(Property $property): string;
 }

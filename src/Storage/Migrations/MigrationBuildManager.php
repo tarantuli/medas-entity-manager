@@ -69,7 +69,7 @@ class MigrationBuildManager
     private function processEntities(string $directory): void
     {
         foreach (get_declared_classes() as $className) {
-            if (null === $entity = $this->getStoredEntity($className, $directory)) {
+            if (null === $entity = $this->determineStoredEntity($className, $directory)) {
                 continue;
             }
 
@@ -77,7 +77,7 @@ class MigrationBuildManager
         }
     }
 
-    private function getStoredEntity(string $className, string $directory): Entity|null
+    private function determineStoredEntity(string $className, string $directory): Entity|null
     {
         $class = new \ReflectionClass($className);
 
@@ -103,7 +103,7 @@ class MigrationBuildManager
 
     private function processEntity(string $className, Entity $entity): void
     {
-        db($entity->storage)->migrationBuilder()
+        storage($entity->storage)->migrationBuilder()
             ->build($className, $this->migrateMethod, $this->undoMethod);
     }
 }

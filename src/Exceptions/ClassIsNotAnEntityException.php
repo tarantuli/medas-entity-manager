@@ -13,7 +13,7 @@ class ClassIsNotAnEntityException extends BaseException
         parent::__construct($className);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'class %s is not an entity class';
     }

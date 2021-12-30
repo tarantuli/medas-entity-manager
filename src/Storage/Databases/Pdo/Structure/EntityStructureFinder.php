@@ -50,7 +50,7 @@ class EntityStructureFinder
     private function determineDefinition(MetaData\Property $property): string
     {
         $handler = $this->typeHandlerFactory->for($property->type);
-        $definition = $handler->getFieldType($property);
+        $definition = $handler->fieldType($property);
 
         if ($property->isGeneratedValue) {
             $definition .= ' NOT NULL AUTO_INCREMENT';
@@ -78,7 +78,7 @@ class EntityStructureFinder
         $index = new Index('PRIMARY');
 
         foreach ($metaData->idProperties as $property) {
-            $index->fields[] = $blueprint->getField($property->name);
+            $index->fields[] = $blueprint->field($property->name);
         }
 
         $index->isUnique = true;
@@ -94,7 +94,7 @@ class EntityStructureFinder
             }
 
             $index = new Index($property->name);
-            $index->fields[] = $blueprint->getField($property->name);
+            $index->fields[] = $blueprint->field($property->name);
             $index->isUnique = true;
             $blueprint->addIndex($index);
         }

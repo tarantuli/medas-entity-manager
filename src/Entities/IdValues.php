@@ -65,6 +65,6 @@ class IdValues
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
-        return $this->valueGetter->getValues($entity, $metaData->idProperties);
+        return $this->valueGetter->get($entity, $metaData->idProperties);
     }
 }

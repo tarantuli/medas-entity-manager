@@ -9,7 +9,7 @@ use Medas\EntityManager\EntityManager;
 use Medas\EntityManager\Storage\Interfaces\Storage;
 use Medas\ServiceManager\ServiceManager;
 
-function db(string $name = null): Storage
+function storage(string $name = null): Storage
 {
     /** @var StorageManager $dm */
     static $dm;

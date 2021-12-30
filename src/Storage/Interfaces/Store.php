@@ -8,7 +8,7 @@ interface Store
 {
     public function storage(): Storage;
 
-    public function getRecord(array $filters): StoreRecord|null;
+    public function fetchRecord(array $filters): StoreRecord|null;
 
     public function prepareCreate(array $values): Action;
 

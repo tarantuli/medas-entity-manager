@@ -63,14 +63,13 @@ class TableStructureFinder
         }
 
         $index = new Index('PRIMARY');
-        $index->fields = $blueprint->getFields($this->getNames($match[1]));
+        $index->fields = $blueprint->fields($this->getNames($match[1]));
         $index->isUnique = true;
 
         $blueprint->addIndex($index);
     }
 
     private function getNames(string $nameString): array
-
     {
         $names = explode(',', $nameString);
 
@@ -90,7 +89,7 @@ class TableStructureFinder
 
         foreach ($matches as $match) {
             $index = new Index($match['name']);
-            $index->fields = $blueprint->getFields($this->getNames($match['fields']));
+            $index->fields = $blueprint->fields($this->getNames($match['fields']));
             $index->isUnique = isset($match['isUnique']);
 
             $blueprint->addIndex($index);

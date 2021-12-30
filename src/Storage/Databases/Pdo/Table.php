@@ -22,7 +22,7 @@ class Table implements Store
         return $this->database;
     }
 
-    public function getRecord(array $filters): Record|null
+    public function fetchRecord(array $filters): Record|null
     {
         $this->database->execute($this->prepareGet($filters));
 

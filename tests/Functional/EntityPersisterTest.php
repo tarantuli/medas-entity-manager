@@ -21,7 +21,7 @@ class EntityPersisterTest extends BaseTest
         // Clear the cache, fetch the entity again
         em()->clear();
 
-        $entity = em()->getRepository(StoredEntity::class)->findOne(['name' => $newName]);
+        $entity = em()->repository(StoredEntity::class)->findOne(['name' => $newName]);
 
         self::assertIsInt($entity->id());
         self::assertEquals($newName, $entity->name);

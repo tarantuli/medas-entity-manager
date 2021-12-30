@@ -14,7 +14,7 @@ class PdoDatabaseException extends BaseException
         parent::__construct($message, $query->query, $query->arguments);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'error %s when executing %s with arguments %s';
     }

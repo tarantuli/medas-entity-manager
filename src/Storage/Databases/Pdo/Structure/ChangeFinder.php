@@ -15,7 +15,7 @@ class ChangeFinder
         $changes = new Changes($expected->name);
 
         foreach ($expected->fields as $field) {
-            if ($current = $existing->getField($field->name)) {
+            if ($current = $existing->field($field->name)) {
                 if ($current->definition === $field->definition) {
                     continue;
                 }

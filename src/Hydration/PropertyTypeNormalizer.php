@@ -10,13 +10,13 @@ use Medas\ServiceManager\Attributes\Service;
 class PropertyTypeNormalizer
 {
     /**@return string[] */
-    public function getNames(\ReflectionProperty $property): array
+    public function names(\ReflectionProperty $property): array
     {
-        return array_map(fn($value): string => $value->getName(), $this->getNamedTypes($property));
+        return array_map(fn($value): string => $value->getName(), $this->namedTypes($property));
     }
 
     /**@return \ReflectionNamedType[] */
-    public function getNamedTypes(\ReflectionProperty $property): array
+    public function namedTypes(\ReflectionProperty $property): array
     {
         $type = $property->getType();
 

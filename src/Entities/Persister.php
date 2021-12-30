@@ -29,13 +29,15 @@ class Persister
     public function prepare(object $entity, Snapshot|null $initialState, UnitOfWork $unitOfWork): void
     {
         if ($initialState === null) {
+            // The entity is new
             $this->prepareCreate($entity, $unitOfWork);
             return;
         }
 
-        $changedValues = $this->snapshotManager->getChanges($entity, $initialState);
+        $changedValues = $this->snapshotManager->findChanges($entity, $initialState);
 
         if ($changedValues === []) {
+            // The entity hasn't changed
             return;
         }
 
@@ -58,7 +60,7 @@ class Persister
 
         $this->unitOfWorkManager->queueCreate(
             $unitOfWork,
-            $metaData->getStore(),
+            $metaData->store(),
             $serializedValues,
             $onComplete
         );
@@ -82,15 +84,15 @@ class Persister
         $serializedValues = [];
 
         foreach ($changedValues as $name => $value) {
-            $property = $metaData->getProperty($name);
+            $property = $metaData->property($name);
             $serializedValues[$name] = $property->type->serialize($value);
         }
 
         $this->unitOfWorkManager->queueUpdate(
             $unitOfWork,
-            $metaData->getStore(),
+            $metaData->store(),
             $serializedValues,
-            $this->valueGetter->getValues($entity, $metaData->idProperties)
+            $this->valueGetter->get($entity, $metaData->idProperties)
         );
     }
 }

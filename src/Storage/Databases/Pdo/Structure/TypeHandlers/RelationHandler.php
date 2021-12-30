@@ -20,7 +20,7 @@ class RelationHandler implements TypeHandler
     {
     }
 
-    public function getFieldType(Property $property): string
+    public function fieldType(Property $property): string
     {
         /** @var Relation $type */
         $type = $property->type;
@@ -28,6 +28,6 @@ class RelationHandler implements TypeHandler
         $metaData = $this->metaDataManager->get($type->className);
         $idProperty = $metaData->idProperty;
 
-        return $this->typeHandlerFactory->for($idProperty->type)->getFieldType($idProperty);
+        return $this->typeHandlerFactory->for($idProperty->type)->fieldType($idProperty);
     }
 }

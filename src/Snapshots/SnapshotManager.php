@@ -16,7 +16,7 @@ class SnapshotManager
     {
     }
 
-    public function getChanges(object $entity, Snapshot|null $initial): array
+    public function findChanges(object $entity, Snapshot|null $initial): array
     {
         return array_diff($this->forEntity($entity)->data, $initial === null ? [] : $initial->data);
     }

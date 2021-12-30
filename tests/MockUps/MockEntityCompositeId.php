@@ -18,7 +18,7 @@ class MockEntityCompositeId
     #[Type\Text]
     private string $name;
 
-    public function getId(): int
+    public function id(): int
     {
         return $this->id;
     }

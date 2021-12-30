@@ -14,7 +14,7 @@ class UnhandledTypeException extends BaseException
         parent::__construct($type);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'unhandled type %s';
     }

@@ -12,7 +12,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class BinaryHandler implements TypeHandler
 {
-    public function getFieldType(Property $property): string
+    public function fieldType(Property $property): string
     {
         /** @var Binary $type */
         $type = $property->type;

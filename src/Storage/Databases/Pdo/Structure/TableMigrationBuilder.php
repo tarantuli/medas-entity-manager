@@ -38,7 +38,7 @@ class TableMigrationBuilder implements MigrationBuilder
         $queryClass = Query::class;
 
         $migrateMethod->body .= <<<PHP
-            \$unitOfWork->addAction(new \\$queryClass("$query->query", [], db("{$this->database->name()}")));
+            \$unitOfWork->addAction(new \\$queryClass("$query->query", [], storage("{$this->database->name()}")));
         PHP;
 
     }

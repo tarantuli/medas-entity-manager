@@ -14,7 +14,7 @@ class SnapshotTest extends BaseTest
     public function testCreateSnapshot(): StoredEntity
     {
         $snapshotManager = service(SnapshotManager::class);
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         $entity = $entityManager->get(StoredEntity::class, 1);
         $initialSnapshot = $snapshotManager->forEntity($entity);
@@ -32,7 +32,7 @@ class SnapshotTest extends BaseTest
         $initialSnapshot = $snapshotManager->forEntity($entity);
 
         $entity->name = 'changed name';
-        $diff = $snapshotManager->getChanges($entity, $initialSnapshot);
+        $diff = $snapshotManager->findChanges($entity, $initialSnapshot);
 
         self::assertIsArray($diff);
         self::assertEquals(['name' => 'changed name'], $diff);

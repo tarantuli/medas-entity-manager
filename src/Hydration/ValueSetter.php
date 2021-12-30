@@ -20,7 +20,7 @@ class ValueSetter
 
     public function set(MetaData $metaData, object $entity, string $propertyName, mixed $value): void
     {
-        $property = $metaData->getProperty($propertyName);
+        $property = $metaData->property($propertyName);
         $valueType = get_debug_type($value);
 
         if (!$property->allowsPhpType($valueType)) {

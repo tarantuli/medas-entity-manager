@@ -14,7 +14,7 @@ class InvalidPropertyTypeException extends BaseException
         parent::__construct($className, $propertyName, $givenType, $expectedTypes);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'invalid value given for class %s and property %s: %s instead of %s';
     }

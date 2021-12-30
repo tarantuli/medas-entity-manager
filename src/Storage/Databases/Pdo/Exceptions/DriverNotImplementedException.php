@@ -13,7 +13,7 @@ class DriverNotImplementedException extends BaseException
         parent::__construct($driverName);
     }
 
-    public function getPattern(): string
+    public function pattern(): string
     {
         return 'pdo driver %s is not implemented';
     }

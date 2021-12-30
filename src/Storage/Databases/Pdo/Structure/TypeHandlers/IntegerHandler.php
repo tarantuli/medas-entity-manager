@@ -11,7 +11,7 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class IntegerHandler implements TypeHandler
 {
-    public function getFieldType(Property $property): string
+    public function fieldType(Property $property): string
     {
         /** @var Integer $type */
         $type = $property->type;

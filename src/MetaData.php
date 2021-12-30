@@ -26,7 +26,7 @@ class MetaData
     {
     }
 
-    public function getProperty(string $propertyName): MetaData\Property
+    public function property(string $propertyName): MetaData\Property
     {
         foreach ($this->properties as $property) {
             if ($property->name === $propertyName) {
@@ -37,8 +37,8 @@ class MetaData
         throw new PropertyDoesNotExistException($this->className, $propertyName);
     }
 
-    public function getStore(): Store
+    public function store(): Store
     {
-        return db($this->entity->storage)->store($this->entity->store);
+        return storage($this->entity->storage)->store($this->entity->store);
     }
 }

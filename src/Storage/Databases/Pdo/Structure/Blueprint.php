@@ -25,12 +25,12 @@ class Blueprint
         $this->indexes[$index->name] = $index;
     }
 
-    public function getField(string $name): Field
+    public function field(string $name): Field
     {
-        return $this->getFields([$name])[0];
+        return $this->fields([$name])[0];
     }
 
-    public function getFields(array $names): array
+    public function fields(array $names): array
     {
         return array_values(array_filter($this->fields, fn($field) => in_array($field->name, $names, true)));
     }

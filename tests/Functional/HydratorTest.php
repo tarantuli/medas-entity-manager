@@ -11,7 +11,7 @@ class HydratorTest extends BaseTest
 {
     public function testHydrateEntity(): void
     {
-        $entityManager = $this->getEntityManager();
+        $entityManager = $this->entityManager();
 
         $entity = $entityManager->get(StoredEntity::class, 1);
 

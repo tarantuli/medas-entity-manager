@@ -6,7 +6,7 @@ use Medas\EntityManager\Storage\Databases\Pdo\Queries\Query;
 use Medas\EntityManager\Storage\Migrations\Migration;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
 
-class Migration20211230114606 implements Migration
+class Migration20211230123813 implements Migration
 {
     public function migrate(UnitOfWork $unitOfWork): void
     {
@@ -17,7 +17,7 @@ class Migration20211230114606 implements Migration
  PRIMARY KEY (`id`),
  UNIQUE KEY `name` (`name`)
 )
-", [], db("default")));
+", [], storage("default")));
     }
 
     public function undo(UnitOfWork $unitOfWork): void
