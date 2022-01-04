@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Migrations;
 
-use Medas\Core\Directory;
 use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
 use Medas\FileBuilder\PhpClass\MethodDefinition;
 use Medas\FileBuilder\PhpClass\ParameterDefinition;
 use Medas\FileBuilder\PhpClass\PhpClassDefinition;
 use Medas\FileBuilder\PhpClassBuilder;
+use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -21,7 +21,8 @@ class MigrationBuildManager
     private MethodDefinition $undoMethod;
 
     public function __construct(
-        private PhpClassBuilder $phpClassBuilder,
+        private DirectoryManager $directoryManager,
+        private PhpClassBuilder  $phpClassBuilder,
     )
     {
     }
@@ -30,7 +31,7 @@ class MigrationBuildManager
     {
         $this->initializeClass();
         $this->initializeMethods();
-        Directory::loadPhpFiles($directory);
+        $this->directoryManager->loadPhpFiles($directory);
         $this->processEntities($directory);
 
         return $this->phpClassBuilder->build($this->migrationClass);

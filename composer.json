@@ -20,32 +20,6 @@
     "require-dev": {
         "phpunit/phpunit": "^9.5"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../core"
-        },
-        {
-            "type": "path",
-            "url": "../service-manager"
-        },
-        {
-            "type": "path",
-            "url": "../config-manager"
-        },
-        {
-            "type": "path",
-            "url": "../file-builder"
-        },
-        {
-            "type": "path",
-            "url": "../php-reformatter"
-        },
-        {
-            "type": "path",
-            "url": "../filesystem"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Medas\\EntityManager\\": "src/",

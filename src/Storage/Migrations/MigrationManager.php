@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Storage\Migrations;
 
-use Medas\Core\Directory;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWork;
 use Medas\EntityManager\Storage\UnitOfWork\UnitOfWorkExecutor;
+use Medas\FileSystem\DirectoryManager;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class MigrationManager
 {
     public function __construct(
+        private DirectoryManager   $directoryManager,
         private UnitOfWorkExecutor $unitOfWorkExecutor,
     )
     {
     }
+
     public function migrate(string $directory): void
     {
-        Directory::loadPhpFiles($directory);
+        $this->directoryManager->loadPhpFiles($directory);
         $this->processEntities($directory);
     }
 

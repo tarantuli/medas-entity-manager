@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15862104f637a6a02cc5d761638f2258",
+    "content-hash": "13fc545fddc174d45e5559996e1c970e",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -71,13 +71,20 @@
         {
             "name": "morphp/medas-config-manager",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-config-manager.git",
+                "reference": "576b42d28aa2a3d72bff858da2f91cab642084ee"
+            },
             "dist": {
-                "type": "path",
-                "url": "../config-manager",
-                "reference": "723078c880907cf62cc8cefed9f83b3b255005d6"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/576b42d28aa2a3d72bff858da2f91cab642084ee",
+                "reference": "576b42d28aa2a3d72bff858da2f91cab642084ee",
+                "shasum": ""
             },
             "require": {
                 "morphp/medas-core": "@dev",
+                "morphp/medas-file-system": "@dev",
                 "morphp/medas-service-manager": "@dev",
                 "symfony/yaml": "~5.3",
                 "vlucas/phpdotenv": "^5.3"
@@ -85,6 +92,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -99,17 +107,25 @@
                 }
             ],
             "description": "Medas config manager",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/tarantuli/medas-config-manager/tree/master",
+                "issues": "https://github.com/tarantuli/medas-config-manager/issues"
+            },
+            "time": "2022-01-04T10:05:03+00:00"
         },
         {
             "name": "morphp/medas-core",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-core.git",
+                "reference": "bcb0957e16af94f29ced4543259daa6b991155e0"
+            },
             "dist": {
-                "type": "path",
-                "url": "../core",
-                "reference": "9563b65644b013d59aad40ffbf8ff9c5d0cac971"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/bcb0957e16af94f29ced4543259daa6b991155e0",
+                "reference": "bcb0957e16af94f29ced4543259daa6b991155e0",
+                "shasum": ""
             },
             "require": {
                 "morphp/medas-service-manager": "@dev",
@@ -118,6 +134,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -132,17 +149,25 @@
                 }
             ],
             "description": "Medas core",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/tarantuli/medas-core/tree/master",
+                "issues": "https://github.com/tarantuli/medas-core/issues"
+            },
+            "time": "2022-01-04T10:05:27+00:00"
         },
         {
             "name": "morphp/medas-file-builder",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-file-builder.git",
+                "reference": "30c885bde4fb87bf0c32c2408459be8a59670894"
+            },
             "dist": {
-                "type": "path",
-                "url": "../file-builder",
-                "reference": "cee14ccbbde5a9e038b8ed81f128aa341b70741c"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-builder/zipball/30c885bde4fb87bf0c32c2408459be8a59670894",
+                "reference": "30c885bde4fb87bf0c32c2408459be8a59670894",
+                "shasum": ""
             },
             "require": {
                 "morphp/medas-php-formatter": "@dev",
@@ -151,6 +176,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -165,17 +191,25 @@
                 }
             ],
             "description": "Medas file builder",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/tarantuli/medas-file-builder/tree/master",
+                "issues": "https://github.com/tarantuli/medas-file-builder/issues"
+            },
+            "time": "2022-01-04T10:20:13+00:00"
         },
         {
-            "name": "morphp/medas-filesystem",
+            "name": "morphp/medas-file-system",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-file-system.git",
+                "reference": "973a853d0630ff4434420fc77efad64bbe967e3f"
+            },
             "dist": {
-                "type": "path",
-                "url": "../filesystem",
-                "reference": "37ed2c61d9f336a296db5abe7aae99d3cd29ae84"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/973a853d0630ff4434420fc77efad64bbe967e3f",
+                "reference": "973a853d0630ff4434420fc77efad64bbe967e3f",
+                "shasum": ""
             },
             "require": {
                 "morphp/medas-core": "@dev",
@@ -184,6 +218,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -197,32 +232,41 @@
                     "email": "patrick@morphp.nl"
                 }
             ],
-            "description": "Medas filesystem",
-            "transport-options": {
-                "relative": true
-            }
+            "description": "Medas file system",
+            "support": {
+                "source": "https://github.com/tarantuli/medas-file-system/tree/master",
+                "issues": "https://github.com/tarantuli/medas-file-system/issues"
+            },
+            "time": "2022-01-04T10:06:35+00:00"
         },
         {
             "name": "morphp/medas-php-formatter",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-php-formatter.git",
+                "reference": "e6832c5ea88c2ccacba30cca0ff49b8413982ef1"
+            },
             "dist": {
-                "type": "path",
-                "url": "../php-reformatter",
-                "reference": "08ed3b41daaa94aebb6625af90a315b616d33601"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-formatter/zipball/e6832c5ea88c2ccacba30cca0ff49b8413982ef1",
+                "reference": "e6832c5ea88c2ccacba30cca0ff49b8413982ef1",
+                "shasum": ""
             },
             "require": {
                 "morphp/medas-config-manager": "@dev",
                 "morphp/medas-core": "@dev",
-                "morphp/medas-filesystem": "@dev",
+                "morphp/medas-file-system": "@dev",
                 "morphp/medas-service-manager": "@dev"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Medas\\PhpBeautifier\\": "src/",
+                    "Medas\\PhpFormatter\\": "src/",
                     "Medas\\Test\\": "tests/"
                 }
             },
@@ -233,17 +277,25 @@
                 }
             ],
             "description": "Medas PHP formatter",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-formatter/tree/master",
+                "issues": "https://github.com/tarantuli/medas-php-formatter/issues"
+            },
+            "time": "2022-01-04T10:10:45+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-service-manager.git",
+                "reference": "5d633492bc5de3499f75dd762050262dc99422ef"
+            },
             "dist": {
-                "type": "path",
-                "url": "../service-manager",
-                "reference": "105506112031e42a23b23b7d0f6ff86c7e52a819"
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-service-manager/zipball/5d633492bc5de3499f75dd762050262dc99422ef",
+                "reference": "5d633492bc5de3499f75dd762050262dc99422ef",
+                "shasum": ""
             },
             "require": {
                 "morphp/medas-core": "@dev"
@@ -252,6 +304,7 @@
                 "morphp/medas-config-manager": "@dev",
                 "phpunit/phpunit": "^9.5"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -266,9 +319,11 @@
                 }
             ],
             "description": "Medas service manager",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/tarantuli/medas-service-manager/tree/master",
+                "issues": "https://github.com/tarantuli/medas-service-manager/issues"
+            },
+            "time": "2022-01-04T10:16:47+00:00"
         },
         {
             "name": "phpoption/phpoption",
@@ -495,16 +550,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v5.4.0",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "d97d6d7f46cb69968f094e329abd987d5ee17c79"
+                "reference": "8aad4b69a10c5c51ab54672e78995860f5e447ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/d97d6d7f46cb69968f094e329abd987d5ee17c79",
-                "reference": "d97d6d7f46cb69968f094e329abd987d5ee17c79",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/8aad4b69a10c5c51ab54672e78995860f5e447ec",
+                "reference": "8aad4b69a10c5c51ab54672e78995860f5e447ec",
                 "shasum": ""
             },
             "require": {
@@ -572,7 +627,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v5.4.0"
+                "source": "https://github.com/symfony/cache/tree/v5.4.2"
             },
             "funding": [
                 {
@@ -588,7 +643,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-23T18:51:45+00:00"
+            "time": "2021-12-28T17:15:56+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -1306,16 +1361,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.4.0",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "9ffaaba53c61ba75a3c7a3a779051d1e9ec4fd2d"
+                "reference": "e6a5d5ecf6589c5247d18e0e74e30b11dfd51a3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/9ffaaba53c61ba75a3c7a3a779051d1e9ec4fd2d",
-                "reference": "9ffaaba53c61ba75a3c7a3a779051d1e9ec4fd2d",
+                "url": "https://api.github.com/repos/symfony/string/zipball/e6a5d5ecf6589c5247d18e0e74e30b11dfd51a3d",
+                "reference": "e6a5d5ecf6589c5247d18e0e74e30b11dfd51a3d",
                 "shasum": ""
             },
             "require": {
@@ -1372,7 +1427,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.4.0"
+                "source": "https://github.com/symfony/string/tree/v5.4.2"
             },
             "funding": [
                 {
@@ -1388,7 +1443,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-24T10:02:00+00:00"
+            "time": "2021-12-16T21:52:00+00:00"
         },
         {
             "name": "symfony/var-exporter",
@@ -1464,16 +1519,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.4.0",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "034ccc0994f1ae3f7499fa5b1f2e75d5e7a94efc"
+                "reference": "b9eb163846a61bb32dfc147f7859e274fab38b58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/034ccc0994f1ae3f7499fa5b1f2e75d5e7a94efc",
-                "reference": "034ccc0994f1ae3f7499fa5b1f2e75d5e7a94efc",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/b9eb163846a61bb32dfc147f7859e274fab38b58",
+                "reference": "b9eb163846a61bb32dfc147f7859e274fab38b58",
                 "shasum": ""
             },
             "require": {
@@ -1519,7 +1574,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.4.0"
+                "source": "https://github.com/symfony/yaml/tree/v5.4.2"
             },
             "funding": [
                 {
@@ -1535,7 +1590,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-28T15:25:38+00:00"
+            "time": "2021-12-16T21:58:21+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

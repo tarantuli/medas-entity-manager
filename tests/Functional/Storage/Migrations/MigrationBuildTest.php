@@ -50,5 +50,8 @@ class MigrationBuildTest extends BaseTest
         // The table should exist and be empty
         $record = $store->fetchRecord([]);
         self::assertNull($record);
+
+        unlink($fileName);
+        rmdir($directory);
     }
 }
