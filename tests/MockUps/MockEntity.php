@@ -10,13 +10,12 @@ use Medas\EntityManager\Types as Type;
 #[Entity]
 class MockEntity
 {
+    #[Type\Text]
+    #[IsUnique]
+    public string $name;
     #[Id]
     #[Type\Integer]
     private int $id;
-
-    #[Type\Text]
-    #[IsUnique]
-    private string $name;
 
     public function id(): int
     {

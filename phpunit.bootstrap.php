@@ -10,6 +10,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 $sm = ServiceManager::get();
 $sm->addPackage(new EntityManagerPackage());
+
 $cache = new ApcuAdapter('entity-manager');
 $cache->clear();
 $sm->bindService($cache, CacheInterface::class);
