@@ -6,7 +6,6 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\Exceptions\PropertyDoesNotExistException;
-use Medas\EntityManager\Storage\Interfaces\Store;
 
 class MetaData
 {
@@ -35,10 +34,5 @@ class MetaData
         }
 
         throw new PropertyDoesNotExistException($this->className, $propertyName);
-    }
-
-    public function store(): Store
-    {
-        return storage($this->entity->storage)->store($this->entity->store);
     }
 }

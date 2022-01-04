@@ -19,7 +19,7 @@ class EntityManager
     private \SplObjectStorage $savedStates;
 
     public function __construct(
-        private Flusher           $flusher,
+        private Flusher|null      $flusher,
         private IdValues          $idValues,
         private Initializer       $initializer,
         private KeyMaker          $keyMaker,

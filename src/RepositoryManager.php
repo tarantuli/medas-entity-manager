@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\EntityManager\Entities\Fetcher;
 use Medas\EntityManager\Entities\IdValues;
 use Medas\EntityManager\Repositories\Repository;
 use Medas\ServiceManager\Attributes\Service;
@@ -15,6 +16,7 @@ class RepositoryManager
 
     public function __construct(
         private IdValues        $idValues,
+        private Fetcher|null    $fetcher,
         private MetaDataManager $metaDataManager,
     )
     {
@@ -25,6 +27,7 @@ class RepositoryManager
         if (!array_key_exists($className, $this->repositories)) {
             $this->repositories[$className] = new Repository(
                 $this->idValues,
+                $this->fetcher,
                 $this->metaDataManager->get($className)
             );
         }
