@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\ConfigManager\ConfigManagerPackage;
-use Medas\FileBuilder\FileBuilderPackage;
 use Medas\ServiceManager\BasePackage;
 
 class EntityManagerPackage extends BasePackage
@@ -14,7 +13,6 @@ class EntityManagerPackage extends BasePackage
     {
         return $this->dependenciesByClass([
             ConfigManagerPackage::class,
-            FileBuilderPackage::class,
         ]);
     }
 
