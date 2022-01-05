@@ -11,9 +11,9 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "morphp/medas-service-manager": "@dev",
-        "morphp/medas-config-manager": "@dev",
-        "morphp/medas-file-builder": "@dev",
+        "morphp/medas-service-manager": "dev-dev",
+        "morphp/medas-config-manager": "dev-dev",
+        "morphp/medas-file-builder": "dev-dev",
         "ext-pdo": "*",
         "symfony/cache": "^5.3"
     },
