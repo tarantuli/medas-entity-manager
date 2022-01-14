@@ -8,5 +8,5 @@ use Medas\EntityManager\MetaData;
 
 interface Fetcher
 {
-    public function fetchRecord(MetaData $metaData, array $filters);
+    public function fetch(MetaData\Property $property): mixed;
 }

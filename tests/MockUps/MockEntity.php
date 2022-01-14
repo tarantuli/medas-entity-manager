@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsUnique};
-use Medas\EntityManager\Types as Type;
+use Medas\EntityManager\Attributes\{Entity, Id, IsUnique, Property};
 
 #[Entity]
 class MockEntity
 {
-    #[Type\Text]
+    #[Id]
+    private int $id;
+
+    #[Property]
     #[IsUnique]
     public string $name;
-    #[Id]
-    #[Type\Integer]
-    private int $id;
 
     public function id(): int
     {

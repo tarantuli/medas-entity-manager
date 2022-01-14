@@ -12,14 +12,18 @@ use Medas\EntityManager\{Attributes,
     Exceptions\ClassIsNotAnEntityException,
     Exceptions\EntityHasNoIdPropertyException,
     Hydration\PropertyTypeNormalizer,
-    MetaData
+    MetaData,
+    Types\TypeFinder
 };
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class Compiler
 {
-    public function __construct(private PropertyTypeNormalizer $propertyTypeNormalizer)
+    public function __construct(
+        private PropertyTypeNormalizer $propertyTypeNormalizer,
+        private TypeFinder             $typeFinder,
+    )
     {
     }
 
@@ -49,16 +53,15 @@ class Compiler
 
     private function processProperty(\ReflectionProperty $property, MetaData $metaData): void
     {
-        $attributes = $property->getAttributes(
-            Attributes\Interfaces\Type::class,
+        $isManagedProperty = $property->getAttributes(
+            Attributes\Property::class,
             \ReflectionAttribute::IS_INSTANCEOF
         );
 
-        if (!$attributes) {
+        if (!$isManagedProperty) {
             return;
         }
-        /** @var Attributes\Interfaces\Type $type */
-        $type = $attributes[0]->newInstance();
+        $type = $this->typeFinder->find($property);
 
         $metaData->properties[] = new Property(
             name: $property->name,

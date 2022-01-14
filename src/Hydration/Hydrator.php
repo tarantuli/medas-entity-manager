@@ -27,17 +27,24 @@ class Hydrator
             return;
         }
 
-        $record = $this->fetcher->fetchRecord(
-            $metaData,
-            filters: $this->valueGetter->get($entity, $metaData->idProperties)
-        );
-
         foreach ($metaData->properties as $property) {
-            $value = $record->get($property->name);
-            $value = $property->type->deserialize($value);
+            $value = $this->fetcher->fetch($property);
 
             $this->valueSetter->set($metaData, $entity, $property->name, $value);
         }
+
+        /*$record = $this->fetcher->fetchRecord(
+                    $metaData,
+                    filters: $this->valueGetter->get($entity, $metaData->idProperties)
+                );
+
+                foreach ($metaData->properties as $property) {
+                    $value = $record->get($property->name);
+                    $value = $property->type->deserialize($value);
+
+                    $this->valueSetter->set($metaData, $entity, $property->name, $value);
+                }
+        */
     }
 
     public function setIdValues(MetaData $metaData, object $entity, array $idValues)

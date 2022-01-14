@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Types;
 
-use Medas\EntityManager\Attributes\Interfaces\Type;
-
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 abstract class BaseType implements Type
 {

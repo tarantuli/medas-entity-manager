@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData;
 
-use Medas\EntityManager\Attributes\Interfaces\Type;
+use Medas\EntityManager\Types\Type;
 
 class Property
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager\Attributes;
+namespace Medas\EntityManager\Types;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class Id extends Property
+class Boolean extends BaseType
 {
 
 }
