@@ -29,13 +29,12 @@ class Compiler
 
     public function compile(string $className, \ReflectionClass $class): MetaData
     {
-        if (!$attributes = $class->getAttributes(Entity::class)) {
+        if (!$entity = attribute(Entity::class, $class)) {
             throw new ClassIsNotAnEntityException($className);
         }
 
         $metaData = new MetaData($className, $class);
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $metaData->entity = $attributes[0]->newInstance();
+        $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
 
         $this->determineProperties($class, $metaData);

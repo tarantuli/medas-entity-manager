@@ -26,17 +26,7 @@ class TypeFinder
 
     private function findExplicitType(\ReflectionProperty $property): Type|null
     {
-        $typeAttribute = $property->getAttributes(
-            Type::class,
-            \ReflectionAttribute::IS_INSTANCEOF
-        );
-
-        if (!$typeAttribute) {
-            return null;
-        }
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $typeAttribute[0]->newInstance();
+        return attribute(Type::class, $property);
     }
 
     private function findImplicitType(\ReflectionProperty $property): Type

@@ -9,7 +9,7 @@ use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 
 $sm = ServiceManager::get();
-$sm->addPackage(new EntityManagerPackage());
+$sm->addPackage(EntityManagerPackage::instance());
 
 $cache = new ApcuAdapter('entity-manager');
 $cache->clear();
