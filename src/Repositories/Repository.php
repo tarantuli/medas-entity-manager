@@ -21,8 +21,22 @@ class Repository
     public function findOne(array $conditions): object
     {
         $record = $this->fetcher->fetchRecord($this->metaData, $conditions);
-        $idValues = $this->idValues->extract($record->data(), $this->metaData);
+        $idValues = $this->idValues->extract($record, $this->metaData);
 
         return em()->get($this->metaData->className, $idValues);
+    }
+
+    /** @return object[] */
+    public function findAll(array $conditions): array
+    {
+        $entities = [];
+        $records = $this->fetcher->fetchAll($this->metaData, $conditions);
+
+        foreach ($records as $record) {
+            $idValues = $this->idValues->extract($record, $this->metaData);
+            $entities[] = em()->get($this->metaData->className, $idValues);
+        }
+
+        return $entities;
     }
 }
