@@ -47,7 +47,7 @@ class EntityManager
         $key = $this->keyMaker->get($className, $id);
 
         if (!array_key_exists($key, $this->entities)) {
-            $entity = $this->initializer->initialize($className, $id);
+            $entity = $this->initializer->initializeAndHydrate($className, $id);
             $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
             $this->entities[$key] = $entity;
         }

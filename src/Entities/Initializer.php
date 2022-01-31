@@ -24,6 +24,14 @@ class Initializer
         $entity = new $className();
         $this->hydrator->setIdValues($metaData, $entity, $id);
 
+        return $entity;
+    }
+
+    public function initializeAndHydrate(string $className, array $id): object
+    {
+        $entity = $this->initialize($className, $id);
+        $metaData = $this->metaDataManager->get($className);
+
         if ($metaData->entity->store) {
             $this->hydrator->hydrate($metaData, $entity);
         }
