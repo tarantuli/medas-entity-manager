@@ -6,5 +6,5 @@ namespace Medas\EntityManager\Entities;
 
 interface Flusher
 {
-    public function flush(array $entities, \SplObjectStorage $savedStates): bool;
+    public function flush(array $entities, \SplObjectStorage $savedStates): void;
 }
