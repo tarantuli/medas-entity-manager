@@ -20,9 +20,7 @@ class ValueSetter
 
     public function set(MetaData $metaData, object $entity, string $propertyName, mixed $value): void
     {
-        if ($value === null) {
-            return;
-        }
+        // If value is null, don't return, but set the value to null
 
         $property = $metaData->property($propertyName);
         $valueType = get_debug_type($value);
