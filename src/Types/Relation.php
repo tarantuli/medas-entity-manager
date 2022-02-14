@@ -17,6 +17,10 @@ class Relation extends BaseType
 
     public function serialize(mixed $value): mixed
     {
+        if ($value === null) {
+            return null;
+        }
+
         if (!$value instanceof HasId) {
             throw new \Exception('cannot fetch id from object');
         }
