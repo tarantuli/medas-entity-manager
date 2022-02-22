@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Cache\CachePackage;
 use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\ServiceManager\AsSingleton;
 use Medas\ServiceManager\BasePackage;
@@ -16,6 +17,7 @@ class EntityManagerPackage extends BasePackage
     {
         return $this->dependenciesByClass([
             ConfigManagerPackage::class,
+            CachePackage::class,
         ]);
     }
 

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Cache\Cache;
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\ServiceManager\Attributes\Service;
-use Symfony\Contracts\Cache\CacheInterface;
 
 #[Service]
 class MetaDataManager
 {
     public function __construct(
-        private CacheInterface $cache,
+        private Cache $cache,
         private Compiler $compiler,
         private PropertyAccessManager $propertyAccessManager,
     )

@@ -33,7 +33,7 @@ class Compiler
             throw new ClassIsNotAnEntityException($className);
         }
 
-        $metaData = new MetaData($className, $class);
+        $metaData = new MetaData($className);
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
 

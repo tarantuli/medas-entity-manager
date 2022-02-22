@@ -22,6 +22,40 @@ class Property
     {
     }
 
+    public function __serialize(): array
+    {
+        return [
+            $this->name,
+            $this->type,
+            $this->default,
+            $this->isId,
+            $this->isGeneratedValue,
+            $this->isNullable,
+            $this->isUnique,
+            $this->phpTypes,
+            $this->reflection->class,
+            $this->reflection->name,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        [
+            $this->name,
+            $this->type,
+            $this->default,
+            $this->isId,
+            $this->isGeneratedValue,
+            $this->isNullable,
+            $this->isUnique,
+            $this->phpTypes,
+            $reflectionClass,
+            $reflectionName,
+        ] = $data;
+
+        $this->reflection = new \ReflectionProperty($reflectionClass, $reflectionName);
+    }
+
     public function allowsPhpType(string $type): bool
     {
         return ($type === 'null' && $this->isNullable) || in_array($type, $this->phpTypes);

@@ -21,7 +21,7 @@ class MetaData
 
     public int $sourceFileDate;
 
-    public function __construct(public string $className, public \ReflectionClass $reflection)
+    public function __construct(public string $className)
     {
     }
 
