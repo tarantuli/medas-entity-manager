@@ -22,7 +22,7 @@ class MetaDataManager
     public function get(string $className): MetaData
     {
         $class = new \ReflectionClass($className);
-        $key = sha1($className);
+        $key = [static::class, $className];
 
         /** @var MetaData $metaData */
         $metaData = $this->cache->get($key, function () use ($className, $class) {
@@ -30,7 +30,7 @@ class MetaDataManager
         });
 
         if (config('env') === 'dev' && $metaData->sourceFileDate !== filemtime($class->getFileName())) {
-            $this->cache->delete($key);
+            $this->cache->remove($key);
             $metaData = $this->get($className);
         }
 
