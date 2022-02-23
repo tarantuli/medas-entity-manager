@@ -23,4 +23,11 @@ class EntityManagerPackage extends BasePackage
     {
         return __DIR__;
     }
+
+    public function initialize(): void
+    {
+        require_once __DIR__ . '/GlobalFunctions.php';
+
+        parent::initialize();
+    }
 }
