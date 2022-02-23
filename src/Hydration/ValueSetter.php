@@ -29,13 +29,14 @@ class ValueSetter
             foreach ($property->phpTypes as $phpType) {
                 if (class_exists($phpType)) {
                     $value = em()->get($phpType, $value);
-                    $valueType = get_debug_type($value);
+                    $valueType = $phpType;
                     break;
                 }
 
                 if ($phpType === 'int' && preg_match('/^\d+$/', $value)) {
                     $value = (int) $value;
                     $valueType = 'int';
+                    break;
                 }
             }
         }
