@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Cache\Cache;
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Interfaces\Cache;
 
 #[Service]
 class MetaDataManager
 {
     public function __construct(
-        private Cache $cache,
-        private Compiler $compiler,
+        private Cache                 $cache,
+        private Compiler              $compiler,
         private PropertyAccessManager $propertyAccessManager,
     )
     {
