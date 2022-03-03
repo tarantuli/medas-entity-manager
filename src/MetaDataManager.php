@@ -6,13 +6,13 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Interfaces\Cache;
+use Medas\ServiceManager\Cache\CacheManager;
 
 #[Service]
 class MetaDataManager
 {
     public function __construct(
-        private Cache                 $cache,
+        private CacheManager          $cacheManager,
         private Compiler              $compiler,
         private PropertyAccessManager $propertyAccessManager,
     )
@@ -25,12 +25,12 @@ class MetaDataManager
         $key = [static::class, $className];
 
         /** @var MetaData $metaData */
-        $metaData = $this->cache->get($key, function () use ($className, $class) {
+        $metaData = $this->cacheManager->get()->get($key, function () use ($className, $class) {
             return $this->compiler->compile($className, $class);
         });
 
         if (config('env') === 'dev' && $metaData->sourceFileDate !== filemtime($class->getFileName())) {
-            $this->cache->remove($key);
+            $this->cacheManager->get()->remove($key);
             $metaData = $this->get($className);
         }
 

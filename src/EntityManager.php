@@ -41,6 +41,9 @@ class EntityManager
         return $this->repositoryManager->forClass($className);
     }
 
+    /**
+     * The return value  is an object of type $type. This is specified in PhpStorm in .phpstorm.meta.php
+     */
     public function get(string $className, mixed $id): object
     {
         $id = $this->idValues->normalize($className, $id);
