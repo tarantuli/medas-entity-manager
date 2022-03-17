@@ -32,7 +32,9 @@ class Repository
         return $entities;
     }
 
-    public function getOrCreate(array $conditions, bool $persistOnCreate = true): object
+    public function getOrCreate(array $conditions,
+                                bool  $persistOnCreate = true,
+                                bool  $flushOnPersist = true): object
     {
         if ($object = $this->findOne($conditions)) {
             return $object;
@@ -42,6 +44,10 @@ class Repository
 
         if ($persistOnCreate) {
             em()->persist($object);
+
+            if ($flushOnPersist) {
+                em()->flush();
+            }
         }
 
         return $object;
