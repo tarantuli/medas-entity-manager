@@ -10,7 +10,7 @@ interface Fetcher
 {
     public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): mixed;
 
-    public function fetchRecord(MetaData $metaData, array $conditions): array;
+    public function fetchRecord(MetaData $metaData, array $conditions): array|null;
 
     public function fetchAll(MetaData $metaData, array $conditions): array;
 }
