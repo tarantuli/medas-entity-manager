@@ -18,14 +18,6 @@ class Repository
     {
     }
 
-    public function findOne(array $conditions): object
-    {
-        $record = $this->fetcher->fetchRecord($this->metaData, $conditions);
-        $idValues = $this->idValues->extract($record, $this->metaData);
-
-        return em()->get($this->metaData->className, $idValues);
-    }
-
     /** @return object[] */
     public function findAll(array $conditions): array
     {
@@ -38,5 +30,31 @@ class Repository
         }
 
         return $entities;
+    }
+
+    public function getOrCreate(array $conditions, bool $persistOnCreate = true): object
+    {
+        if ($object = $this->findOne($conditions)) {
+            return $object;
+        }
+
+        $object = em()->create($this->metaData->className, $conditions);
+
+        if ($persistOnCreate) {
+            em()->persist($object);
+        }
+
+        return $object;
+    }
+
+    public function findOne(array $conditions): object|null
+    {
+        if (!$record = $this->fetcher->fetchRecord($this->metaData, $conditions)) {
+            return null;
+        }
+
+        $idValues = $this->idValues->extract($record, $this->metaData);
+
+        return em()->get($this->metaData->className, $idValues);
     }
 }

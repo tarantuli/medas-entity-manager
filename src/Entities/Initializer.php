@@ -18,18 +18,18 @@ class Initializer
     {
     }
 
-    public function initialize(string $className, array $id): object
+    public function initialize(string $className, array $values): object
     {
         $metaData = $this->metaDataManager->get($className);
         $entity = new $className();
-        $this->hydrator->setIdValues($metaData, $entity, $id);
+        $this->hydrator->setValues($metaData, $entity, $values);
 
         return $entity;
     }
 
-    public function initializeAndHydrate(string $className, array $id): object
+    public function initializeAndHydrate(string $className, array $values): object
     {
-        $entity = $this->initialize($className, $id);
+        $entity = $this->initialize($className, $values);
 
         $metaData = $this->metaDataManager->get($className);
         $this->hydrator->hydrate($metaData, $entity);

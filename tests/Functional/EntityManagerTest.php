@@ -70,4 +70,12 @@ class EntityManagerTest extends BaseTest
         $this->expectException(IdValueShouldBeAnArrayException::class);
         $entityManager->get(MockEntityCompositeId::class, 1);
     }
+
+    public function testCreateEntity(): void
+    {
+        $entityManager = $this->entityManager();
+
+        $entity = $entityManager->create(MockEntity::class, ['name' => 'createTest']);
+        self::assertInstanceOf(MockEntity::class, $entity);
+    }
 }

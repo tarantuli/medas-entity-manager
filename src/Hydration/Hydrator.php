@@ -34,8 +34,8 @@ class Hydrator
         }
     }
 
-    public function setIdValues(MetaData $metaData, object $entity, array $idValues)
+    public function setValues(MetaData $metaData, object $entity, array $values)
     {
-        $this->valueSetter->setValues($metaData, $entity, $idValues);
+        $this->valueSetter->setValues($metaData, $entity, $values);
     }
 }

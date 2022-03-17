@@ -7,4 +7,8 @@ namespace PHPSTORM_META {
     override(EntityManager::get(), map([
         '' => '@',
     ]));
+
+    override(EntityManager::create(), map([
+        '' => '@',
+    ]));
 }
