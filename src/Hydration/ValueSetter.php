@@ -38,6 +38,12 @@ class ValueSetter
                     $valueType = 'int';
                     break;
                 }
+
+                if ($phpType === 'bool' && preg_match('/^\d+$/', $value)) {
+                    $value = (bool) $value;
+                    $valueType = 'bool';
+                    break;
+                }
             }
         }
 
