@@ -27,6 +27,12 @@ class ValueSetter
 
         if (!$property->allowsPhpType($valueType)) {
             foreach ($property->phpTypes as $phpType) {
+                if ($phpType === \DateTime::class) {
+                    $value = new \DateTime($value);
+                    $valueType = $phpType;
+                    break;
+                }
+
                 if (class_exists($phpType)) {
                     $value = em()->get($phpType, $value);
                     $valueType = $phpType;
