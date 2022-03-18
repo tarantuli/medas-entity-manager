@@ -6,7 +6,11 @@ namespace Medas\EntityManager\Filters;
 
 class Between
 {
-    public function __construct(public mixed $lowerBound, public mixed $upperBound)
+    public function __construct(
+        public string $field,
+        public mixed  $lowerValue,
+        public mixed  $upperValue,
+    )
     {
     }
 }

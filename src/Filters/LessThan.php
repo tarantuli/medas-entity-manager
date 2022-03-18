@@ -6,7 +6,10 @@ namespace Medas\EntityManager\Filters;
 
 class LessThan implements Filter
 {
-    public function __construct(public mixed $value)
+    public function __construct(
+        public string $field,
+        public mixed  $value,
+    )
     {
     }
 }
