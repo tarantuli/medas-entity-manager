@@ -38,4 +38,7 @@ class MockEntityTypes
 
     #[Property]
     private ?string $questionMarkNullableType;
+
+    #[Property]
+    private \DateTime $dateTime;
 }

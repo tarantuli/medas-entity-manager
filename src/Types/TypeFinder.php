@@ -34,6 +34,7 @@ class TypeFinder
         $baseType = $this->getBaseType($property);
 
         return match (true) {
+            $baseType->getName() === 'DateTime' => new DateTime(),
             !$baseType->isBuiltin() => new Relation($baseType->getName()),
             $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'string' => new Text(),

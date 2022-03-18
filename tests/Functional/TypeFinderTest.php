@@ -6,7 +6,7 @@ namespace Medas\Test\Functional;
 
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypesException;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitTypeException;
-use Medas\EntityManager\Types\{Binary, Integer, Relation, Text, TypeFinder};
+use Medas\EntityManager\Types\{Binary, DateTime, Integer, Relation, Text, TypeFinder};
 use Medas\Test\BaseTest;
 use Medas\Test\MockUps\MockEntityTypes;
 
@@ -79,5 +79,12 @@ class TypeFinderTest extends BaseTest
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
         self::assertInstanceOf(Text::class, $finder->find($class->getProperty('questionMarkNullableType')));
+    }
+
+    public function testDateTimeType(): void
+    {
+        $finder = service(TypeFinder::class);
+        $class = new \ReflectionClass(MockEntityTypes::class);
+        self::assertInstanceOf(DateTime::class, $finder->find($class->getProperty('dateTime')));
     }
 }
