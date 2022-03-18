@@ -23,6 +23,6 @@ class DateTime extends BaseType
     /** @param \DateTime|null $value */
     public function serialize(mixed $value): string|null
     {
-        return $value instanceof \DateTime ? $value->format(DATE_ISO8601) : $value;
+        return $value instanceof \DateTime ? $value->format('Y-m-d H:i:s') : $value;
     }
 }
