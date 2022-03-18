@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Types;
 
 use Medas\EntityManager\Attributes\HasId;
+use Medas\EntityManager\Exceptions\ValueDoesNotImplementHasIdException;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Relation extends BaseType
@@ -22,7 +23,7 @@ class Relation extends BaseType
         }
 
         if (!$value instanceof HasId) {
-            throw new \Exception('cannot fetch id from object');
+            throw new ValueDoesNotImplementHasIdException($value);
         }
 
         return $value->id();
