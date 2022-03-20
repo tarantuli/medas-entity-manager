@@ -19,7 +19,7 @@ class Repository
     }
 
     /** @return object[] */
-    public function findAll(array $conditions): array
+    public function findAll(array $conditions = []): array
     {
         $entities = [];
         $records = $this->fetcher->fetchAll($this->metaData, $conditions);
@@ -53,7 +53,7 @@ class Repository
         return $object;
     }
 
-    public function findOne(array $conditions): object|null
+    public function findOne(array $conditions = []): object|null
     {
         if (!$record = $this->fetcher->fetchRecord($this->metaData, $conditions)) {
             return null;
