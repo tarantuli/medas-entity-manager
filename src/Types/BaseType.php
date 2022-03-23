@@ -7,13 +7,4 @@ namespace Medas\EntityManager\Types;
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 abstract class BaseType implements Type
 {
-    public function deserialize(mixed $value): mixed
-    {
-        return $value;
-    }
-
-    public function serialize(mixed $value): mixed
-    {
-        return $value;
-    }
 }

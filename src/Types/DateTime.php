@@ -14,15 +14,4 @@ class DateTime extends BaseType
     )
     {
     }
-
-    public function deserialize(mixed $value): \DateTime|null
-    {
-        return $value === null ? null : new \DateTime($value);
-    }
-
-    /** @param \DateTime|null $value */
-    public function serialize(mixed $value): string|null
-    {
-        return $value instanceof \DateTime ? $value->format('Y-m-d H:i:s') : $value;
-    }
 }
