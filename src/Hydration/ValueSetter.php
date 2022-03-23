@@ -25,7 +25,7 @@ class ValueSetter
         $property = $metaData->property($propertyName);
         $valueType = get_debug_type($value);
 
-        if (!$property->allowsPhpType($valueType)) {
+        if (!$property->allowsPhpType($valueType) && $value !== null) {
             foreach ($property->phpTypes as $phpType) {
                 if ($phpType === \DateTime::class) {
                     $value = new \DateTime($value);
