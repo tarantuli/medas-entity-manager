@@ -46,7 +46,7 @@ class IdValues
         return $idValues;
     }
 
-    public function extract(array $values, MetaData $metaData): array
+    public function extract(array|\ArrayAccess $values, MetaData $metaData): array
     {
         $idProperties = $metaData->idProperties;
         $idValues = [];
