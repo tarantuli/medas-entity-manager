@@ -52,7 +52,7 @@ class IdValues
         $idValues = [];
 
         foreach ($idProperties as $idProperty) {
-            if (!array_key_exists($idProperty->name, $values)) {
+            if (!isset($values[$idProperty->name])) {
                 throw new IdPropertyNotGivenException($metaData->className, $idProperty->name);
             }
 
