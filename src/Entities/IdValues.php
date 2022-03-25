@@ -58,6 +58,7 @@ class IdValues
 
             $idValues[$idProperty->name] = $values[$idProperty->name];
         }
+
         return $idValues;
     }
 
