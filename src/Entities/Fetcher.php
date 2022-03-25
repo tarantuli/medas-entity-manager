@@ -8,7 +8,7 @@ use Medas\EntityManager\MetaData;
 
 interface Fetcher
 {
-    public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): mixed;
+    public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult;
 
     public function fetchRecord(MetaData $metaData, array $conditions): array|null;
 
