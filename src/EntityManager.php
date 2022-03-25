@@ -15,8 +15,9 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class EntityManager
 {
-    private array $entities;
-    private \SplObjectStorage $savedStates;
+    protected array $entities;
+    protected array $entitiesToDelete;
+    protected \SplObjectStorage $savedStates;
 
     public function __construct(
         private Flusher|null      $flusher,
@@ -33,6 +34,7 @@ class EntityManager
     public function clear(): void
     {
         $this->entities = [];
+        $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
     }
 
@@ -58,23 +60,42 @@ class EntityManager
         return $this->entities[$key];
     }
 
+    public function delete(object $entity): void
+    {
+        if (!in_array($entity, $this->entitiesToDelete, true)) {
+            $this->entitiesToDelete[] = $entity;
+        }
+    }
+
     public function flush(): void
     {
-        $this->flusher->flush($this->entities, $this->savedStates);
+        $this->flusher->flush($this->entities, $this->savedStates, $this->entitiesToDelete);
         $this->updateEntityStates();
     }
 
     private function updateEntityStates(): void
     {
-        foreach ($this->entities as $entity) {
-            $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+        foreach ($this->entities as $key => $entity) {
+            if (in_array($entity, $this->entitiesToDelete, true)) {
+                unset($this->entities[$key]);
+                unset($this->savedStates[$entity]);
+            }
+            else {
+                $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            }
         }
+
+        $this->entitiesToDelete = [];
     }
 
-    public function persist(object $entity): void
+    public function persist(object ...$entities): void
     {
-        $key = $entity::class . ':new:' . mt_rand();
-        $this->entities[$key] = $entity;
+        foreach ($entities as $entity) {
+            if (!in_array($entity, $this->entities, true)) {
+                $key = $entity::class . ':new:' . mt_rand();
+                $this->entities[$key] = $entity;
+            }
+        }
     }
 
     public function resetKey(object $entity): void
@@ -93,5 +114,12 @@ class EntityManager
     public function create(string $className, array $conditions): object
     {
         return $this->initializer->initialize($className, $conditions);
+    }
+
+    public function setFlusher(?Flusher $flusher): self
+    {
+        $this->flusher = $flusher;
+
+        return $this;
     }
 }

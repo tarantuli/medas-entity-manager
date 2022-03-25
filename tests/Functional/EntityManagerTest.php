@@ -12,6 +12,7 @@ use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
 use Medas\Test\BaseTest;
 use Medas\Test\MockUps\MockEntity;
 use Medas\Test\MockUps\MockEntityCompositeId;
+use Medas\Test\MockUps\MockFlusher;
 use Medas\Test\MockUps\MockNotAnEntity;
 
 class EntityManagerTest extends BaseTest
@@ -77,5 +78,25 @@ class EntityManagerTest extends BaseTest
 
         $entity = $entityManager->create(MockEntity::class, ['name' => 'createTest']);
         self::assertInstanceOf(MockEntity::class, $entity);
+    }
+
+    public function testDeleteEntity(): void
+    {
+        $entityManager = $this->entityManager();
+        $entityManager->setFlusher(sm()->instantiate(MockFlusher::class));
+
+        $entity1 = $entityManager->get(MockEntity::class, 1);
+        $entityManager->get(MockEntity::class, 2);
+
+        self::assertCount(2, $entityManager->getEntities());
+
+        $entityManager->flush();
+        self::assertCount(2, $entityManager->getEntities());
+
+        $entityManager->delete($entity1);
+        self::assertCount(2, $entityManager->getEntities());
+
+        $entityManager->flush();
+        self::assertCount(1, $entityManager->getEntities());
     }
 }
