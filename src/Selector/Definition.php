@@ -6,6 +6,11 @@ namespace Medas\EntityManager\Selector;
 
 class Definition
 {
+    public static function create(string $entity): static
+    {
+        return new static($entity);
+    }
+
     /** @var Relations\Relation[] */
     public array $relations = [];
 
