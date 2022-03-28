@@ -24,7 +24,7 @@ class Repository
     public function findAll(Selector $selector): array
     {
         $entities = [];
-        $records = $this->fetcher->fetchAll($selector, $this->metaData);
+        $records = $this->fetcher->fetchAll($selector);
 
         foreach ($records as $record) {
             $idValues = $this->idValues->extract($record, $this->metaData);
@@ -57,7 +57,7 @@ class Repository
 
     public function findOne(Selector $selector): object|null
     {
-        if (!$record = $this->fetcher->fetchRecord($selector, $this->metaData)) {
+        if (!$record = $this->fetcher->fetchRecord($selector)) {
             return null;
         }
 
