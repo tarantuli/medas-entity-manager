@@ -7,6 +7,8 @@ namespace Medas\EntityManager\Repositories;
 use Medas\EntityManager\Entities\Fetcher;
 use Medas\EntityManager\Entities\IdValues;
 use Medas\EntityManager\MetaData;
+use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Selector\Selectors\WithValues;
 
 class Repository
 {
@@ -19,10 +21,10 @@ class Repository
     }
 
     /** @return object[] */
-    public function findAll(array $conditions = []): array
+    public function findAll(Selector $selector): array
     {
         $entities = [];
-        $records = $this->fetcher->fetchAll($this->metaData, $conditions);
+        $records = $this->fetcher->fetchAll($selector, $this->metaData);
 
         foreach ($records as $record) {
             $idValues = $this->idValues->extract($record, $this->metaData);
@@ -32,15 +34,15 @@ class Repository
         return $entities;
     }
 
-    public function getOrCreate(array $conditions,
+    public function getOrCreate(array $values,
                                 bool  $persistOnCreate = true,
                                 bool  $flushOnPersist = true): object
     {
-        if ($object = $this->findOne($conditions)) {
+        if ($object = $this->findOne(new WithValues($this->metaData->className, $values))) {
             return $object;
         }
 
-        $object = em()->create($this->metaData->className, $conditions);
+        $object = em()->create($this->metaData->className, $values);
 
         if ($persistOnCreate) {
             em()->persist($object);
@@ -53,9 +55,9 @@ class Repository
         return $object;
     }
 
-    public function findOne(array $conditions = []): object|null
+    public function findOne(Selector $selector): object|null
     {
-        if (!$record = $this->fetcher->fetchRecord($this->metaData, $conditions)) {
+        if (!$record = $this->fetcher->fetchRecord($selector, $this->metaData)) {
             return null;
         }
 

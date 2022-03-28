@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities;
 
 use Medas\EntityManager\MetaData;
+use Medas\EntityManager\Selector\Selector;
 
 interface Fetcher
 {
     public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult;
 
-    public function fetchRecord(MetaData $metaData, array $conditions): array|null;
+    public function fetchRecord(Selector $selector, MetaData $metaData = null): array|null;
 
-    public function fetchAll(MetaData $metaData, array $conditions): array;
+    public function fetchAll(Selector $selector, MetaData $metaData = null): array;
 }
