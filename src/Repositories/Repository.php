@@ -21,10 +21,10 @@ class Repository
     }
 
     /** @return object[] */
-    public function findAll(Selector $selector): array
+    public function findAll(Selector $selector, array $arguments = []): array
     {
         $entities = [];
-        $records = $this->fetcher->fetchAll($selector);
+        $records = $this->fetcher->fetchAll($selector, $arguments);
 
         foreach ($records as $record) {
             $idValues = $this->idValues->extract($record, $this->metaData);
@@ -55,9 +55,9 @@ class Repository
         return $object;
     }
 
-    public function findOne(Selector $selector): object|null
+    public function findOne(Selector $selector, array $arguments = []): object|null
     {
-        if (!$record = $this->fetcher->fetchRecord($selector)) {
+        if (!$record = $this->fetcher->fetchRecord($selector, $arguments)) {
             return null;
         }
 
