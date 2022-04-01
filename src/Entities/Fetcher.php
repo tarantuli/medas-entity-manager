@@ -13,5 +13,5 @@ interface Fetcher
 
     public function fetchRecord(Selector $selector, array $arguments = []): array|null;
 
-    public function fetchAll(Selector $selector, array $arguments = []): array;
+    public function fetchAll(Selector $selector = null, array $arguments = []): array;
 }

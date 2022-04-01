@@ -21,7 +21,7 @@ class Repository
     }
 
     /** @return object[] */
-    public function findAll(Selector $selector, array $arguments = []): array
+    public function findAll(Selector $selector = null, array $arguments = []): array
     {
         $entities = [];
         $records = $this->fetcher->fetchAll($selector, $arguments);
