@@ -9,8 +9,8 @@ use Medas\EntityManager\Selector\Operants\Operant;
 class WhereIs implements Condition
 {
     public function __construct(
-        protected Operant $property,
-        protected Operant $value
+        public Operant $property,
+        public Operant $value
     )
     {
     }
