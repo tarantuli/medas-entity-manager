@@ -11,7 +11,5 @@ interface Fetcher
 {
     public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult;
 
-    public function fetchRecord(Selector $selector, array $arguments = []): array|null;
-
     public function fetch(Selector $selector, array $arguments = []): array;
 }

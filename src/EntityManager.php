@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Entities\Flusher;
-use Medas\EntityManager\Entities\IdValues;
-use Medas\EntityManager\Entities\Initializer;
-use Medas\EntityManager\Entities\KeyMaker;
-use Medas\EntityManager\Repositories\Repository;
+use Medas\EntityManager\Entities\{Flusher, IdValues, Initializer, KeyMaker};
 use Medas\EntityManager\Snapshots\SnapshotManager;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -20,12 +16,11 @@ class EntityManager
     protected \SplObjectStorage $savedStates;
 
     public function __construct(
-        private Flusher|null      $flusher,
-        private IdValues          $idValues,
-        private Initializer       $initializer,
-        private KeyMaker          $keyMaker,
-        private RepositoryManager $repositoryManager,
-        private SnapshotManager   $snapshotManager,
+        private Flusher|null    $flusher,
+        private IdValues        $idValues,
+        private Initializer     $initializer,
+        private KeyMaker        $keyMaker,
+        private SnapshotManager $snapshotManager,
     )
     {
         $this->clear();
@@ -36,11 +31,6 @@ class EntityManager
         $this->entities = [];
         $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
-    }
-
-    public function repository(string $className): Repository
-    {
-        return $this->repositoryManager->forClass($className);
     }
 
     /**
