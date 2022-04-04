@@ -8,6 +8,7 @@ use Medas\EntityManager\Entities\Fetcher;
 use Medas\EntityManager\Entities\IdValues;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Selector\Selectors\AllEntities;
 use Medas\EntityManager\Selector\Selectors\WithValues;
 
 class Repository
@@ -21,10 +22,16 @@ class Repository
     }
 
     /** @return object[] */
-    public function findAll(Selector $selector = null, array $arguments = []): array
+    public function findAll(): array
+    {
+        return $this->find(new AllEntities($this->metaData->className));
+    }
+
+    /** @return object[] */
+    public function find(Selector $selector, array $arguments = []): array
     {
         $entities = [];
-        $records = $this->fetcher->fetchAll($selector, $arguments);
+        $records = $this->fetcher->fetch($selector, $arguments);
 
         foreach ($records as $record) {
             $idValues = $this->idValues->extract($record, $this->metaData);

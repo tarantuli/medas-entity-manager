@@ -28,7 +28,7 @@ class Hydrator
         }
 
         foreach ($metaData->properties as $property) {
-            $fetchResult = $this->fetcher->fetch($metaData, $entity, $property);
+            $fetchResult = $this->fetcher->fetchValue($metaData, $entity, $property);
 
             if ($fetchResult->foundValue) {
                 $this->valueSetter->set($metaData, $entity, $property->name, $fetchResult->value);

@@ -9,9 +9,9 @@ use Medas\EntityManager\Selector\Selector;
 
 interface Fetcher
 {
-    public function fetch(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult;
+    public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult;
 
     public function fetchRecord(Selector $selector, array $arguments = []): array|null;
 
-    public function fetchAll(Selector $selector = null, array $arguments = []): array;
+    public function fetch(Selector $selector, array $arguments = []): array;
 }
