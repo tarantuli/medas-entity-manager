@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\Selectors;
 
-use Medas\EntityManager\Selector\Conditions\WhereIs;
-use Medas\EntityManager\Selector\Definition;
-use Medas\EntityManager\Selector\Operants\Property;
-use Medas\EntityManager\Selector\Operants\Value;
-use Medas\EntityManager\Selector\Selector;
+use Medas\EntityManager\Selector\{Conditions\WhereIs, Definition, Operants\Property, Operants\Value, Selector};
+use Medas\ServiceManager\Interfaces\NotCacheable;
 
-class WithValues implements Selector
+class WithValues implements Selector, NotCacheable
 {
     public function __construct(
         private string $entity,
