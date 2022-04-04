@@ -43,6 +43,9 @@ class Repository
         return $entities;
     }
 
+    /**
+     * The return value  is an object of type $entity. This is specified in PhpStorm in .phpstorm.meta.php
+     */
     public function getOrCreate(string $entity,
                                 array  $values,
                                 bool   $persistOnCreate = true,
