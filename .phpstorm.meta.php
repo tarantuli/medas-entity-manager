@@ -16,4 +16,8 @@ namespace PHPSTORM_META {
     override(Repository::getOrCreate(), map([
         '' => '@',
     ]));
+
+    override(Repository::fetchAll(), map([
+        '' => '@[]',
+    ]));
 }

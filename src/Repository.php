@@ -22,7 +22,9 @@ class Repository
     {
     }
 
-    /** @return object[] */
+    /**
+     * The return value is an array of objects of type $entity. This is specified in PhpStorm in .phpstorm.meta.php
+     */
     public function fetchAll(string $entity): array
     {
         return $this->fetch(new AllEntities($entity));
@@ -44,7 +46,7 @@ class Repository
     }
 
     /**
-     * The return value  is an object of type $entity. This is specified in PhpStorm in .phpstorm.meta.php
+     * The return value is an object of type $entity. This is specified in PhpStorm in .phpstorm.meta.php
      */
     public function getOrCreate(string $entity,
                                 array  $values,
