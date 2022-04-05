@@ -21,18 +21,9 @@ class MetaDataManager
 
     public function get(string $className): MetaData
     {
-        $class = new \ReflectionClass($className);
-        $key = [static::class, $className];
-
-        /** @var MetaData $metaData */
-        $metaData = $this->cacheManager->get()->get($key, function () use ($className, $class) {
-            return $this->compiler->compile($className, $class);
+        $metaData = $this->cacheManager->get()->get([static::class, $className], function () use ($className) {
+            return $this->compiler->compile($className);
         });
-
-        if (config('env') === 'dev' && $metaData->sourceFileDate !== filemtime($class->getFileName())) {
-            $this->cacheManager->get()->remove($key);
-            $metaData = $this->get($className);
-        }
 
         $this->propertyAccessManager->makeAccessible($metaData);
 
