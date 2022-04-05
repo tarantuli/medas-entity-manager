@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities;
 
 use Medas\EntityManager\Hydration\Hydrator;
+use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -18,9 +19,9 @@ class Initializer
     {
     }
 
-    public function initialize(string $className, array $values): object
+    public function initialize(string $className, array $values, MetaData $metaData = null): object
     {
-        $metaData = $this->metaDataManager->get($className);
+        $metaData ?? $metaData = $this->metaDataManager->get($className);
         $entity = new $className();
         $this->hydrator->setValues($metaData, $entity, $values);
 
@@ -29,9 +30,9 @@ class Initializer
 
     public function initializeAndHydrate(string $className, array $values): object
     {
-        $entity = $this->initialize($className, $values);
-
         $metaData = $this->metaDataManager->get($className);
+        $entity = $this->initialize($className, $values, $metaData);
+
         $this->hydrator->hydrate($metaData, $entity);
 
         return $entity;
