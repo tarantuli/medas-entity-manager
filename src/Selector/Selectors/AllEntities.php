@@ -11,7 +11,7 @@ use Medas\ServiceManager\Interfaces\NotCacheable;
 class AllEntities implements Selector, NotCacheable
 {
     public function __construct(
-        private string $entity
+        private readonly string $entity
     )
     {
     }

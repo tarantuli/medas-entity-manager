@@ -16,11 +16,11 @@ class EntityManager
     protected \SplObjectStorage $savedStates;
 
     public function __construct(
-        private Flusher|null    $flusher,
-        private IdValues        $idValues,
-        private Initializer     $initializer,
-        private KeyMaker        $keyMaker,
-        private SnapshotManager $snapshotManager,
+        private Flusher|null $flusher,
+        private              readonly IdValues        $idValues,
+        private              readonly Initializer     $initializer,
+        private              readonly KeyMaker        $keyMaker,
+        private              readonly SnapshotManager $snapshotManager,
     )
     {
         $this->clear();

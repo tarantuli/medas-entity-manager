@@ -15,9 +15,9 @@ use Medas\ServiceManager\Attributes\Service;
 class Repository
 {
     public function __construct(
-        private IdValues        $idValues,
-        private Fetcher         $fetcher,
-        private MetaDataManager $metaDataManager,
+        private readonly IdValues        $idValues,
+        private readonly Fetcher         $fetcher,
+        private readonly MetaDataManager $metaDataManager,
     )
     {
     }

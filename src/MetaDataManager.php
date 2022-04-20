@@ -12,9 +12,9 @@ use Medas\ServiceManager\Cache\CacheManager;
 class MetaDataManager
 {
     public function __construct(
-        private CacheManager          $cacheManager,
-        private Compiler              $compiler,
-        private PropertyAccessManager $propertyAccessManager,
+        private readonly CacheManager          $cacheManager,
+        private readonly Compiler              $compiler,
+        private readonly PropertyAccessManager $propertyAccessManager,
     )
     {
     }

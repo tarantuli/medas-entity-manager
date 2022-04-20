@@ -21,8 +21,8 @@ use Medas\ServiceManager\Attributes\Service;
 class Compiler
 {
     public function __construct(
-        private PropertyTypeNormalizer $propertyTypeNormalizer,
-        private TypeFinder             $typeFinder,
+        private readonly PropertyTypeNormalizer $propertyTypeNormalizer,
+        private readonly TypeFinder             $typeFinder,
     )
     {
     }
@@ -45,7 +45,7 @@ class Compiler
         return $metaData;
     }
 
-    private function determineProperties(\ReflectionClass $class, MetaData $metaData)
+    private function determineProperties(\ReflectionClass $class, MetaData $metaData): void
     {
         foreach ($class->getProperties() as $property) {
             $this->processProperty($property, $metaData);

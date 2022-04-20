@@ -13,7 +13,7 @@ use Medas\ServiceManager\Attributes\Service;
 class TypeFinder
 {
     public function __construct(
-        private PropertyTypeNormalizer $normalizer,
+        private readonly PropertyTypeNormalizer $normalizer,
     )
     {
     }

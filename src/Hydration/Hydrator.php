@@ -13,10 +13,10 @@ use Medas\ServiceManager\Attributes\Service;
 class Hydrator
 {
     public function __construct(
-        private IdValues     $idValues,
-        private Fetcher|null $fetcher,
-        private ValueGetter  $valueGetter,
-        private ValueSetter  $valueSetter,
+        private readonly IdValues     $idValues,
+        private readonly Fetcher|null $fetcher,
+        private readonly ValueGetter  $valueGetter,
+        private readonly ValueSetter  $valueSetter,
     )
     {
     }
@@ -36,7 +36,7 @@ class Hydrator
         }
     }
 
-    public function setValues(MetaData $metaData, object $entity, array $values)
+    public function setValues(MetaData $metaData, object $entity, array $values): void
     {
         $this->valueSetter->setValues($metaData, $entity, $values);
     }

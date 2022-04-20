@@ -16,8 +16,8 @@ use Medas\ServiceManager\Attributes\Service;
 class IdValues
 {
     public function __construct(
-        private MetaDataManager $metaDataManager,
-        private ValueGetter     $valueGetter,
+        private readonly MetaDataManager $metaDataManager,
+        private readonly ValueGetter     $valueGetter,
     )
     {
     }

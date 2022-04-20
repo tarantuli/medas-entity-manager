@@ -11,7 +11,7 @@ use Medas\ServiceManager\Attributes\Service;
 class SnapshotManager
 {
     public function __construct(
-        private MetaDataManager $metaDataManager,
+        private readonly MetaDataManager $metaDataManager,
     )
     {
     }

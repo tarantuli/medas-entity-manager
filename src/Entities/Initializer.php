@@ -13,8 +13,8 @@ use Medas\ServiceManager\Attributes\Service;
 class Initializer
 {
     public function __construct(
-        private Hydrator        $hydrator,
-        private MetaDataManager $metaDataManager
+        private readonly Hydrator        $hydrator,
+        private readonly MetaDataManager $metaDataManager
     )
     {
     }

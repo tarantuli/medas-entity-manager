@@ -10,8 +10,8 @@ use Medas\ServiceManager\Interfaces\NotCacheable;
 class WithValues implements Selector, NotCacheable
 {
     public function __construct(
-        private string $entity,
-        private array  $values,
+        private readonly string $entity,
+        private readonly array  $values,
     )
     {
     }
