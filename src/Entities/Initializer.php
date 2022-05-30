@@ -21,9 +21,12 @@ class Initializer
 
     public function initialize(string $className, array $values, MetaData $metaData = null): object
     {
-        $metaData ?? $metaData = $this->metaDataManager->get($className);
         $entity = new $className();
-        $this->hydrator->setValues($metaData, $entity, $values);
+
+        if ($values) {
+            $metaData ?? $metaData = $this->metaDataManager->get($className);
+            $this->hydrator->setValues($metaData, $entity, $values);
+        }
 
         return $entity;
     }
