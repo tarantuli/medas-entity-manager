@@ -14,6 +14,9 @@ class MetaData
     /** @var MetaData\Property[] */
     public array $properties;
 
+    /** @var MetaData\Reference[] */
+    public array $references;
+
     public ?MetaData\Property $idProperty;
     /** @var MetaData\Property[] */
     public array $idProperties;

@@ -39,6 +39,11 @@ class ValueSetter
                     break;
                 }
 
+                if (interface_exists($phpType) && $value instanceof $phpType) {
+                    $valueType = $phpType;
+                    break;
+                }
+
                 if ($phpType === 'int' && preg_match('/^\d+$/', $value)) {
                     $value = (int) $value;
                     $valueType = 'int';

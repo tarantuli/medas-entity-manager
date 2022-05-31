@@ -38,6 +38,8 @@ class Compiler
         $metaData = new MetaData($className);
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
+        $metaData->properties = [];
+        $metaData->references = [];
 
         $this->determineProperties($class, $metaData);
         $this->determineIdProperties($metaData);
@@ -49,6 +51,7 @@ class Compiler
     {
         foreach ($class->getProperties() as $property) {
             $this->processProperty($property, $metaData);
+            $this->processReferences($property, $metaData);
         }
     }
 
@@ -62,6 +65,7 @@ class Compiler
         if (!$isManagedProperty) {
             return;
         }
+
         $type = $this->typeFinder->find($property);
 
         $metaData->properties[] = new Property(
@@ -97,5 +101,42 @@ class Compiler
             $metaData->idProperty = null;
             $metaData->hasCompositeId = true;
         }
+    }
+
+    private function processReferences(\ReflectionProperty $property, MetaData $metaData): void
+    {
+        $references = attribute(Attributes\References::class, $property);
+
+        if (!$references) {
+            return;
+        }
+
+        if ($references->property === null) {
+            $targetClass = new \ReflectionClass($references->entity);
+
+            $targetProperties = [];
+
+            foreach ($targetClass->getProperties() as $targetProperty) {
+                if (in_array($metaData->className, $this->propertyTypeNormalizer->names($targetProperty))) {
+                    $targetProperties[] = $targetProperty;
+                }
+            }
+
+            if (count($targetProperties) === 0) {
+                throw new \Exception('property ' . $property->name . ' should be referenced by ' . $references->entity . ' but no properties refer to ' . $metaData->className);
+            }
+
+            if (count($targetProperties) >= 2) {
+                throw new \Exception('property ' . $property->name . ' should be referenced by ' . $references->entity . ' but too many properties refer to ' . $metaData->className);
+            }
+
+            $references->property = $targetProperties[0]->name;
+        }
+
+        $metaData->references[] = new Reference(
+            name: $property->name,
+            entity: $references->entity,
+            property: $references->property,
+        );
     }
 }
