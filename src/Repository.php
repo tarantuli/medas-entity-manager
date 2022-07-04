@@ -74,4 +74,9 @@ class Repository
     {
         return $this->fetch($selector, $arguments)[0] ?? null;
     }
+
+    public function fetchReferences(object $entity, MetaData\Reference $reference): array
+    {
+        return $this->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
+    }
 }

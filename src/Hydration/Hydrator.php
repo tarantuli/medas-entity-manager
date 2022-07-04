@@ -8,16 +8,19 @@ use Medas\EntityManager\Entities\Fetcher;
 use Medas\EntityManager\Entities\IdValues;
 use Medas\EntityManager\Entities\ReferenceCollection;
 use Medas\EntityManager\MetaData;
+use Medas\EntityManager\MetaDataManager;
+use Medas\EntityManager\Selector\Selectors\WithValues;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
 class Hydrator
 {
     public function __construct(
-        private readonly IdValues    $idValues,
-        private Fetcher|null         $fetcher,
-        private readonly ValueGetter $valueGetter,
-        private readonly ValueSetter $valueSetter,
+        private readonly IdValues        $idValues,
+        private Fetcher|null             $fetcher,
+        private readonly MetaDataManager $metaDataManager,
+        private readonly ValueGetter     $valueGetter,
+        private readonly ValueSetter     $valueSetter,
     )
     {
     }
@@ -44,8 +47,22 @@ class Hydrator
         foreach ($metaData->references as $reference) {
             $this->valueSetter->set(
                 $metaData, $entity, $reference->name,
-                new ReferenceCollection(fn() => $this->fetcher->fetchReferences($metaData, $entity, $reference)));
+                new ReferenceCollection(fn() => $this->fetchReferences($entity, $reference)));
         }
+    }
+
+    private function fetchReferences(object $entity, MetaData\Reference $reference): array
+    {
+        $entities = [];
+        $records = $this->fetcher->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
+        $metaData = $this->metaDataManager->get($reference->entity);
+
+        foreach ($records as $record) {
+            $idValues = $this->idValues->extract($record, $metaData);
+            $entities[] = em()->get($metaData->className, $idValues);
+        }
+
+        return $entities;
     }
 
     public function setValues(MetaData $metaData, object $entity, array $values): void

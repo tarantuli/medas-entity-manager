@@ -21,14 +21,6 @@ class TestFetcher implements Fetcher
 
     public function fetch(Selector $selector, array $arguments = []): array
     {
-        return [];
-    }
-
-    public function fetchReferences(MetaData $metaData, object $entity, MetaData\Reference $reference): array
-    {
-        return [
-            em()->get(ChildEntity::class, 1),
-            em()->get(ChildEntity::class, 2),
-        ];
+        return [['id' => 1], ['id' => 2]];
     }
 }
