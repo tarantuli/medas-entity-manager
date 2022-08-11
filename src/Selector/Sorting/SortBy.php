@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\Sorting;
 
+use Medas\EntityManager\Selector\Element;
 use Medas\EntityManager\Selector\Operants\Operant;
 
-class SortBy
+class SortBy implements Element
 {
     public static function c(Operant $operant, SortDirection $direction = SortDirection::ASC): static
     {
