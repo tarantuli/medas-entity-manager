@@ -10,5 +10,4 @@ require_once __DIR__ . '/bootstrap.php';
 sm()->addPackage(ConfigManagerPackage::instance());
 
 $config = service(ConfigManager::class);
-$config->readEnv(__DIR__);
-$config->addDirectory(__DIR__ . '/config');
+$config->addDirectory(__DIR__ . '/tests/MockUps/config');
