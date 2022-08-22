@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Selector\Selectors;
 
 use Medas\EntityManager\Selector\{Conditions\WhereIs, Definition, Operants\Property, Operants\Value, Selector};
-use Medas\ServiceManager\Interfaces\NotCacheable;
+use Medas\ServiceManager\Cache\Interfaces\NotCacheable;
 
 class WithValues implements Selector, NotCacheable
 {

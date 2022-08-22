@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\ConfigManager\ConfigManagerPackage;
-use Medas\ServiceManager\AsSingleton;
-use Medas\ServiceManager\BasePackage;
+use Medas\ServiceManager\{AsSingleton, BasePackage};
 
 class EntityManagerPackage extends BasePackage
 {
@@ -15,7 +13,6 @@ class EntityManagerPackage extends BasePackage
     public function dependencies(): array
     {
         return $this->dependenciesByClass([
-            ConfigManagerPackage::class,
         ]);
     }
 

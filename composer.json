@@ -12,12 +12,11 @@
     "prefer-stable": true,
     "require": {
         "morphp/medas-service-manager": "dev-dev",
-        "morphp/medas-config-manager": "dev-dev",
-        "ext-pdo": "*",
-        "morphp/medas-cache": "dev-dev"
+        "ext-pdo": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "morphp/medas-config-manager": "dev-dev"
     },
     "autoload": {
         "psr-4": {

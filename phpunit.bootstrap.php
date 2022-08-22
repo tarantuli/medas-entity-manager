@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-use Medas\ConfigManager\ConfigManager;
-use Medas\EntityManager\EntityManagerPackage;
-use Medas\ServiceManager\ServiceManager;
+use Medas\ConfigManager\ConfigManagerPackage;
+use Medas\ServiceManager\Interfaces\ConfigManager;
 
-$sm = ServiceManager::get();
+require_once __DIR__ . '/bootstrap.php';
 
-$sm->addPackage(EntityManagerPackage::instance());
+sm()->addPackage(ConfigManagerPackage::instance());
 
-/** @var ConfigManager $config */
-$config = $sm->resolve(ConfigManager::class);
+$config = service(ConfigManager::class);
 $config->readEnv(__DIR__);
 $config->addDirectory(__DIR__ . '/config');

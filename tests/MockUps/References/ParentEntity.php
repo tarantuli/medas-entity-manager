@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\Test\MockUps\References;
 
-use Medas\Core\Collection;
 use Medas\EntityManager\Attributes\{Entity, Id, References};
+use Medas\Core\Collections\Collection;
 
 #[Entity]
 class ParentEntity

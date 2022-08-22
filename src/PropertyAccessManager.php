@@ -17,6 +17,7 @@ class PropertyAccessManager
         }
 
         foreach ($metaData->properties as $property) {
+            /** @noinspection PhpExpressionResultUnusedInspection */
             $property->reflection->setAccessible(true);
         }
     }

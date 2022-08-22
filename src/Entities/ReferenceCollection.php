@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\Collection;
+use Medas\Core\Collections\Collection;
 
 class ReferenceCollection implements Collection
 {

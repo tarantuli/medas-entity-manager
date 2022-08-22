@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Selector\Selectors;
 
 use Medas\EntityManager\Selector\Definition;
 use Medas\EntityManager\Selector\Selector;
-use Medas\ServiceManager\Interfaces\NotCacheable;
+use Medas\ServiceManager\Cache\Interfaces\NotCacheable;
 
 class AllEntities implements Selector, NotCacheable
 {
