@@ -74,33 +74,13 @@ class Compiler
             default: $property->hasDefaultValue() ? $property->getDefaultValue() : null,
             isId: !empty($property->getAttributes(Id::class, \ReflectionAttribute::IS_INSTANCEOF)),
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
+            isCreationTimestamp: !empty($property->getAttributes(Attributes\IsCreationTimestamp::class)),
+            isModificationTimestamp: !empty($property->getAttributes(Attributes\IsModificationTimestmap::class)),
             isNullable: !empty($property->getAttributes(IsNullable::class)),
             isUnique: !empty($property->getAttributes(IsUnique::class)),
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property
         );
-    }
-
-    private function determineIdProperties(MetaData $metaData): void
-    {
-        $metaData->idProperties = [];
-        $metaData->hasCompositeId = false;
-
-        foreach ($metaData->properties as $property) {
-            if ($property->isId) {
-                $metaData->idProperties[] = $property;
-                $metaData->idProperty = $property;
-            }
-        }
-
-        if (count($metaData->idProperties) === 0) {
-            throw new EntityHasNoIdPropertyException($metaData->className);
-        }
-
-        if (count($metaData->idProperties) > 1) {
-            $metaData->idProperty = null;
-            $metaData->hasCompositeId = true;
-        }
     }
 
     private function processReferences(\ReflectionProperty $property, MetaData $metaData): void
@@ -138,5 +118,27 @@ class Compiler
             entity: $references->entity,
             property: $references->property,
         );
+    }
+
+    private function determineIdProperties(MetaData $metaData): void
+    {
+        $metaData->idProperties = [];
+        $metaData->hasCompositeId = false;
+
+        foreach ($metaData->properties as $property) {
+            if ($property->isId) {
+                $metaData->idProperties[] = $property;
+                $metaData->idProperty = $property;
+            }
+        }
+
+        if (count($metaData->idProperties) === 0) {
+            throw new EntityHasNoIdPropertyException($metaData->className);
+        }
+
+        if (count($metaData->idProperties) > 1) {
+            $metaData->idProperty = null;
+            $metaData->hasCompositeId = true;
+        }
     }
 }

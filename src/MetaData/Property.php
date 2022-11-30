@@ -14,6 +14,8 @@ class Property
         public mixed               $default,
         public bool                $isId,
         public bool                $isGeneratedValue,
+        public bool                $isCreationTimestamp,
+        public bool                $isModificationTimestamp,
         public bool                $isNullable,
         public bool                $isUnique,
         public array               $phpTypes,
