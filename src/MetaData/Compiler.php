@@ -72,7 +72,7 @@ class Compiler
             name: $property->name,
             type: $type,
             default: $property->hasDefaultValue() ? $property->getDefaultValue() : null,
-            isId: !empty($property->getAttributes(Id::class)),
+            isId: !empty($property->getAttributes(Id::class, \ReflectionAttribute::IS_INSTANCEOF)),
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
             isNullable: !empty($property->getAttributes(IsNullable::class)),
             isUnique: !empty($property->getAttributes(IsUnique::class)),
