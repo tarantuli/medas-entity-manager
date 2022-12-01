@@ -14,8 +14,12 @@ class Binary extends BaseType
 
     public function __construct(
         public int $minLength = 0,
-        public int $maxLength = self::MAX_1_BYTE_LENGTH
+        public int $maxLength = self::MAX_1_BYTE_LENGTH,
+        int|null   $length = null
     )
     {
+        if ($length !== null) {
+            $this->minLength = $this->maxLength = $length;
+        }
     }
 }
