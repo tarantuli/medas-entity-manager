@@ -27,18 +27,18 @@ class Property
     public function __serialize(): array
     {
         return [
-            $this->name,
-            $this->type,
-            $this->default,
-            $this->isId,
-            $this->isGeneratedValue,
-            $this->isCreationTimestamp,
-            $this->isModificationTimestamp,
-            $this->isNullable,
-            $this->isUnique,
-            $this->phpTypes,
-            $this->reflection->class,
-            $this->reflection->name,
+            'name' => $this->name,
+            'type' => $this->type,
+            'default' => $this->default,
+            'isId' => $this->isId,
+            'isGeneratedValue' => $this->isGeneratedValue,
+            'isCreationTimestamp' => $this->isCreationTimestamp,
+            'isModificationTimestamp' => $this->isModificationTimestamp,
+            'isNullable' => $this->isNullable,
+            'isUnique' => $this->isUnique,
+            'phpTypes' => $this->phpTypes,
+            'reflectionClass' => $this->reflection->class,
+            'reflectionName' => $this->reflection->name,
         ];
     }
 
