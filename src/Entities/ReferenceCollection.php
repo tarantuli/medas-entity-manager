@@ -17,6 +17,11 @@ class ReferenceCollection implements Collection
     {
     }
 
+    public function offsetExists(mixed $offset): bool
+    {
+        return array_key_exists($offset, $this->data());
+    }
+
     public function data(): array
     {
         if (!isset($this->data)) {
@@ -24,11 +29,6 @@ class ReferenceCollection implements Collection
         }
 
         return $this->data;
-    }
-
-    public function offsetExists(mixed $offset): bool
-    {
-        return array_key_exists($offset, $this->data());
     }
 
     public function offsetGet(mixed $offset): mixed
@@ -69,5 +69,10 @@ class ReferenceCollection implements Collection
     public function rewind(): void
     {
         $this->index = 0;
+    }
+
+    public function count(): int
+    {
+        return count($this->data);
     }
 }
