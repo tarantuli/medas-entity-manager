@@ -71,6 +71,7 @@ class Compiler
         $metaData->properties[] = new Property(
             name: $property->name,
             type: $type,
+            hasDefault: $property->hasDefaultValue(),
             default: $property->hasDefaultValue() ? $property->getDefaultValue() : null,
             isId: !empty($property->getAttributes(Id::class, \ReflectionAttribute::IS_INSTANCEOF)),
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
