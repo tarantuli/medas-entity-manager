@@ -7,7 +7,6 @@ namespace Medas\EntityManager\MetaData;
 use Medas\EntityManager\{Attributes,
     Attributes\Entity,
     Attributes\Id,
-    Attributes\IsNullable,
     Attributes\IsUnique,
     Exceptions\ClassIsNotAnEntityException,
     Exceptions\EntityHasNoIdPropertyException,
@@ -67,6 +66,7 @@ class Compiler
         }
 
         $type = $this->typeFinder->find($property);
+        $isNullable = $property->getType()->allowsNull();
 
         $metaData->properties[] = new Property(
             name: $property->name,
@@ -76,7 +76,7 @@ class Compiler
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
             isCreationTimestamp: !empty($property->getAttributes(Attributes\IsCreationTimestamp::class)),
             isModificationTimestamp: !empty($property->getAttributes(Attributes\IsModificationTimestmap::class)),
-            isNullable: !empty($property->getAttributes(IsNullable::class)),
+            isNullable: $isNullable,
             isUnique: !empty($property->getAttributes(IsUnique::class)),
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property
