@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional\MetaData;
+namespace Medas\EntityManagerTest\Functional\MetaData;
 
 use Medas\EntityManager\MetaData\Compiler;
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\MockNullableProperties;
+use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\MockUps\MockNullableProperties;
 
 class CompilerTest extends BaseTest
 {

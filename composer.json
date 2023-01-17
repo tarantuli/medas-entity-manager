@@ -16,12 +16,13 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
-        "morphp/medas-config-manager": "dev-dev"
+        "morphp/medas-config-manager": "dev-dev",
+        "morphp/medas-console": "dev-dev"
     },
     "autoload": {
         "psr-4": {
             "Medas\\EntityManager\\": "src/",
-            "Medas\\Test\\": "tests/"
+            "Medas\\EntityManagerTest\\": "tests/"
         }
     }
 }

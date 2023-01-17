@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Inspectors;
+namespace Medas\EntityManagerTest\Inspectors;
 
 use Medas\EntityManager\EntityManager;
 use Medas\ServiceManager\Attributes\Service;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Snapshots\Snapshot;
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\MockEntity;
+use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\MockUps\MockEntity;
 
 class SnapshotTest extends BaseTest
 {

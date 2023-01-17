@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\MockUps\References;
+namespace Medas\EntityManagerTest\MockUps\References;
 
 use Medas\EntityManager\Attributes\{Entity, Id, Property};
 

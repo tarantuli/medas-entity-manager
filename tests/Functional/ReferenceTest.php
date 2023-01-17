@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Entities\ReferenceCollection;
 use Medas\EntityManager\Hydration\Hydrator;
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\References\{ChildEntity, ParentEntity, TestFetcher};
+use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\MockUps\References\{ChildEntity, ParentEntity, TestFetcher};
 
 class ReferenceTest extends BaseTest
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypesException;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitTypeException;
 use Medas\EntityManager\Types\{Binary, DateTime, Integer, Relation, Text, TypeFinder};
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\MockEntityTypes;
+use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\MockUps\MockEntityTypes;
 
 class TypeFinderTest extends BaseTest
 {

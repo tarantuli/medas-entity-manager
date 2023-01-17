@@ -1,0 +1,82 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Medas\EntityManager\Entities\Generator;
+
+use Medas\EntityManager\Entities\Generator\Exceptions\ClassHasNoNamespace;
+use Medas\EntityManager\Entities\Generator\NameConverters\NameConverter;
+use Medas\ServiceManager\Attributes\Service;
+
+#[Service]
+class EntityClassGenerator
+{
+    public function __construct(
+        private readonly FileNameFinder $fileNameFinder,
+        private readonly NameConverter  $storeNameConverter,
+    )
+    {
+    }
+
+    public function generate(string $className): string
+    {
+        //$fileName = $this->fileNameFinder->find($className);
+        [$namespace, $shortClassName] = $this->splitClassName($className);
+        $storeName = $this->storeNameConverter->convert($shortClassName);
+
+        $replacements = [
+            '{{namespace}}' => $namespace,
+            '{{shortClassName}}' => $shortClassName,
+            '{{storeName}}' => $storeName,
+        ];
+
+        return str_replace(
+            array_keys($replacements),
+            array_values($replacements),
+            $this->template()
+        );
+    }
+
+    private function splitClassName(string $className): array
+    {
+        $pos = strrpos($className, '\\');
+
+        if ($pos === false) {
+            throw new ClassHasNoNamespace($className);
+        }
+
+        return [
+            substr($className, 0, $pos),
+            substr($className, $pos + 1),
+        ];
+    }
+
+    private function template(): string
+    {
+        return <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use Medas\EntityManager\Attributes\{Entity, HasId, Id, Property};
+use Medas\EntityManager\Traits\Timestamps;
+use Medas\EntityManager\Types\Guid;
+
+#[Entity(store: '{{storeName}}')]
+class {{shortClassName}} implements HasId
+{
+    use Timestamps;
+
+    #[Id, Guid]
+    private string $guid;
+
+    public function id(): string
+    {
+        return $this->guid;
+    }
+}
+PHP;
+    }
+}

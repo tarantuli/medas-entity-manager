@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\MockUps;
+namespace Medas\EntityManagerTest\MockUps;
 
 class MockNotAnEntity
 {

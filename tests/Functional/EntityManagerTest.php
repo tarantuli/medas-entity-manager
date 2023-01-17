@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Medas\Test\Functional;
+namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\EntityManager;
 use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
 use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
 use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
-use Medas\Test\BaseTest;
-use Medas\Test\MockUps\MockEntity;
-use Medas\Test\MockUps\MockEntityCompositeId;
-use Medas\Test\MockUps\MockFlusher;
-use Medas\Test\MockUps\MockNotAnEntity;
+use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\MockUps\MockEntity;
+use Medas\EntityManagerTest\MockUps\MockEntityCompositeId;
+use Medas\EntityManagerTest\MockUps\MockFlusher;
+use Medas\EntityManagerTest\MockUps\MockNotAnEntity;
 
 class EntityManagerTest extends BaseTest
 {
