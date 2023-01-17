@@ -11,6 +11,7 @@ class FileNameFinderTest extends BaseTest
 {
     public function testCorrectFileNameGeneration(): void
     {
+        chdir(__DIR__ . '/../../../..');
         $fileName = service(FileNameFinder::class)->find('Medas\EntityManagerTest\MockUps\EntityName');
 
         self::assertStringContainsString('MockUps\EntityName', $fileName);

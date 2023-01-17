@@ -32,7 +32,7 @@ class FileNameFinder
     private function getPsr4Prefixes(): array
     {
         /** @var ClassLoader $loader */
-        $loader = require __DIR__ . '/../../../vendor/autoload.php';
+        $loader = require 'vendor/autoload.php';
         return $loader->getPrefixesPsr4();
     }
 

@@ -38,7 +38,7 @@ class CreateEntityFile extends BaseConsoleCommand
 
     public function process(array $arguments): void
     {
-        $className = $arguments[0];
+        $className = $arguments[1];
 
         $code = $this->entityClassGenerator->generate($className);
         $fileName = $this->fileNameFinder->find($className);

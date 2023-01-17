@@ -60,7 +60,7 @@ declare(strict_types=1);
 
 namespace {{namespace}};
 
-use Medas\EntityManager\Attributes\{Entity, HasId, Id, Property};
+use Medas\EntityManager\Attributes\{Entity, HasId, Id};
 use Medas\EntityManager\Traits\Timestamps;
 use Medas\EntityManager\Types\Guid;
 
