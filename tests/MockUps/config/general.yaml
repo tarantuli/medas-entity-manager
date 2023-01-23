@@ -1,1 +1,4 @@
 env: dev
+
+entity-manager:
+  generator-root-namespace: Medas\EntityManagerTest
