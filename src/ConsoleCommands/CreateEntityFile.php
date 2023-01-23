@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConsoleCommands;
 
-use Medas\Console\Commands\BaseConsoleCommand;
-use Medas\Console\Commands\ConsoleCommandGroup;
-use Medas\EntityManager\Entities\Generator\EntityClassGenerator;
-use Medas\EntityManager\Entities\Generator\FileNameFinder;
+use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
+use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]

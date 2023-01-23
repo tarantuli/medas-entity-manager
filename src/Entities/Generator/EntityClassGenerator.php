@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\Generator;
 
-use Medas\EntityManager\ConfigOptions\GeneratorRootNamespace;
 use Medas\EntityManager\Entities\Generator\{Exceptions\ClassHasNoNamespace, NameConverters\NameConverter};
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\ConfigOptions\ConfigValue;
 
 #[Service]
 class EntityClassGenerator
@@ -39,17 +37,16 @@ class {{shortClassName}} implements HasId
 PHP;
 
     public function __construct(
-        #[ConfigValue(GeneratorRootNamespace::class)]
-        private readonly string|null    $rootNamespace,
-        private readonly FileNameFinder $fileNameFinder,
-        private readonly NameConverter  $storeNameConverter,
+        private readonly ClassNameNormalizer $classNameNormalizer,
+        private readonly FileNameFinder      $fileNameFinder,
+        private readonly NameConverter       $storeNameConverter,
     )
     {
     }
 
     public function generate(string $className): string
     {
-        $className = $this->normalizeClassName($className);
+        $className = $this->classNameNormalizer->normalize($className);
 
         [$namespace, $shortClassName] = $this->splitClassName($className);
         $storeName = $this->storeNameConverter->convert($shortClassName);
@@ -79,16 +76,5 @@ PHP;
             substr($className, 0, $pos),
             substr($className, $pos + 1),
         ];
-    }
-
-    private function normalizeClassName(string $className): string|array
-    {
-        // Replace a leading dot by the root namespace
-        if (str_starts_with($className, '.')) {
-            $className = $this->rootNamespace . substr($className, 1);
-        }
-
-        // Replace forward slashes by backward slashes
-        return str_replace('/', '\\', $className);
     }
 }

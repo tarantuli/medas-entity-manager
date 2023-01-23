@@ -10,8 +10,16 @@ use Medas\ServiceManager\Attributes\Service;
 #[Service]
 class FileNameFinder
 {
+    public function __construct(
+        private readonly ClassNameNormalizer $classNameNormalizer,
+    )
+    {
+    }
+
     public function find(string $className): string|null
     {
+        $className = $this->classNameNormalizer->normalize($className);
+
         $psr4Prefixes = $this->getPsr4Prefixes();
         foreach ($psr4Prefixes as $prefix => $paths) {
             if (!str_starts_with($className, $prefix)) {
