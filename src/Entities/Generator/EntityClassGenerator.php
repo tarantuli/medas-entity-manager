@@ -34,6 +34,7 @@ class {{shortClassName}} implements HasId
         return $this->guid;
     }
 }
+
 PHP;
 
     public function __construct(

@@ -5,13 +5,19 @@ declare(strict_types=1);
 namespace Medas\EntityManager\ConsoleCommands;
 
 use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
+use Medas\Console\Formats\Color;
+use Medas\Console\Printer;
+use Medas\Console\Text;
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Interfaces\DirectoryManager;
 
 #[Service]
 class CreateEntityFile extends BaseConsoleCommand
 {
     public function __construct(
+        private readonly DirectoryManager      $directoryManager,
+        private readonly Printer               $printer,
         private readonly EntityClassGenerator  $entityClassGenerator,
         private readonly EntityManagerCommands $entityManagerCommands,
         private readonly FileNameFinder        $fileNameFinder,
@@ -41,6 +47,16 @@ class CreateEntityFile extends BaseConsoleCommand
         $code = $this->entityClassGenerator->generate($className);
         $fileName = $this->fileNameFinder->find($className);
 
-        file_put_contents($fileName, $code);
+        $this->directoryManager->create(dirname($fileName));
+
+        if (file_exists($fileName)) {
+            $this->printer->print(new Text('file ' . $fileName . ' already exists', Color::LightRed));
+        }
+        elseif (file_put_contents($fileName, $code)) {
+            $this->printer->print(new Text('created entity file '), new Text($fileName, Color::LightYellow));
+        }
+        else {
+            $this->printer->print(new Text('could not creat entity file ' . $fileName, Color::Red));
+        }
     }
 }
