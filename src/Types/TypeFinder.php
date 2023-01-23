@@ -37,6 +37,7 @@ class TypeFinder
             $baseType->getName() === 'DateTime' => new DateTime(),
             !$baseType->isBuiltin() => new Relation($baseType->getName()),
             $baseType->getName() === 'int' => new Integer(),
+            $baseType->getName() === 'float' => new FloatingPoint(),
             $baseType->getName() === 'string' => new Text(),
             $baseType->getName() === 'bool' => new Boolean(),
             default => throw new PropertyHasNoImplicitTypeException($property),
