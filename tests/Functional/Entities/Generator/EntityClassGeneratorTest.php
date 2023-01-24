@@ -34,6 +34,7 @@ class MockEntity implements HasId
         return $this->guid;
     }
 }
+
 PHP;
 
     public function testSimpleGeneration(): void
