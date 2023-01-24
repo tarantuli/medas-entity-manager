@@ -8,6 +8,7 @@ use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypesException;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitTypeException;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Values\Interfaces\Guid as GuidProperty;
 
 #[Service]
 class TypeFinder
@@ -35,6 +36,7 @@ class TypeFinder
 
         return match (true) {
             $baseType->getName() === 'DateTime' => new DateTime(),
+            $baseType->getName() === GuidProperty::class => new Guid(),
             !$baseType->isBuiltin() => new Relation($baseType->getName()),
             $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\Attributes\Id;
-use Medas\EntityManager\Attributes\Property;
+use Medas\EntityManager\Attributes\{Entity, Id, Property};
 use Medas\EntityManager\Types\Binary;
+use Medas\ServiceManager\Values\Interfaces\Guid;
 
 #[Entity]
 class MockEntityTypes
@@ -41,4 +40,7 @@ class MockEntityTypes
 
     #[Property]
     private \DateTime $dateTime;
+
+    #[Property]
+    private Guid $guid;
 }

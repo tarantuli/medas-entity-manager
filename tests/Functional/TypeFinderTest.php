@@ -6,7 +6,7 @@ namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypesException;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitTypeException;
-use Medas\EntityManager\Types\{Binary, DateTime, Integer, Relation, Text, TypeFinder};
+use Medas\EntityManager\Types\{Binary, DateTime, Guid, Integer, Relation, Text, TypeFinder};
 use Medas\EntityManagerTest\BaseTest;
 use Medas\EntityManagerTest\MockUps\MockEntityTypes;
 
@@ -38,6 +38,13 @@ class TypeFinderTest extends BaseTest
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
         self::assertInstanceOf(Relation::class, $finder->find($class->getProperty('relation')));
+    }
+
+    public function testGuidType(): void
+    {
+        $finder = service(TypeFinder::class);
+        $class = new \ReflectionClass(MockEntityTypes::class);
+        self::assertInstanceOf(Guid::class, $finder->find($class->getProperty('guid')));
     }
 
     public function testNoPhpType(): void
