@@ -11,6 +11,12 @@ class KeyMaker
 {
     public function get(string $className, array $id): string
     {
-        return $className . ':' . json_encode($id);
+        foreach ($id as &$value) {
+            if (is_object($value)) {
+                $value = spl_object_id($value);
+            }
+        }
+
+        return $className . ':' . print_r($id, true);
     }
 }
