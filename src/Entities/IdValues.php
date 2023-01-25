@@ -26,7 +26,7 @@ class IdValues
     {
         $metaData = $this->metaDataManager->get($className);
 
-        if (is_scalar($id)) {
+        if (!is_iterable($id)) {
             if ($metaData->hasCompositeId) {
                 throw new IdValueShouldBeAnArrayException($className, get_debug_type($id));
             }
