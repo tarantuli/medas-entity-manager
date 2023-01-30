@@ -7,10 +7,17 @@ namespace Medas\EntityManager\Hydration;
 use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Values\Interfaces\{Guid, GuidProvider};
 
 #[Service]
 class ValueSetter
 {
+    public function __construct(
+        private readonly GuidProvider|null $guidProvider,
+    )
+    {
+    }
+
     public function setValues(MetaData $metaData, object $entity, array $values): void
     {
         foreach ($values as $propertyName => $value) {
@@ -31,6 +38,10 @@ class ValueSetter
                     $value = new \DateTime($value);
                     $valueType = $phpType;
                     break;
+                }
+
+                if ($phpType === Guid::class && is_string($value)) {
+                    $value = $this->guidProvider->fromString($value);
                 }
 
                 if (class_exists($phpType)) {
