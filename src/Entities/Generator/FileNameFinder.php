@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities\Generator;
 
 use Composer\Autoload\ClassLoader;
+use Medas\EntityManager\Entities\Generator\Exceptions\NoPathFoundForClassName;
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -16,7 +17,7 @@ class FileNameFinder
     {
     }
 
-    public function find(string $className): string|null
+    public function find(string $className): string
     {
         $className = $this->classNameNormalizer->normalize($className);
 
@@ -34,7 +35,7 @@ class FileNameFinder
             return $this->normalizePath($filePath);
         }
 
-        return null;
+        throw new NoPathFoundForClassName($className);
     }
 
     private function getPsr4Prefixes(): array
