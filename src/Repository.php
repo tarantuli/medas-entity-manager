@@ -35,7 +35,7 @@ class Repository
     {
         $entities = [];
         $records = $this->fetcher->fetch($selector, $arguments);
-        $metaData = $this->metaDataManager->get($selector->entity());
+        $metaData = $this->metaDataManager->get($selector->definition()->entity);
 
         foreach ($records as $record) {
             $idValues = $this->idValues->extract($record, $metaData);

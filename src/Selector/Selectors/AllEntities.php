@@ -16,12 +16,7 @@ class AllEntities implements Selector, NotCacheable
     {
     }
 
-    public function entity(): string
-    {
-        return $this->entity;
-    }
-
-    public function get(): Definition
+    public function definition(): Definition
     {
         return new Definition($this->entity);
     }
