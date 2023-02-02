@@ -8,7 +8,7 @@ use Medas\Core\Exceptions\BaseException;
 
 class PropertyDoesNotExistException extends BaseException
 {
-    public function __construct(string $className, string $propertyName)
+    public function __construct(public string $className, public string $propertyName)
     {
         parent::__construct($className, $propertyName);
     }
