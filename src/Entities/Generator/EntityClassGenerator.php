@@ -19,17 +19,17 @@ namespace {{namespace}};
 
 use Medas\EntityManager\Attributes\{Entity, HasId, Id};
 use Medas\EntityManager\Traits\Timestamps;
-use Medas\EntityManager\Types\Guid;
+use Medas\ServiceManager\Values\Interfaces\Guid;
 
 #[Entity(store: '{{storeName}}')]
 class {{shortClassName}} implements HasId
 {
     use Timestamps;
 
-    #[Id, Guid]
-    private string $guid;
+    #[Id]
+    private Guid $guid;
 
-    public function id(): string
+    public function id(): Guid
     {
         return $this->guid;
     }
