@@ -23,6 +23,8 @@ class Definition
     /** @var Parameter[] */
     public array $parameters = [];
 
+    public Pagination|null $pagination = null;
+
     public function __construct(
         public string $entity,
     )
@@ -36,6 +38,7 @@ class Definition
             $element instanceof Conditions\Condition => $this->conditions[] = $element,
             $element instanceof Sorting\SortBy => $this->sorts[] = $element,
             $element instanceof Parameter => $this->parameters[] = $element,
+            $element instanceof Pagination => $this->pagination = $element,
             default => throw new \Exception('unhandled element type ' . $element::class),
         };
 
