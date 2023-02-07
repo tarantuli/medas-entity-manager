@@ -28,7 +28,12 @@ class Compiler
 
     public function compile(string $className): MetaData
     {
-        $class = new \ReflectionClass($className);
+        try {
+            $class = new \ReflectionClass($className);
+        }
+        catch (\ReflectionException) {
+            throw new ClassIsNotAnEntityException($className);
+        }
 
         if (!$entity = attribute(Entity::class, $class)) {
             throw new ClassIsNotAnEntityException($className);
