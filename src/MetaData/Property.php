@@ -19,6 +19,7 @@ class Property
         public bool                $isModificationTimestamp,
         public bool                $isNullable,
         public bool                $isUnique,
+        public bool                $onDeleteCascade,
         public array               $phpTypes,
         public \ReflectionProperty $reflection
     )
@@ -37,6 +38,7 @@ class Property
             'isModificationTimestamp' => $this->isModificationTimestamp,
             'isNullable' => $this->isNullable,
             'isUnique' => $this->isUnique,
+            'onDeleteCascade' => $this->onDeleteCascade,
             'phpTypes' => $this->phpTypes,
             'reflectionClass' => $this->reflection->class,
             'reflectionName' => $this->reflection->name,
@@ -55,6 +57,7 @@ class Property
             $this->isModificationTimestamp,
             $this->isNullable,
             $this->isUnique,
+            $this->onDeleteCascade,
             $this->phpTypes,
             $reflectionClass,
             $reflectionName,

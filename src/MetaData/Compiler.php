@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\EntityManager\{Attributes,
-    Attributes\Entity,
-    Attributes\Id,
-    Attributes\IsUnique,
     Exceptions\ClassIsNotAnEntityException,
     Exceptions\EntityHasNoIdPropertyException,
     Hydration\PropertyTypeNormalizer,
@@ -35,7 +32,7 @@ class Compiler
             throw new ClassIsNotAnEntityException($className);
         }
 
-        if (!$entity = attribute(Entity::class, $class)) {
+        if (!$entity = attribute(Attributes\Entity::class, $class)) {
             throw new ClassIsNotAnEntityException($className);
         }
 
@@ -78,12 +75,13 @@ class Compiler
             type: $type,
             hasDefault: $property->hasDefaultValue(),
             default: $property->hasDefaultValue() ? $property->getDefaultValue() : null,
-            isId: !empty($property->getAttributes(Id::class, \ReflectionAttribute::IS_INSTANCEOF)),
+            isId: !empty($property->getAttributes(Attributes\Id::class, \ReflectionAttribute::IS_INSTANCEOF)),
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
             isCreationTimestamp: !empty($property->getAttributes(Attributes\IsCreationTimestamp::class)),
             isModificationTimestamp: !empty($property->getAttributes(Attributes\IsModificationTimestmap::class)),
             isNullable: $isNullable,
-            isUnique: !empty($property->getAttributes(IsUnique::class)),
+            isUnique: !empty($property->getAttributes(Attributes\IsUnique::class)),
+            onDeleteCascade: !empty($property->getAttributes(Attributes\OnDeleteCascade::class)),
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property
         );
