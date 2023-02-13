@@ -9,6 +9,7 @@ use Medas\EntityManager\Exceptions\ClassIsNotAnEntity;
 use Medas\EntityManager\Exceptions\IdValueShouldBeAnArray;
 use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\Exceptions\NonIdPropertyGiven;
+use Medas\EntityManager\FlushManager;
 use Medas\EntityManagerTest\BaseTest;
 use Medas\EntityManagerTest\MockUps\MockEntity;
 use Medas\EntityManagerTest\MockUps\MockEntityCompositeId;
@@ -83,7 +84,7 @@ class EntityManagerTest extends BaseTest
     public function testDeleteEntity(): void
     {
         $entityManager = $this->entityManager();
-        $entityManager->setFlusher(sm()->instantiate(MockFlusher::class));
+        service(FlushManager::class)->setFlusher(sm()->instantiate(MockFlusher::class));
 
         $entity1 = $entityManager->get(MockEntity::class, 1);
         $entityManager->get(MockEntity::class, 2);

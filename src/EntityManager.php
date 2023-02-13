@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Entities\{Flusher, IdValues, Initializer, KeyMaker};
+use Medas\EntityManager\Entities\{IdValues, Initializer, KeyMaker};
 use Medas\EntityManager\Snapshots\SnapshotManager;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -16,11 +16,11 @@ class EntityManager
     protected \SplObjectStorage $savedStates;
 
     public function __construct(
-        private Flusher|null $flusher,
-        private              readonly IdValues        $idValues,
-        private              readonly Initializer     $initializer,
-        private              readonly KeyMaker        $keyMaker,
-        private              readonly SnapshotManager $snapshotManager,
+        private readonly FlushManager    $flushManager,
+        private readonly IdValues        $idValues,
+        private readonly Initializer     $initializer,
+        private readonly KeyMaker        $keyMaker,
+        private readonly SnapshotManager $snapshotManager,
     )
     {
         $this->clear();
@@ -59,7 +59,7 @@ class EntityManager
 
     public function flush(): void
     {
-        $this->flusher->flush($this->entities, $this->savedStates, $this->entitiesToDelete);
+        $this->flushManager->flush($this->entities, $this->savedStates, $this->entitiesToDelete);
         $this->updateEntityStates();
     }
 
@@ -104,12 +104,5 @@ class EntityManager
     public function create(string $className, array $conditions): object
     {
         return $this->initializer->initialize($className, $conditions);
-    }
-
-    public function setFlusher(?Flusher $flusher): self
-    {
-        $this->flusher = $flusher;
-
-        return $this;
     }
 }
