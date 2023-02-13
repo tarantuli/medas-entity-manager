@@ -12,8 +12,9 @@ use Medas\ServiceManager\Attributes\Service;
 class FlushManager
 {
     public function __construct(
-        private Flusher|null             $flusher,
-        private readonly SnapshotManager $snapshotManager,
+        private Flusher|null                      $flusher,
+        private readonly SnapshotManager          $snapshotManager,
+        private readonly AfterFlushHandlerManager $afterFlushHandlerManager,
     )
     {
     }
@@ -38,6 +39,7 @@ class FlushManager
         }
 
         $this->flusher->flush($changes);
+        $this->afterFlushHandlerManager->handle($changes);
     }
 
     public function setFlusher(Flusher|null $flusher): self
