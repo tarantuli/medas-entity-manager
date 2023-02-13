@@ -20,21 +20,24 @@ class FlushManager
 
     public function flush(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): void
     {
-        $entitiesToCreate = [];
-        $entitiesToUpdate = [];
+        $changes = new Entities\Changes();
 
         foreach ($entities as $entity) {
             if ($savedStates[$entity] ?? null) {
-                if ($this->snapshotManager->findChanges($entity, $savedStates[$entity])) {
-                    $entitiesToUpdate[] = $entity;
+                if ($diff = $this->snapshotManager->findChanges($entity, $savedStates[$entity])) {
+                    $changes->addUpdate($entity, $diff);
                 }
             }
             else {
-                $entitiesToCreate[] = $entity;
+                $changes->addCreate($entity);
             }
         }
 
-        $this->flusher->flush($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
+        foreach ($entitiesToDelete as $entity) {
+            $changes->addDelete($entity);
+        }
+
+        $this->flusher->flush($changes);
     }
 
     public function setFlusher(Flusher|null $flusher): self

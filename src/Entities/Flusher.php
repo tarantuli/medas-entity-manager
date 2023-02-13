@@ -6,9 +6,5 @@ namespace Medas\EntityManager\Entities;
 
 interface Flusher
 {
-    public function flush(
-        array $entitiesToCreate,
-        array $entitiesToUpdate,
-        array $entitiesToDelete
-    ): void;
+    public function flush(Changes $changes): void;
 }
