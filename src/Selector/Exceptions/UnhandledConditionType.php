@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Selector\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\EntityManager\Selector\Conditions\Condition;
 
-class UnhandledConditionTypeException extends BaseException
+class UnhandledConditionType extends BaseException
 {
     public function __construct(Condition $condition)
     {

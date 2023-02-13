@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\EntityManager\Exceptions\IdPropertyNotGivenException;
-use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
-use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
+use Medas\EntityManager\Exceptions\IdPropertyNotGiven;
+use Medas\EntityManager\Exceptions\IdValueShouldBeAnArray;
+use Medas\EntityManager\Exceptions\NonIdPropertyGiven;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
@@ -28,7 +28,7 @@ class IdValues
 
         if (!is_iterable($id)) {
             if ($metaData->hasCompositeId) {
-                throw new IdValueShouldBeAnArrayException($className, get_debug_type($id));
+                throw new IdValueShouldBeAnArray($className, get_debug_type($id));
             }
 
             return [$metaData->idProperty->name => $id];
@@ -37,7 +37,7 @@ class IdValues
         $idValues = $this->extract($id, $metaData);
 
         if ($superfluousValues = array_diff_key($id, $idValues)) {
-            throw new NonIdPropertyGivenException(
+            throw new NonIdPropertyGiven(
                 $className,
                 implode(', ', array_keys($superfluousValues))
             );
@@ -53,7 +53,7 @@ class IdValues
 
         foreach ($idProperties as $idProperty) {
             if (!isset($values[$idProperty->name])) {
-                throw new IdPropertyNotGivenException($metaData->className, $idProperty->name);
+                throw new IdPropertyNotGiven($metaData->className, $idProperty->name);
             }
 
             $idValues[$idProperty->name] = $values[$idProperty->name];

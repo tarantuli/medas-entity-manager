@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class ValueDoesNotImplementHasIdException extends BaseException
+class ValueDoesNotImplementHasId extends BaseException
 {
     public function __construct(mixed $value)
     {

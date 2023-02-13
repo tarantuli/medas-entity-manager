@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
+use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Values\Interfaces\{Guid, GuidProvider};
@@ -70,7 +70,7 @@ class ValueSetter
         }
 
         if (!$property->allowsPhpType($valueType)) {
-            throw new InvalidPropertyTypeException(
+            throw new InvalidPropertyType(
                 $metaData->className, $propertyName,
                 $valueType, $property->phpTypes
             );

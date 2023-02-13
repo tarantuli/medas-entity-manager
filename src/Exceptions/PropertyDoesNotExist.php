@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class PropertyDoesNotExistException extends BaseException
+class PropertyDoesNotExist extends BaseException
 {
     public function __construct(public string $className, public string $propertyName)
     {

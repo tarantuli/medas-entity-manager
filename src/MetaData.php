@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\Exceptions\PropertyDoesNotExistException;
+use Medas\EntityManager\Exceptions\PropertyDoesNotExist;
 
 class MetaData
 {
@@ -36,6 +36,6 @@ class MetaData
             }
         }
 
-        throw new PropertyDoesNotExistException($this->className, $propertyName);
+        throw new PropertyDoesNotExist($this->className, $propertyName);
     }
 }

@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class IdValueShouldBeAnArrayException extends BaseException
+class IdValueShouldBeAnArray extends BaseException
 {
     public function __construct(string $className, string $givenType)
     {

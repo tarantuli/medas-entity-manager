@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class NonIdPropertyGivenException extends BaseException
+class IdPropertyNotGiven extends BaseException
 {
     public function __construct(string $className, string $property)
     {
@@ -15,6 +15,6 @@ class NonIdPropertyGivenException extends BaseException
 
     public function pattern(): string
     {
-        return 'properties %s of class %s are not id properties';
+        return 'id properties %s of class %s not given';
     }
 }

@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class InvalidPropertyTypeException extends BaseException
+class InvalidPropertyType extends BaseException
 {
 
     public function __construct(string $className, string $propertyName, string $givenType, array $expectedTypes)

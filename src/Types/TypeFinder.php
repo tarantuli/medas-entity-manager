@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Types;
 
-use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypesException;
-use Medas\EntityManager\Exceptions\PropertyHasNoImplicitTypeException;
+use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
+use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Values\Interfaces\Guid as GuidProperty;
@@ -42,7 +42,7 @@ class TypeFinder
             $baseType->getName() === 'float' => new FloatingPoint(),
             $baseType->getName() === 'string' => new Text(),
             $baseType->getName() === 'bool' => new Boolean(),
-            default => throw new PropertyHasNoImplicitTypeException($property),
+            default => throw new PropertyHasNoImplicitType($property),
         };
     }
 
@@ -51,14 +51,14 @@ class TypeFinder
         $phpTypes = $this->normalizer->namedTypes($property);
 
         if ($phpTypes === []) {
-            throw new PropertyHasNoImplicitTypeException($property);
+            throw new PropertyHasNoImplicitType($property);
         }
 
         $baseType = null;
 
         foreach ($phpTypes as $phpType) {
             if ($baseType !== null) {
-                throw new PropertyHasMultipleImplicitTypesException($property);
+                throw new PropertyHasMultipleImplicitTypes($property);
             }
 
             $baseType = $phpType;

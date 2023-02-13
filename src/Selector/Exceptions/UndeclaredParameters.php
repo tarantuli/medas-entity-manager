@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Selector\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class UndeclaredParametersException extends BaseException
+class UndeclaredParameters extends BaseException
 {
     public function __construct(array $names)
     {

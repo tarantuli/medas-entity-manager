@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class PropertyHasNoImplicitTypeException extends BaseException
+class PropertyHasMultipleImplicitTypes extends BaseException
 {
     public function __construct(\ReflectionProperty $property)
     {
@@ -15,6 +15,6 @@ class PropertyHasNoImplicitTypeException extends BaseException
 
     public function pattern(): string
     {
-        return 'property %s:%s has no implicit type, declare one explicitly using a Property attribute';
+        return 'property %s:%s has multiple implicit types, declare one explicitly using a Property attribute';
     }
 }

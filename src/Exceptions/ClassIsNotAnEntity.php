@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class ClassIsNotAnEntityException extends BaseException
+class ClassIsNotAnEntity extends BaseException
 {
     public function __construct(string $className)
     {

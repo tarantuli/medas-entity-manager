@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypesException;
-use Medas\EntityManager\Exceptions\PropertyHasNoImplicitTypeException;
+use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
+use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Types\{Binary, DateTime, Guid, Integer, Relation, Text, TypeFinder};
 use Medas\EntityManagerTest\BaseTest;
 use Medas\EntityManagerTest\MockUps\MockEntityTypes;
@@ -51,7 +51,7 @@ class TypeFinderTest extends BaseTest
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
-        $this->expectException(PropertyHasNoImplicitTypeException::class);
+        $this->expectException(PropertyHasNoImplicitType::class);
 
         $finder->find($class->getProperty('noPhpType'));
     }
@@ -60,7 +60,7 @@ class TypeFinderTest extends BaseTest
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
-        $this->expectException(PropertyHasNoImplicitTypeException::class);
+        $this->expectException(PropertyHasNoImplicitType::class);
 
         $finder->find($class->getProperty('mixedType'));
     }
@@ -69,7 +69,7 @@ class TypeFinderTest extends BaseTest
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
-        $this->expectException(PropertyHasMultipleImplicitTypesException::class);
+        $this->expectException(PropertyHasMultipleImplicitTypes::class);
 
         $finder->find($class->getProperty('unionType'));
     }

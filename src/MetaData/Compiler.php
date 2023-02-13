@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\EntityManager\{Attributes,
-    Exceptions\ClassIsNotAnEntityException,
-    Exceptions\EntityHasNoIdPropertyException,
+    Exceptions\ClassIsNotAnEntity,
+    Exceptions\EntityHasNoIdProperty,
     Hydration\PropertyTypeNormalizer,
     MetaData,
     Types\TypeFinder
@@ -29,11 +29,11 @@ class Compiler
             $class = new \ReflectionClass($className);
         }
         catch (\ReflectionException) {
-            throw new ClassIsNotAnEntityException($className);
+            throw new ClassIsNotAnEntity($className);
         }
 
         if (!$entity = attribute(Attributes\Entity::class, $class)) {
-            throw new ClassIsNotAnEntityException($className);
+            throw new ClassIsNotAnEntity($className);
         }
 
         $metaData = new MetaData($className);
@@ -137,7 +137,7 @@ class Compiler
         }
 
         if (count($metaData->idProperties) === 0) {
-            throw new EntityHasNoIdPropertyException($metaData->className);
+            throw new EntityHasNoIdProperty($metaData->className);
         }
 
         if (count($metaData->idProperties) > 1) {

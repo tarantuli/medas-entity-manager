@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Selector\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\EntityManager\Selector\Operants\Operant;
 
-class UnhandledOperantTypeException extends BaseException
+class UnhandledOperantType extends BaseException
 {
     public function __construct(Operant $operant)
     {

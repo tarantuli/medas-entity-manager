@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Selector\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\EntityManager\Selector\Relations\Relation;
 
-class UnhandledRelationTypeException extends BaseException
+class UnhandledRelationType extends BaseException
 {
     public function __construct(Relation $relation)
     {

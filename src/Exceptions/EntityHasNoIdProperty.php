@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
 
-class EntityHasNoIdPropertyException extends BaseException
+class EntityHasNoIdProperty extends BaseException
 {
     public function __construct(string $className)
     {

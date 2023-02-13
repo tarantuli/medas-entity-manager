@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\EntityManager;
-use Medas\EntityManager\Exceptions\ClassIsNotAnEntityException;
-use Medas\EntityManager\Exceptions\IdValueShouldBeAnArrayException;
-use Medas\EntityManager\Exceptions\InvalidPropertyTypeException;
-use Medas\EntityManager\Exceptions\NonIdPropertyGivenException;
+use Medas\EntityManager\Exceptions\ClassIsNotAnEntity;
+use Medas\EntityManager\Exceptions\IdValueShouldBeAnArray;
+use Medas\EntityManager\Exceptions\InvalidPropertyType;
+use Medas\EntityManager\Exceptions\NonIdPropertyGiven;
 use Medas\EntityManagerTest\BaseTest;
 use Medas\EntityManagerTest\MockUps\MockEntity;
 use Medas\EntityManagerTest\MockUps\MockEntityCompositeId;
@@ -21,7 +21,7 @@ class EntityManagerTest extends BaseTest
     {
         $entityManager = $this->entityManager();
 
-        $this->expectException(ClassIsNotAnEntityException::class);
+        $this->expectException(ClassIsNotAnEntity::class);
         $entityManager->get(MockNotAnEntity::class, 1);
     }
 
@@ -44,14 +44,14 @@ class EntityManagerTest extends BaseTest
     public function testTooComplexId(): void
     {
         $entityManager = $this->entityManager();
-        $this->expectException(NonIdPropertyGivenException::class);
+        $this->expectException(NonIdPropertyGiven::class);
         $entityManager->get(MockEntity::class, ['id' => 1, 'name' => 'test']);
     }
 
     public function testWrongIdType(): void
     {
         $entityManager = $this->entityManager();
-        $this->expectException(InvalidPropertyTypeException::class);
+        $this->expectException(InvalidPropertyType::class);
         $entityManager->get(MockEntity::class, 'string value');
     }
 
@@ -68,7 +68,7 @@ class EntityManagerTest extends BaseTest
     {
         $entityManager = $this->entityManager();
 
-        $this->expectException(IdValueShouldBeAnArrayException::class);
+        $this->expectException(IdValueShouldBeAnArray::class);
         $entityManager->get(MockEntityCompositeId::class, 1);
     }
 

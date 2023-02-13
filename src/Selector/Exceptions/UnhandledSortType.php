@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Selector\Exceptions;
 use Medas\Core\Exceptions\BaseException;
 use Medas\EntityManager\Selector\Sorting\SortBy;
 
-class UnhandledSortTypeException extends BaseException
+class UnhandledSortType extends BaseException
 {
     public function __construct(SortBy $sort)
     {
