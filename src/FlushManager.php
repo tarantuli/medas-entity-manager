@@ -12,9 +12,10 @@ use Medas\ServiceManager\Attributes\Service;
 class FlushManager
 {
     public function __construct(
-        private Flusher|null                      $flusher,
-        private readonly SnapshotManager          $snapshotManager,
-        private readonly AfterFlushHandlerManager $afterFlushHandlerManager,
+        private Flusher|null                       $flusher,
+        private readonly SnapshotManager           $snapshotManager,
+        private readonly AfterFlushHandlerManager  $afterFlushHandlerManager,
+        private readonly BeforeFlushHandlerManager $beforeFlushHandlerManager,
     )
     {
     }
@@ -38,6 +39,7 @@ class FlushManager
             $changes->addDelete($entity);
         }
 
+        $this->beforeFlushHandlerManager->handle($changes);
         $this->flusher->flush($changes);
         $this->afterFlushHandlerManager->handle($changes);
     }
