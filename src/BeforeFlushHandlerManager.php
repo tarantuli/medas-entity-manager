@@ -24,7 +24,7 @@ class BeforeFlushHandlerManager
         $madeChanges = false;
 
         foreach ($this->getHandlers() as $handler) {
-            $madeChanges |= $handler->handle($changes);
+            $madeChanges = $madeChanges || $handler->handle($changes);
         }
 
         return $madeChanges;
