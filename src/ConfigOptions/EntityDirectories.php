@@ -7,7 +7,7 @@ namespace Medas\EntityManager\ConfigOptions;
 use Medas\ServiceManager\AsSingleton;
 use Medas\ServiceManager\ConfigOptions\{ConfigGroup, ConfigOption};
 
-class GeneratorRootNamespace implements ConfigOption
+class EntityDirectories implements ConfigOption
 {
     use AsSingleton;
 
@@ -18,21 +18,21 @@ class GeneratorRootNamespace implements ConfigOption
 
     public function name(): string
     {
-        return 'generator-root-namespace';
+        return 'entity-directories';
     }
 
     public function description(): string
     {
-        return 'The root namespace to use when the entity name starts with a dot (eg. ./Projects/Project)';
+        return 'The directories where entity files reside.';
     }
 
     public function hasDefault(): bool
     {
-        return false;
+        return true;
     }
 
-    public function default(): mixed
+    public function default(): array
     {
-        return null;
+        return ['src'];
     }
 }
