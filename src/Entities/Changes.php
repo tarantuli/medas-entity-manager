@@ -8,6 +8,7 @@ class Changes
 {
     private array $creates = [];
     private array $updates = [];
+    private array $diffs = [];
     private array $deletes = [];
 
     public function addCreate(object $entity): void
@@ -15,19 +16,25 @@ class Changes
         $this->creates[] = $entity;
     }
 
-    public function creates(): array
+    public function createdEntities(): array
     {
         return $this->creates;
     }
 
     public function addUpdate(object $entity, array $changes): void
     {
-        $this->updates[] = [$entity, $changes];
+        $this->updates[] = $entity;
+        $this->diffs[spl_object_id($entity)] = $changes;
     }
 
-    public function updates(): array
+    public function updatedEntities(): array
     {
         return $this->updates;
+    }
+
+    public function entityChanges(object $entity): array
+    {
+        return $this->diffs[spl_object_id($entity)] ?? [];
     }
 
     public function addDelete(object $entity): void
@@ -35,7 +42,7 @@ class Changes
         $this->deletes[] = $entity;
     }
 
-    public function deletes(): array
+    public function deletedEntities(): array
     {
         return $this->deletes;
     }
