@@ -8,6 +8,8 @@ use Medas\EntityManager\EntityManagerPackage;
 use Medas\ServiceManager\Interfaces\ConfigManager;
 use Medas\ServiceManager\ServiceManager;
 
+chdir(__DIR__);
+
 $sm = ServiceManager::get();
 
 $sm->addPackage(EntityManagerPackage::instance());

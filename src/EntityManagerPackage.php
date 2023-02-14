@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\ServiceManager\{AsSingleton, BasePackage, ConfigOptions\ConfigOption};
-use Medas\ConfigOptions\ConfigOptionsPackage;
+use Medas\FileSystem\FileSystemPackage;
+use Medas\ServiceManager\{AsSingleton, BasePackage};
 
 class EntityManagerPackage extends BasePackage
 {
@@ -14,6 +14,7 @@ class EntityManagerPackage extends BasePackage
     public function dependencies(): array
     {
         return $this->dependenciesByClass([
+            FileSystemPackage::class,
         ]);
     }
 

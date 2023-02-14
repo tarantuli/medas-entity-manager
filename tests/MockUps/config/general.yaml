@@ -2,3 +2,4 @@ env: dev
 
 entity-manager:
   generator-root-namespace: Medas\EntityManagerTest
+  entity-directories: [tests/MockUps]
