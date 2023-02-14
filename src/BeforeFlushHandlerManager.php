@@ -19,11 +19,15 @@ class BeforeFlushHandlerManager
     {
     }
 
-    public function handle(Changes $changes): void
+    public function handle(Changes $changes): bool
     {
+        $madeChanges = false;
+
         foreach ($this->getHandlers() as $handler) {
-            $handler->handle($changes);
+            $madeChanges |= $handler->handle($changes);
         }
+
+        return $madeChanges;
     }
 
     /** @return BeforeFlushHandler[] */

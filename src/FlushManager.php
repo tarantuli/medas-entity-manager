@@ -20,7 +20,27 @@ class FlushManager
     {
     }
 
-    public function flush(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): void
+    public function flush(\Closure $entities, \Closure $savedStates, \Closure $entitiesToDelete): void
+    {
+        $changes = $this->gatherChanges($entities(), $savedStates(), $entitiesToDelete());
+
+        if ($this->beforeFlushHandlerManager->handle($changes)) {
+            $changes = $this->gatherChanges($entities(), $savedStates(), $entitiesToDelete());
+        }
+
+        $this->flusher->flush($changes);
+
+        $this->afterFlushHandlerManager->handle($changes);
+    }
+
+    public function setFlusher(Flusher|null $flusher): self
+    {
+        $this->flusher = $flusher;
+
+        return $this;
+    }
+
+    private function gatherChanges(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): Entities\Changes
     {
         $changes = new Entities\Changes();
 
@@ -38,16 +58,6 @@ class FlushManager
         foreach ($entitiesToDelete as $entity) {
             $changes->addDelete($entity);
         }
-
-        $this->beforeFlushHandlerManager->handle($changes);
-        $this->flusher->flush($changes);
-        $this->afterFlushHandlerManager->handle($changes);
-    }
-
-    public function setFlusher(Flusher|null $flusher): self
-    {
-        $this->flusher = $flusher;
-
-        return $this;
+        return $changes;
     }
 }

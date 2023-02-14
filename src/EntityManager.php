@@ -59,7 +59,7 @@ class EntityManager
 
     public function flush(): void
     {
-        $this->flushManager->flush($this->entities, $this->savedStates, $this->entitiesToDelete);
+        $this->flushManager->flush(fn() => $this->entities, fn() => $this->savedStates, fn() => $this->entitiesToDelete);
         $this->updateEntityStates();
     }
 
