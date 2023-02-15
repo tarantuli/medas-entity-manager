@@ -61,7 +61,7 @@ class Property
             $this->phpTypes,
             $reflectionClass,
             $reflectionName,
-        ] = $data;
+        ] = array_values($data);
 
         $this->reflection = new \ReflectionProperty($reflectionClass, $reflectionName);
     }
