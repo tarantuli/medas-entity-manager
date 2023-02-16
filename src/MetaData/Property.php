@@ -31,6 +31,7 @@ class Property
         return [
             'name' => $this->name,
             'type' => $this->type,
+            'hasDefault' => $this->hasDefault,
             'default' => $this->default,
             'isId' => $this->isId,
             'isGeneratedValue' => $this->isGeneratedValue,
@@ -50,6 +51,7 @@ class Property
         [
             $this->name,
             $this->type,
+            $this->hasDefault,
             $this->default,
             $this->isId,
             $this->isGeneratedValue,
