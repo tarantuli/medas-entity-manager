@@ -10,13 +10,13 @@ use Medas\EntityManager\Exceptions\IdValueShouldBeAnArray;
 use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\Exceptions\NonIdPropertyGiven;
 use Medas\EntityManager\FlushManager;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\MockEntity;
 use Medas\EntityManagerTest\MockUps\MockEntityCompositeId;
 use Medas\EntityManagerTest\MockUps\MockFlusher;
 use Medas\EntityManagerTest\MockUps\MockNotAnEntity;
 
-class EntityManagerTest extends BaseTest
+class EntityManagerTest extends BaseTestClass
 {
     public function testNotAnEntityManager(): void
     {

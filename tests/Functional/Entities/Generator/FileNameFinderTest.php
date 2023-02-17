@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional\Entities\Generator;
 
 use Medas\EntityManager\Entities\Generator\FileNameFinder;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 
-class FileNameFinderTest extends BaseTest
+class FileNameFinderTest extends BaseTestClass
 {
     public function testCorrectFileNameGeneration(): void
     {

@@ -6,10 +6,10 @@ namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Entities\ReferenceCollection;
 use Medas\EntityManager\Hydration\Hydrator;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\References\{ChildEntity, ParentEntity, TestFetcher};
 
-class ReferenceTest extends BaseTest
+class ReferenceTest extends BaseTestClass
 {
     public function testCollectionInitialization(): void
     {

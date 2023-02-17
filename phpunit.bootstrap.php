@@ -6,15 +6,23 @@ use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\ServiceManager\Interfaces\ConfigManager;
+use Medas\ServiceManager\ServiceConfig;
 use Medas\ServiceManager\ServiceManager;
 
 chdir(__DIR__);
 
-$sm = ServiceManager::get();
+new ServiceManager(
+    function (): ServiceConfig {
+        $config = new ServiceConfig();
+        $config->addPackages([
+            EntityManagerPackage::instance(),
+            ConfigManagerPackage::instance(),
+            ConfigOptionsPackage::instance(),
+        ]);
 
-$sm->addPackage(EntityManagerPackage::instance());
-$sm->addPackage(ConfigManagerPackage::instance());
-$sm->addPackage(ConfigOptionsPackage::instance());
+        return $config;
+    }
+);
 
-$config = service(ConfigManager::class);
-$config->addDirectory(__DIR__ . '/tests/MockUps/config');
+service(ConfigManager::class)
+    ->addDirectory(__DIR__ . '/tests/MockUps/config');

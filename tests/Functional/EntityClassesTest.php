@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\EntityClasses;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\MockEntity;
 
-class EntityClassesTest extends BaseTest
+class EntityClassesTest extends BaseTestClass
 {
     public function testFetch(): void
     {

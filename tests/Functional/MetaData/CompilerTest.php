@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional\MetaData;
 
 use Medas\EntityManager\MetaData\Compiler;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\MockNullableProperties;
 
-class CompilerTest extends BaseTest
+class CompilerTest extends BaseTestClass
 {
     public function testNullability(): void
     {

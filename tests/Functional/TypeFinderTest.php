@@ -7,10 +7,10 @@ namespace Medas\EntityManagerTest\Functional;
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Types\{Binary, DateTime, Guid, Integer, Relation, Text, TypeFinder};
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\MockEntityTypes;
 
-class TypeFinderTest extends BaseTest
+class TypeFinderTest extends BaseTestClass
 {
     public function testIdProperty(): void
     {

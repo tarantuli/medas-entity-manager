@@ -7,6 +7,7 @@ namespace Medas\EntityManager;
 use Medas\EntityManager\Entities\{AfterFlushHandler, Changes};
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Cache\CacheManager;
+use Medas\ServiceManager\Mapping\ImplementorFinder;
 
 #[Service]
 class AfterFlushHandlerManager
@@ -31,7 +32,7 @@ class AfterFlushHandlerManager
     {
         return $this->cacheManager->get()->get(
             self::HANDLERS_CACHE_KEY,
-            fn() => sm()->findImplementors(AfterFlushHandler::class)
+            fn() => service(ImplementorFinder::class)->find(AfterFlushHandler::class)
         );
     }
 }

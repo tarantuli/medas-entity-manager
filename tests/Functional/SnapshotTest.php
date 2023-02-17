@@ -6,10 +6,10 @@ namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Snapshots\Snapshot;
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\MockEntity;
 
-class SnapshotTest extends BaseTest
+class SnapshotTest extends BaseTestClass
 {
     public function testCreateSnapshot(): MockEntity
     {

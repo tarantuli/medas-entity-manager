@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\FileSystem\FileSystemPackage;
-use Medas\ServiceManager\{AsSingleton, BasePackage};
+use Medas\ServiceManager\{AsSingleton, BasePackage, ServiceConfig};
 
 class EntityManagerPackage extends BasePackage
 {
@@ -23,10 +23,10 @@ class EntityManagerPackage extends BasePackage
         return __DIR__;
     }
 
-    public function initialize(): void
+    public function initialize(ServiceConfig $config): void
     {
         require_once __DIR__ . '/GlobalFunctions.php';
 
-        parent::initialize();
+        parent::initialize($config);
     }
 }

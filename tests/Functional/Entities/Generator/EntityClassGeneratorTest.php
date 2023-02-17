@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional\Entities\Generator;
 
 use Medas\EntityManager\Entities\Generator\EntityClassGenerator;
-use Medas\EntityManagerTest\BaseTest;
+use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\MockEntity;
 
-class EntityClassGeneratorTest extends BaseTest
+class EntityClassGeneratorTest extends BaseTestClass
 {
     const MOCK_ENTITY_EXPECTED_CLASS_CONTENT = <<<'PHP'
 <?php
