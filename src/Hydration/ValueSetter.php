@@ -44,6 +44,12 @@ class ValueSetter
                     $value = $this->guidProvider->fromString($value);
                 }
 
+                if (enum_exists($phpType)) {
+                    $value = $phpType::from($value);
+                    $valueType = $phpType;
+                    break;
+                }
+
                 if (class_exists($phpType)) {
                     $value = em()->get($phpType, $value);
                     $valueType = $phpType;
