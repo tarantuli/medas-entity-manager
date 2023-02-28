@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Entities\Fetcher;
-use Medas\EntityManager\Entities\IdValues;
-use Medas\EntityManager\Selector\Selector;
-use Medas\EntityManager\Selector\Selectors\AllEntities;
-use Medas\EntityManager\Selector\Selectors\WithValues;
+use Medas\EntityManager\Entities\{Fetcher, IdValues};
+use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
 use Medas\ServiceManager\Attributes\Service;
 
 #[Service]
@@ -48,16 +45,29 @@ class Repository
     /**
      * The return value is an object of type $entity. This is specified in PhpStorm in .phpstorm.meta.php
      */
-    public function getOrCreate(string $entity,
-                                array  $values,
-                                bool   $persistOnCreate = true,
-                                bool   $flushOnPersist = true): object
+    public function getOrCreate(
+        string $entity,
+        array  $values,
+        bool   $persistOnCreate = true,
+        bool   $flushOnPersist = true,
+    ): object
     {
-        if ($object = $this->fetchOne(new WithValues($entity, $values))) {
+        return $this->fetchOrCreate(new WithValues($entity, $values), $values, fn() => $values, $persistOnCreate, $flushOnPersist);
+    }
+
+    public function fetchOrCreate(
+        Selector $selector,
+        array    $values,
+        \Closure $creationValues,
+        bool     $persistOnCreate = true,
+        bool     $flushOnPersist = true,
+    ): object
+    {
+        if ($object = $this->fetchOne($selector, $values)) {
             return $object;
         }
 
-        $object = em()->create($entity, $values);
+        $object = em()->create($selector->definition()->entity, $creationValues());
 
         if ($persistOnCreate) {
             em()->persist($object);
