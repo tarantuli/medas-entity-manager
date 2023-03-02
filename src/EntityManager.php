@@ -12,6 +12,7 @@ use Medas\ServiceManager\Attributes\Service;
 class EntityManager
 {
     protected array $entities;
+    protected int $entityCount;
     protected array $entitiesToDelete;
     protected \SplObjectStorage $savedStates;
 
@@ -29,25 +30,9 @@ class EntityManager
     public function clear(): void
     {
         $this->entities = [];
+        $this->entityCount = 0;
         $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
-    }
-
-    /**
-     * The return value  is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
-     */
-    public function get(string $className, mixed $id): object
-    {
-        $id = $this->idValues->normalize($className, $id);
-        $key = $this->keyMaker->get($className, $id);
-
-        if (!array_key_exists($key, $this->entities)) {
-            $entity = $this->initializer->initializeAndHydrate($className, $id);
-            $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
-            $this->entities[$key] = $entity;
-        }
-
-        return $this->entities[$key];
     }
 
     public function delete(object $entity): void
@@ -78,12 +63,19 @@ class EntityManager
         $this->entitiesToDelete = [];
     }
 
+    public function cacheSize(): int
+    {
+        return $this->entityCount;
+    }
+
     public function persist(object ...$entities): void
     {
         foreach ($entities as $entity) {
             if (!in_array($entity, $this->entities, true)) {
                 $key = $entity::class . ':new:' . mt_rand();
+
                 $this->entities[$key] = $entity;
+                ++$this->entityCount;
             }
         }
     }
@@ -96,6 +88,24 @@ class EntityManager
 
         $this->entities[$newKey] = $entity;
         unset($this->entities[$oldKey]);
+    }
+
+    /**
+     * The return value  is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
+     */
+    public function get(string $className, mixed $id): object
+    {
+        $id = $this->idValues->normalize($className, $id);
+        $key = $this->keyMaker->get($className, $id);
+
+        if (!array_key_exists($key, $this->entities)) {
+            $entity = $this->initializer->initializeAndHydrate($className, $id);
+            $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            $this->entities[$key] = $entity;
+            ++$this->entityCount;
+        }
+
+        return $this->entities[$key];
     }
 
     /**
