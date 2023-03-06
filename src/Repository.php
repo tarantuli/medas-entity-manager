@@ -64,7 +64,7 @@ class Repository
     public function fetchOrCreate(
         Selector $selector,
         array    $values,
-        \Closure $creationValues,
+        \Closure $creationValues = null,
         bool     $persistOnCreate = true,
         bool     $flushOnPersist = true,
     ): object
@@ -75,7 +75,7 @@ class Repository
 
         $object = em()->create(
             $selector->definition()->entity,
-            array_merge($values, $creationValues())
+            $creationValues ? array_merge($values, $creationValues()) : $values
         );
 
         if ($persistOnCreate) {
