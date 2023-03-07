@@ -8,7 +8,7 @@ use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Values\Interfaces\Guid as GuidProperty;
+use Medas\ServiceManager\Interfaces\{Guid as GuidProperty, Type};
 
 #[Service]
 class TypeFinder

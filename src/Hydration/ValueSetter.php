@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Hydration;
 use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\MetaData;
 use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Values\Interfaces\{Guid, GuidProvider};
+use Medas\ServiceManager\Interfaces\{Guid, GuidProvider};
 
 #[Service]
 class ValueSetter
