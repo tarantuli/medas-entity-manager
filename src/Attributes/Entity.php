@@ -8,8 +8,8 @@ namespace Medas\EntityManager\Attributes;
 class Entity
 {
     public function __construct(
-        public ?string $store = null,
-        public ?string $storage = null
+        public string|null $store = null,
+        public string|null $storage = null,
     )
     {
     }

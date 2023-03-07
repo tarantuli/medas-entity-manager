@@ -31,10 +31,10 @@ class Initializer
         return $entity;
     }
 
-    public function initializeAndHydrate(string $className, array $values): object
+    public function initializeAndHydrate(string $className, mixed $id): object
     {
         $metaData = $this->metaDataManager->get($className);
-        $entity = $this->initialize($className, $values, $metaData);
+        $entity = $this->initialize($className, [$metaData->idProperty->name => $id], $metaData);
 
         $this->hydrator->hydrate($metaData, $entity);
 

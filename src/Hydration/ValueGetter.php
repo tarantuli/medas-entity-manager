@@ -11,7 +11,7 @@ use Medas\ServiceManager\Attributes\Service;
 class ValueGetter
 {
     /** @param MetaData\Property[] $fields */
-    public function get(object $entity, array $fields): array
+    public function getValues(object $entity, array $fields): array
     {
         $values = [];
 
@@ -22,5 +22,10 @@ class ValueGetter
         }
 
         return $values;
+    }
+
+    public function getValue(object $entity, MetaData\Property $field): mixed
+    {
+        return $field->reflection->getValue($entity);
     }
 }

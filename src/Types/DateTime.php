@@ -8,9 +8,9 @@ namespace Medas\EntityManager\Types;
 class DateTime extends BaseType
 {
     public function __construct(
-        public ?\DateTimeInterface $minValue = null,
-        public ?\DateTimeInterface $maxValue = null,
-        public ?\DateTimeZone      $timeZone = null
+        public \DateTimeInterface|null $minValue = null,
+        public \DateTimeInterface|null $maxValue = null,
+        public \DateTimeZone|null      $timeZone = null,
     )
     {
     }

@@ -6,6 +6,7 @@ namespace Medas\EntityManager\MetaData;
 
 use Medas\EntityManager\{Attributes,
     Exceptions\ClassIsNotAnEntity,
+    Exceptions\EntityHasMultipleIdProperties,
     Exceptions\EntityHasNoIdProperty,
     Hydration\PropertyTypeNormalizer,
     MetaData,
@@ -42,13 +43,13 @@ class Compiler
         $metaData->properties = [];
         $metaData->references = [];
 
-        $this->determineProperties($class, $metaData);
-        $this->determineIdProperties($metaData);
+        $this->processProperties($class, $metaData);
+        $this->findIdProperty($metaData);
 
         return $metaData;
     }
 
-    private function determineProperties(\ReflectionClass $class, MetaData $metaData): void
+    private function processProperties(\ReflectionClass $class, MetaData $metaData): void
     {
         foreach ($class->getProperties() as $property) {
             $this->processProperty($property, $metaData);
@@ -124,25 +125,23 @@ class Compiler
         );
     }
 
-    private function determineIdProperties(MetaData $metaData): void
+    private function findIdProperty(MetaData $metaData): void
     {
-        $metaData->idProperties = [];
-        $metaData->hasCompositeId = false;
+        $foundProperty = false;
 
         foreach ($metaData->properties as $property) {
             if ($property->isId) {
-                $metaData->idProperties[] = $property;
+                if ($foundProperty) {
+                    throw new EntityHasMultipleIdProperties($metaData->className);
+                }
+
                 $metaData->idProperty = $property;
+                $foundProperty = true;
             }
         }
 
-        if (count($metaData->idProperties) === 0) {
+        if (!$foundProperty) {
             throw new EntityHasNoIdProperty($metaData->className);
-        }
-
-        if (count($metaData->idProperties) > 1) {
-            $metaData->idProperty = null;
-            $metaData->hasCompositeId = true;
         }
     }
 }

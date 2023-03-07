@@ -17,10 +17,7 @@ class MetaData
     /** @var MetaData\Reference[] */
     public array $references;
 
-    public ?MetaData\Property $idProperty;
-    /** @var MetaData\Property[] */
-    public array $idProperties;
-    public bool $hasCompositeId;
+    public MetaData\Property|null $idProperty;
 
     public int $sourceFileDate;
 

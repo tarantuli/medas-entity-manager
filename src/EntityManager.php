@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Entities\{IdValues, Initializer, KeyMaker};
+use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
 use Medas\EntityManager\Snapshots\SnapshotManager;
 use Medas\ServiceManager\Attributes\Service;
 
@@ -18,7 +18,7 @@ class EntityManager
 
     public function __construct(
         private readonly FlushManager    $flushManager,
-        private readonly IdValues        $idValues,
+        private readonly IdValue         $idValue,
         private readonly Initializer     $initializer,
         private readonly KeyMaker        $keyMaker,
         private readonly SnapshotManager $snapshotManager,
@@ -82,7 +82,7 @@ class EntityManager
 
     public function resetKey(object $entity): void
     {
-        $id = $this->idValues->fromEntity($entity);
+        $id = $this->idValue->fromEntity($entity);
         $newKey = $this->keyMaker->get($entity::class, $id);
         $oldKey = array_search($entity, $this->entities);
 
@@ -91,11 +91,10 @@ class EntityManager
     }
 
     /**
-     * The return value  is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
+     * The return value is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
      */
     public function get(string $className, mixed $id): object
     {
-        $id = $this->idValues->normalize($className, $id);
         $key = $this->keyMaker->get($className, $id);
 
         if (!array_key_exists($key, $this->entities)) {
@@ -109,7 +108,7 @@ class EntityManager
     }
 
     /**
-     * The return value  is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
+     * The return value is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
      */
     public function create(string $className, array $conditions): object
     {

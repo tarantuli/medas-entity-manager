@@ -8,7 +8,6 @@ use Medas\Core\Exceptions\BaseException;
 
 class InvalidPropertyType extends BaseException
 {
-
     public function __construct(string $className, string $propertyName, string $givenType, array $expectedTypes)
     {
         parent::__construct($className, $propertyName, $givenType, $expectedTypes);

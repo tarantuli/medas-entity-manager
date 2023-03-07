@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Entities\{Fetcher, IdValues};
+use Medas\EntityManager\Entities\{Fetcher, IdValue};
 use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
 use Medas\ServiceManager\Attributes\Service;
 
@@ -12,7 +12,7 @@ use Medas\ServiceManager\Attributes\Service;
 class Repository
 {
     public function __construct(
-        private readonly IdValues        $idValues,
+        private readonly IdValue         $idValue,
         private readonly Fetcher         $fetcher,
         private readonly MetaDataManager $metaDataManager,
     )
@@ -35,8 +35,8 @@ class Repository
         $metaData = $this->metaDataManager->get($selector->definition()->entity);
 
         foreach ($records as $record) {
-            $idValues = $this->idValues->extract($record, $metaData);
-            $entities[] = em()->get($metaData->className, $idValues);
+            $idValue = $this->idValue->extract($record, $metaData);
+            $entities[] = em()->get($metaData->className, $idValue);
         }
 
         return $entities;

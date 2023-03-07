@@ -5,16 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\EntityManager;
-use Medas\EntityManager\Exceptions\ClassIsNotAnEntity;
-use Medas\EntityManager\Exceptions\IdValueShouldBeAnArray;
-use Medas\EntityManager\Exceptions\InvalidPropertyType;
-use Medas\EntityManager\Exceptions\NonIdPropertyGiven;
+use Medas\EntityManager\Exceptions\{ClassIsNotAnEntity, InvalidPropertyType};
 use Medas\EntityManager\FlushManager;
 use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\MockEntity;
-use Medas\EntityManagerTest\MockUps\MockEntityCompositeId;
-use Medas\EntityManagerTest\MockUps\MockFlusher;
-use Medas\EntityManagerTest\MockUps\MockNotAnEntity;
+use Medas\EntityManagerTest\MockUps\{MockEntity, MockFlusher, MockNotAnEntity};
 
 class EntityManagerTest extends BaseTestClass
 {
@@ -42,35 +36,11 @@ class EntityManagerTest extends BaseTestClass
         self::assertEquals(1, $entity->id());
     }
 
-    public function testTooComplexId(): void
-    {
-        $entityManager = $this->entityManager();
-        $this->expectException(NonIdPropertyGiven::class);
-        $entityManager->get(MockEntity::class, ['id' => 1, 'name' => 'test']);
-    }
-
     public function testWrongIdType(): void
     {
         $entityManager = $this->entityManager();
         $this->expectException(InvalidPropertyType::class);
         $entityManager->get(MockEntity::class, 'string value');
-    }
-
-    public function testCompositeGetEntity(): void
-    {
-        $entityManager = $this->entityManager();
-
-        $entity = $entityManager->get(MockEntityCompositeId::class, ['id' => 1, 'name' => 'test']);
-        self::assertInstanceOf(MockEntityCompositeId::class, $entity);
-        self::assertEquals(1, $entity->id());
-    }
-
-    public function testTooSimpleId(): void
-    {
-        $entityManager = $this->entityManager();
-
-        $this->expectException(IdValueShouldBeAnArray::class);
-        $entityManager->get(MockEntityCompositeId::class, 1);
     }
 
     public function testCreateEntity(): void
