@@ -31,7 +31,7 @@ class IdValue
         return $values[$name];
     }
 
-    public function fromEntity(object $entity): array
+    public function fromEntity(object $entity): mixed
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
