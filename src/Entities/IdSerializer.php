@@ -23,7 +23,7 @@ class IdSerializer implements StringSerializer
         return (string) $value;
     }
 
-    public function unserialize(Type $type, mixed $value): mixed
+    public function unserialize(mixed $value, Type $type = null): mixed
     {
         // No need to implement this
         return $value;
