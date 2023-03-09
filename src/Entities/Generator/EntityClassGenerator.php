@@ -17,8 +17,9 @@ declare(strict_types=1);
 
 namespace {{namespace}};
 
-use Medas\EntityManager\Attributes\{Entity, HasId, Id};
+use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Traits\Timestamps;
+use Medas\ServiceManager\Interfaces\HasId;
 use Medas\ServiceManager\Values\Interfaces\Guid;
 
 #[Entity(store: '{{storeName}}')]
