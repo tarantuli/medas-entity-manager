@@ -35,7 +35,7 @@ class Repository
         $metaData = $this->metaDataManager->get($selector->definition()->entity);
 
         foreach ($records as $record) {
-            $idValue = $this->idValue->extract($record, $metaData);
+            $idValue = $this->idValue->get($record, $metaData);
             $entities[] = em()->get($metaData->className, $idValue);
         }
 

@@ -56,7 +56,7 @@ class Hydrator
         $metaData = $this->metaDataManager->get($reference->entity);
 
         foreach ($records as $record) {
-            $idValue = $this->idValue->extract($record, $metaData);
+            $idValue = $this->idValue->get($record, $metaData);
             $entities[] = em()->get($metaData->className, $idValue);
         }
 

@@ -20,7 +20,7 @@ class IdValue
     {
     }
 
-    public function extract(array|\ArrayAccess $values, MetaData $metaData): mixed
+    public function get(array|\ArrayAccess $values, MetaData $metaData): mixed
     {
         $name = $metaData->idProperty->name;
 
@@ -29,6 +29,11 @@ class IdValue
         }
 
         return $values[$name];
+    }
+
+    public function asArray(array|\ArrayAccess $values, MetaData $metaData): array
+    {
+        return [$metaData->idProperty->name => $this->get($values, $metaData)];
     }
 
     public function fromEntity(object $entity): mixed
