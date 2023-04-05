@@ -19,8 +19,7 @@ namespace Medas\EntityManagerTest\MockUps;
 
 use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Traits\Timestamps;
-use Medas\ServiceManager\Interfaces\HasId;
-use Medas\ServiceManager\Values\Interfaces\Guid;
+use Medas\ServiceManager\Interfaces\{Guid, HasId};
 
 #[Entity(store: 'mock_entities')]
 class MockEntity implements HasId
