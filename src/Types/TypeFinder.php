@@ -7,6 +7,7 @@ namespace Medas\EntityManager\Types;
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
+use Medas\EntityManager\Properties\PropertyManager;
 use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Interfaces\{Guid as GuidProperty, Type};
 
@@ -15,6 +16,7 @@ class TypeFinder
 {
     public function __construct(
         private readonly PropertyTypeNormalizer $normalizer,
+        private readonly PropertyManager        $propertyManager,
     )
     {
     }
@@ -27,6 +29,10 @@ class TypeFinder
 
     private function findExplicitType(\ReflectionProperty $property): Type|null
     {
+        if ($handler = $this->propertyManager->getHandler($property)) {
+            return $handler->type();
+        }
+
         return attribute(Type::class, $property);
     }
 
