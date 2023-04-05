@@ -10,6 +10,7 @@ use Medas\EntityManager\{Attributes,
     Exceptions\EntityHasNoIdProperty,
     Hydration\PropertyTypeNormalizer,
     MetaData,
+    Properties\PropertyManager,
     Types\TypeFinder
 };
 use Medas\ServiceManager\Attributes\Service;
@@ -19,6 +20,7 @@ class Compiler
 {
     public function __construct(
         private readonly PropertyTypeNormalizer $propertyTypeNormalizer,
+        private readonly PropertyManager        $propertyManager,
         private readonly TypeFinder             $typeFinder,
     )
     {
@@ -71,6 +73,8 @@ class Compiler
         $type = $this->typeFinder->find($property);
         $isNullable = $property->getType()->allowsNull();
 
+        $handler = $this->propertyManager->getHandler($property);
+
         $metaData->properties[] = new Property(
             name: $property->name,
             type: $type,
@@ -84,7 +88,8 @@ class Compiler
             isUnique: !empty($property->getAttributes(Attributes\IsUnique::class)),
             onDeleteCascade: !empty($property->getAttributes(Attributes\OnDeleteCascade::class)),
             phpTypes: $this->propertyTypeNormalizer->names($property),
-            reflection: $property
+            reflection: $property,
+            handler: $handler ? $handler::class : null,
         );
     }
 

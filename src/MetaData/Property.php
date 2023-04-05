@@ -21,7 +21,8 @@ class Property
         public bool                $isUnique,
         public bool                $onDeleteCascade,
         public array               $phpTypes,
-        public \ReflectionProperty $reflection
+        public \ReflectionProperty $reflection,
+        public string|null         $handler,
     )
     {
     }
@@ -43,6 +44,7 @@ class Property
             'phpTypes' => $this->phpTypes,
             'reflectionClass' => $this->reflection->class,
             'reflectionName' => $this->reflection->name,
+            'handler' => $this->handler,
         ];
     }
 
@@ -63,6 +65,7 @@ class Property
             $this->phpTypes,
             $reflectionClass,
             $reflectionName,
+            $this->handler,
         ] = array_values($data);
 
         $this->reflection = new \ReflectionProperty($reflectionClass, $reflectionName);
