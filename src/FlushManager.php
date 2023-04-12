@@ -6,7 +6,7 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\Entities\Flusher;
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class FlushManager

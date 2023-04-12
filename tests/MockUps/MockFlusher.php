@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\MockUps;
 
 use Medas\EntityManager\Entities\{Changes, Flusher};
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class MockFlusher implements Flusher

@@ -6,7 +6,7 @@ namespace Medas\EntityManagerTest\MockUps;
 
 use Medas\EntityManager\Attributes\{Entity, Id, Property};
 use Medas\EntityManager\Types\Binary;
-use Medas\ServiceManager\Interfaces\Guid;
+use Medas\Core\Interfaces\Guid;
 
 #[Entity]
 class MockEntityTypes

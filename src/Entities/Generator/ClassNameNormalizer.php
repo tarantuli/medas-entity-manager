@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\Generator;
 
+use Medas\Core\Attributes\ConfigValue;
 use Medas\EntityManager\ConfigOptions\GeneratorRootNamespace;
-use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\ConfigOptions\ConfigValue;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ClassNameNormalizer

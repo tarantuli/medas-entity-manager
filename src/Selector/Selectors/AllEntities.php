@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\Selectors;
 
-use Medas\EntityManager\Selector\Definition;
-use Medas\EntityManager\Selector\Selector;
-use Medas\ServiceManager\Cache\Interfaces\NotCacheable;
+use Medas\Core\Interfaces\NotCacheable;
+use Medas\EntityManager\Selector\{Definition, Selector};
 
 class AllEntities implements Selector, NotCacheable
 {

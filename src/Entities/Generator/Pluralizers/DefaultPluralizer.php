@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\Generator\Pluralizers;
 
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class DefaultPluralizer implements Pluralizer

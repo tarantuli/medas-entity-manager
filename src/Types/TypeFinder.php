@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Types;
 
+use Medas\Core\Interfaces\{Guid as GuidProperty, Type};
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\EntityManager\Properties\PropertyManager;
-use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Interfaces\{Guid as GuidProperty, Type};
+use Medas\ServiceManager\Service;
 
 #[Service]
 class TypeFinder

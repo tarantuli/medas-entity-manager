@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Entities;
 use Medas\EntityManager\Hydration\Hydrator;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class Initializer
@@ -24,7 +24,7 @@ class Initializer
         $entity = new $className();
 
         if ($values) {
-            $metaData ?? $metaData = $this->metaDataManager->get($className);
+                $metaData ?? $metaData = $this->metaDataManager->get($className);
             $this->hydrator->setValues($metaData, $entity, $values);
         }
 

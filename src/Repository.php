@@ -6,7 +6,7 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\Entities\{Fetcher, IdValue};
 use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class Repository

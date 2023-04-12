@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities\Generator;
 
 use Medas\EntityManager\Entities\Generator\{Exceptions\ClassHasNoNamespace, NameConverters\NameConverter};
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class EntityClassGenerator
@@ -19,7 +19,7 @@ namespace {{namespace}};
 
 use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Traits\Timestamps;
-use Medas\ServiceManager\Interfaces\{Guid, HasId};
+use Medas\Core\Interfaces\{Guid, HasId};
 
 #[Entity(store: '{{storeName}}')]
 class {{shortClassName}} implements HasId

@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Entities\Generator;
 
 use Composer\Autoload\ClassLoader;
 use Medas\EntityManager\Entities\Generator\Exceptions\NoPathFoundForClassName;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class FileNameFinder

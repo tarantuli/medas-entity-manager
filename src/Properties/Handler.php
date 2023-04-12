@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Properties;
 
-use Medas\ServiceManager\Interfaces\Type;
+use Medas\Core\Interfaces\Type;
 
 interface Handler
 {

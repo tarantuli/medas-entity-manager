@@ -6,8 +6,8 @@ namespace Medas\EntityManager\Properties;
 
 use Medas\EntityManager\Attributes\Property;
 use Medas\EntityManager\Exceptions\InvalidHandler;
-use Medas\ServiceManager\Attributes\Service;
 use Medas\ServiceManager\Exceptions\ServiceNotFoundByType;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class PropertyManager

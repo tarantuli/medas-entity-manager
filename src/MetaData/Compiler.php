@@ -11,9 +11,8 @@ use Medas\EntityManager\{Attributes,
     Hydration\PropertyTypeNormalizer,
     MetaData,
     Properties\PropertyManager,
-    Types\TypeFinder
-};
-use Medas\ServiceManager\Attributes\Service;
+    Types\TypeFinder};
+use Medas\ServiceManager\Service;
 
 #[Service]
 class Compiler

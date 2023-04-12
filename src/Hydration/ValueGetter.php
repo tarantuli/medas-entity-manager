@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\EntityManager\MetaData;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class ValueGetter

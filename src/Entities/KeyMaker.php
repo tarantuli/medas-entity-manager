@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
+use Medas\Core\Interfaces\Serializer;
 use Medas\ServiceManager\Attributes\PreferredDefault;
-use Medas\ServiceManager\Attributes\Service;
-use Medas\ServiceManager\Interfaces\Serializer;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class KeyMaker

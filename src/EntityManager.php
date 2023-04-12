@@ -6,7 +6,7 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\ServiceManager\Attributes\Service;
+use Medas\ServiceManager\Service;
 
 #[Service]
 class EntityManager
