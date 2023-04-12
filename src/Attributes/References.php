@@ -12,5 +12,6 @@ class References extends Property
         public string|null $property = null,
     )
     {
+        parent::__construct();
     }
 }
