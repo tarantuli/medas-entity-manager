@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\ServiceManager\Cache\CacheManager;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class MetaDataManager

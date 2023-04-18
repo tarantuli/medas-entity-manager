@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
+use Medas\Core\GlobalRepository;
 use Medas\EntityManager\Entities\ReferenceCollection;
 use Medas\EntityManager\Hydration\Hydrator;
 use Medas\EntityManagerTest\BaseTestClass;
@@ -13,7 +14,8 @@ class ReferenceTest extends BaseTestClass
 {
     public function testCollectionInitialization(): void
     {
-        service(Hydrator::class)->setFetcher(sm()->instantiate(TestFetcher::class));
+        $flusher = GlobalRepository::objectInstantiator()->instantiate(TestFetcher::class);
+        service(Hydrator::class)->setFetcher($flusher);
         $parent = em()->get(ParentEntity::class, 1);
 
         self::assertInstanceOf(ReferenceCollection::class, $parent->children);

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Exceptions\IdPropertyNotGiven;
 use Medas\EntityManager\Hydration\ValueGetter;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class IdValue

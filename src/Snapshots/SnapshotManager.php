@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Snapshots;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaDataManager;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class SnapshotManager

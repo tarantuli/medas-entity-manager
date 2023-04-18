@@ -4,17 +4,10 @@ declare(strict_types=1);
 
 // This file should be in the global namespace
 
+use Medas\Core\GlobalRepository;
 use Medas\EntityManager\EntityManager;
-use Medas\ServiceManager\ServiceManager;
 
 function em(): EntityManager
 {
-    /** @var EntityManager $em */
-    static $em;
-
-    if (!isset($em)) {
-        $em = ServiceManager::get()->resolve((EntityManager::class));
-    }
-
-    return $em;
+    return GlobalRepository::serviceManager()->resolve(EntityManager::class);
 }

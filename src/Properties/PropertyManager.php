@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Properties;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Attributes\Property;
 use Medas\EntityManager\Exceptions\InvalidHandler;
 use Medas\ServiceManager\Exceptions\ServiceNotFoundByType;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class PropertyManager

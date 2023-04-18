@@ -8,9 +8,9 @@ use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
 use Medas\Console\Formats\Color;
 use Medas\Console\Printer;
 use Medas\Console\Text;
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\DirectoryManager;
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class CreateEntityFile extends BaseConsoleCommand

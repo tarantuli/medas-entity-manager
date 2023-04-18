@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{Fetcher, IdValue, ReferenceCollection};
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class Hydrator

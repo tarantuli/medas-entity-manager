@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 
 #[Service]
 class PropertyAccessManager

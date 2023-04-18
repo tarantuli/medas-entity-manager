@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{Fetcher, IdValue};
 use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class Repository

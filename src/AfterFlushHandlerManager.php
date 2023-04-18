@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{AfterFlushHandler, Changes};
 use Medas\ServiceManager\Cache\CacheManager;
 use Medas\ServiceManager\Mapping\ImplementorFinder;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class AfterFlushHandlerManager

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class EntityManager

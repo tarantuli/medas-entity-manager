@@ -8,7 +8,7 @@ use Medas\EntityManager\Entities\Fetcher;
 use Medas\EntityManager\Entities\FetchResult;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Selector\Selector;
-use Medas\ServiceManager\Service;
+use Medas\Core\Attributes\Service;
 
 #[Service]
 class TestFetcher implements Fetcher

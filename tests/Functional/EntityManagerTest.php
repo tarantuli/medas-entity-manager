@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
+use Medas\Core\GlobalRepository;
 use Medas\EntityManager\EntityManager;
 use Medas\EntityManager\Exceptions\{ClassIsNotAnEntity, InvalidPropertyType};
 use Medas\EntityManager\FlushManager;
@@ -54,7 +55,8 @@ class EntityManagerTest extends BaseTestClass
     public function testDeleteEntity(): void
     {
         $entityManager = $this->entityManager();
-        service(FlushManager::class)->setFlusher(sm()->instantiate(MockFlusher::class));
+        $flusher = GlobalRepository::objectInstantiator()->instantiate(MockFlusher::class);
+        service(FlushManager::class)->setFlusher($flusher);
 
         $entity1 = $entityManager->get(MockEntity::class, 1);
         $entityManager->get(MockEntity::class, 2);

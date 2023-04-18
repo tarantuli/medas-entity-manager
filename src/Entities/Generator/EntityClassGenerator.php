@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\Generator;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\Generator\{Exceptions\ClassHasNoNamespace, NameConverters\NameConverter};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class EntityClassGenerator

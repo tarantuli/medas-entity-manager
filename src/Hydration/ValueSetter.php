@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
+use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{Guid, GuidProvider};
 use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\MetaData;
-use Medas\ServiceManager\Service;
 
 #[Service]
 class ValueSetter

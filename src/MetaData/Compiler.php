@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData;
 
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{Attributes,
     Exceptions\ClassIsNotAnEntity,
     Exceptions\EntityHasMultipleIdProperties,
@@ -12,7 +13,6 @@ use Medas\EntityManager\{Attributes,
     MetaData,
     Properties\PropertyManager,
     Types\TypeFinder};
-use Medas\ServiceManager\Service;
 
 #[Service]
 class Compiler
