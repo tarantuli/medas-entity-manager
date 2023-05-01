@@ -6,10 +6,10 @@ namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\ConfigValue;
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\CacheManager;
 use Medas\Core\Interfaces\DirectoryManager;
 use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\ConfigOptions\EntityDirectories;
-use Medas\ServiceManager\Cache\CacheManager;
 
 #[Service]
 class EntityClasses

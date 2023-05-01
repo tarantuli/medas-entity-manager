@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\CacheManager;
+use Medas\Core\Interfaces\ImplementorFinder;
 use Medas\EntityManager\Entities\{BeforeFlushHandler, Changes};
-use Medas\ServiceManager\Cache\CacheManager;
-use Medas\ServiceManager\Mapping\ImplementorFinder;
 
 #[Service]
 class BeforeFlushHandlerManager

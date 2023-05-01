@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConfigOptions;
 
+use Medas\Core\AsSingleton;
 use Medas\Core\Interfaces\ConfigGroup;
-use Medas\ServiceManager\AsSingleton;
 
 class EntityManagerGroup implements ConfigGroup
 {

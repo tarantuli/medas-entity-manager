@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
-use Medas\EntityManager\EntityManagerPackage;
 use Medas\Core\Interfaces\ConfigManager;
-use Medas\ServiceManager\ServiceConfig;
-use Medas\ServiceManager\ServiceManager;
+use Medas\EntityManager\EntityManagerPackage;
+use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
 chdir(__DIR__);
 

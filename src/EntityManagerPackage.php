@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
+use Medas\Core\AsSingleton;
 use Medas\FileSystem\FileSystemPackage;
-use Medas\ServiceManager\{AsSingleton, BasePackage, ServiceConfig};
+use Medas\ServiceManager\{BasePackage, ServiceConfig};
 
 class EntityManagerPackage extends BasePackage
 {
