@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Entities;
 
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\Serializer;
-use Medas\ServiceManager\Attributes\PreferredDefault;
+use Medas\ObjectInstantiator\Attributes\PreferredDefault;
 
 #[Service]
 class KeyMaker
