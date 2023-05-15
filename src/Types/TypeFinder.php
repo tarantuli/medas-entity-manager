@@ -10,6 +10,7 @@ use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\EntityManager\Properties\PropertyManager;
+use Medas\PhpClassAnalysis\ClassAnalyser;
 
 #[Service]
 class TypeFinder
@@ -17,6 +18,7 @@ class TypeFinder
     public function __construct(
         private readonly PropertyTypeNormalizer $normalizer,
         private readonly PropertyManager        $propertyManager,
+        private readonly ClassAnalyser          $classAnalyser,
     )
     {
     }
@@ -43,7 +45,7 @@ class TypeFinder
         return match (true) {
             $baseType->getName() === 'DateTime' => new DateTime(),
             $baseType->getName() === GuidProperty::class => new Guid(),
-            !$baseType->isBuiltin() => new Relation($baseType->getName()),
+            !$baseType->isBuiltin() => $this->findRelationType($baseType),
             $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),
             $baseType->getName() === 'string' => new Text(),
@@ -71,5 +73,17 @@ class TypeFinder
         }
 
         return $baseType;
+    }
+
+    private function findRelationType(\ReflectionNamedType $baseType): Type
+    {
+        $relationName = $baseType->getName();
+        $analysis = $this->classAnalyser->analyseClassByName($relationName);
+
+        if ($analysis->extensionType) {
+            return new Collection($analysis->extensionType->fqn);
+        }
+
+        return new Relation($relationName);
     }
 }

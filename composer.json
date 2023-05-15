@@ -13,6 +13,7 @@
     "require": {
         "morphp/medas-service-manager": "dev-dev",
         "morphp/medas-file-system": "dev-dev",
+        "morphp/medas-php-class-analysis": "dev-dev",
         "ext-pdo": "*"
     },
     "require-dev": {

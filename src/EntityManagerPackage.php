@@ -6,6 +6,7 @@ namespace Medas\EntityManager;
 
 use Medas\Core\AsSingleton;
 use Medas\FileSystem\FileSystemPackage;
+use Medas\PhpClassAnalysis\PhpClassAnalysisPackage;
 use Medas\ServiceManager\{BasePackage, ServiceConfig};
 
 class EntityManagerPackage extends BasePackage
@@ -16,6 +17,7 @@ class EntityManagerPackage extends BasePackage
     {
         return $this->dependenciesByClass([
             FileSystemPackage::class,
+            PhpClassAnalysisPackage::class,
         ]);
     }
 

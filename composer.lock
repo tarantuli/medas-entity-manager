@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d793bd81bd123a92b39b7c3740f4f49",
+    "content-hash": "7b7c16a4c1bbb72762eeeb13e95cf8d3",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -175,6 +175,88 @@
                 "issues": "https://github.com/tarantuli/medas-object-instantiator/issues"
             },
             "time": "2023-05-02T08:13:36+00:00"
+        },
+        {
+            "name": "morphp/medas-php-class-analysis",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
+                "reference": "efffac6f6d637be4fb49886f0233d2f2374b053b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/efffac6f6d637be4fb49886f0233d2f2374b053b",
+                "reference": "efffac6f6d637be4fb49886f0233d2f2374b053b",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-php-tokenizer": "dev-dev",
+                "morphp/medas-service-manager": "dev-dev"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PhpClassAnalysis\\": "src/",
+                    "Medas\\PhpClassAnalysisTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas PHP class analysis",
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
+            },
+            "time": "2023-05-15T13:54:54+00:00"
+        },
+        {
+            "name": "morphp/medas-php-tokenizer",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
+                "reference": "ac10971f387791a4ecce2f9f1121f426aa8fe1f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/ac10971f387791a4ecce2f9f1121f426aa8fe1f6",
+                "reference": "ac10971f387791a4ecce2f9f1121f426aa8fe1f6",
+                "shasum": ""
+            },
+            "require-dev": {
+                "morphp/medas-console-printer": "dev-dev",
+                "morphp/medas-service-manager": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PhpTokenizer\\": "src/",
+                    "Medas\\PhpTokenizerTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas PHP tokenizer",
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
+            },
+            "time": "2023-05-11T11:53:19+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -2659,6 +2741,7 @@
     "stability-flags": {
         "morphp/medas-service-manager": 20,
         "morphp/medas-file-system": 20,
+        "morphp/medas-php-class-analysis": 20,
         "morphp/medas-config-manager": 20,
         "morphp/medas-config-options": 20,
         "morphp/medas-console": 20
