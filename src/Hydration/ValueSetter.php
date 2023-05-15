@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Guid, GuidProvider};
+use Medas\Core\Interfaces\{Collection, Guid, GuidProvider};
 use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\MetaData;
 
@@ -51,7 +51,9 @@ class ValueSetter
                 }
 
                 if (class_exists($phpType)) {
-                    $value = em()->get($phpType, $value);
+                    if (!$value instanceof Collection) {
+                        $value = em()->get($phpType, $value);
+                    }
                     $valueType = $phpType;
                     break;
                 }

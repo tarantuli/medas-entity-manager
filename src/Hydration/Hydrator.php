@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{Fetcher, IdValue, ReferenceCollection};
+use Medas\EntityManager\Entities\{Fetcher, IdValue};
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
@@ -43,9 +43,10 @@ class Hydrator
         }
 
         foreach ($metaData->references as $reference) {
+            $collectionClass = $metaData->property($reference->name)->phpTypes[0];
             $this->valueSetter->set(
                 $metaData, $entity, $reference->name,
-                new ReferenceCollection(fn() => $this->fetchReferences($entity, $reference)));
+                new $collectionClass(fn() => $this->fetchReferences($entity, $reference)));
         }
     }
 

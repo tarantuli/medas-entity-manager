@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps\References;
 
-use Medas\Core\Interfaces\Collection;
-use Medas\EntityManager\Attributes\{Entity, Id, References};
+use Medas\EntityManager\Attributes\{Entity, Id, Property, References};
 
 #[Entity]
 class ParentEntity
@@ -14,5 +13,8 @@ class ParentEntity
     public int $id;
 
     #[References(ChildEntity::class)]
-    public Collection $children;
+    public ChildEntities $children;
+
+    #[Property]
+    public ChildEntity $mostImportantChild;
 }
