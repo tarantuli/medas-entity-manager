@@ -8,6 +8,7 @@ namespace Medas\EntityManager\Types;
 class Collection extends BaseType
 {
     public function __construct(
+        public string $collectionType,
         public string $contentType,
     )
     {

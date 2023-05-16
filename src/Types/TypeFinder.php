@@ -81,7 +81,7 @@ class TypeFinder
         $analysis = $this->classAnalyser->analyseClassByName($relationName);
 
         if ($analysis->extensionType) {
-            return new Collection($analysis->extensionType->fqn);
+            return new Collection($baseType->getName(), $analysis->extensionType->fqn);
         }
 
         return new Relation($relationName);
