@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Snapshots;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\TracksChanges;
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
@@ -21,8 +22,17 @@ class SnapshotManager
         return array_udiff_assoc(
             $this->forEntity($entity)->data,
             $initial === null ? [] : $initial->data,
-            fn($a, $b) => (int) ($a !== $b)
+            $this->compareValues(...)
         );
+    }
+
+    private function compareValues(mixed $current, mixed $initial): int
+    {
+        if ($current instanceof TracksChanges) {
+            return (int) $current->hasChanged();
+        }
+
+        return (int) ($current !== $initial);
     }
 
     public function forEntity(object $entity): Snapshot

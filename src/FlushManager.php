@@ -58,6 +58,7 @@ class FlushManager
         foreach ($entitiesToDelete as $entity) {
             $changes->addDelete($entity);
         }
+
         return $changes;
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
+use Medas\Core\Interfaces\TracksChanges;
 use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
 use Medas\EntityManager\Snapshots\SnapshotManager;
 
@@ -57,6 +58,10 @@ class EntityManager
             }
             else {
                 $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            }
+
+            if ($entity instanceof TracksChanges) {
+                $entity->resetChangeTracking();
             }
         }
 
