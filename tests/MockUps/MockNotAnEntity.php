@@ -6,5 +6,4 @@ namespace Medas\EntityManagerTest\MockUps;
 
 class MockNotAnEntity
 {
-
 }

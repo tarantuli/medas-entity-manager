@@ -6,5 +6,4 @@ namespace Medas\EntityManager\Selector\Conditions;
 
 class WhereIsNotNull extends WhereIsNull
 {
-
 }

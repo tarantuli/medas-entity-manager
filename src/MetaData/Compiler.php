@@ -60,12 +60,7 @@ class Compiler
 
     private function processProperty(\ReflectionProperty $property, MetaData $metaData): void
     {
-        $isManagedProperty = $property->getAttributes(
-            Attributes\Property::class,
-            \ReflectionAttribute::IS_INSTANCEOF
-        );
-
-        if (!$isManagedProperty) {
+        if (attribute(Attributes\Unmanaged::class, $property)) {
             return;
         }
 

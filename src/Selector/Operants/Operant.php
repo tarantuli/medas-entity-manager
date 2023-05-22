@@ -6,5 +6,4 @@ namespace Medas\EntityManager\Selector\Operants;
 
 interface Operant
 {
-
 }

@@ -7,5 +7,4 @@ namespace Medas\EntityManager\Attributes;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 class UniquePropertySet
 {
-
 }

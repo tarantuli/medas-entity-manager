@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\Core\GlobalRepository;
 use Medas\EntityManager\Hydration\Hydrator;
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\EntityManager\Types\Collection;
@@ -15,7 +14,7 @@ class ReferenceTest extends BaseTestClass
 {
     public function testCollectionInitialization(): void
     {
-        $flusher = GlobalRepository::objectInstantiator()->instantiate(TestFetcher::class);
+        $flusher = medas()->objectInstantiator()->instantiate(TestFetcher::class);
         service(Hydrator::class)->setFetcher($flusher);
         $parent = em()->get(ParentEntity::class, 1);
 
@@ -31,8 +30,8 @@ class ReferenceTest extends BaseTestClass
 
         $childData = $metaData->property('children');
 
-        self::assertInstanceOf(Collection::class, $childData->type);
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-        self::assertEquals('\\' . ChildEntity::class, $childData->type->contentType);
+        $dataType = $childData->type;
+        self::assertInstanceOf(Collection::class, $dataType);
+        self::assertEquals(ChildEntity::class, $dataType->contentType);
     }
 }

@@ -6,5 +6,4 @@ namespace Medas\EntityManager\Selector\Relations;
 
 class RightJoin extends Join
 {
-
 }

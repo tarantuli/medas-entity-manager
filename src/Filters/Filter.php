@@ -6,5 +6,4 @@ namespace Medas\EntityManager\Filters;
 
 interface Filter
 {
-
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\EntityManager\Attributes\{Entity, Id, IsUnique, Property};
+use Medas\EntityManager\Attributes\{Entity, Id, IsUnique};
 
 #[Entity]
 class MockEntity
@@ -12,7 +12,6 @@ class MockEntity
     #[Id]
     private int $id;
 
-    #[Property]
     #[IsUnique]
     public string $name;
 

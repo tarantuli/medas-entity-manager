@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Types;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Guid as GuidProperty, Type};
+use Medas\Core\Interfaces\{Guid as GuidProperty, ManagedCollection, Type};
+use Medas\EntityManager\Attributes\EntityCollection;
+use Medas\EntityManager\Exceptions\EntityCollectionDoesNotImplementManagedCollection;
 use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
 use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\EntityManager\Properties\PropertyManager;
-use Medas\PhpClassAnalysis\ClassAnalyser;
 
 #[Service]
 class TypeFinder
@@ -18,7 +19,6 @@ class TypeFinder
     public function __construct(
         private readonly PropertyTypeNormalizer $normalizer,
         private readonly PropertyManager        $propertyManager,
-        private readonly ClassAnalyser          $classAnalyser,
     )
     {
     }
@@ -78,10 +78,15 @@ class TypeFinder
     private function findRelationType(\ReflectionNamedType $baseType): Type
     {
         $relationName = $baseType->getName();
-        $analysis = $this->classAnalyser->analyseClassByName($relationName);
 
-        if ($analysis->extensionType) {
-            return new Collection($baseType->getName(), $analysis->extensionType->fqn);
+        $class = new \ReflectionClass($relationName);
+
+        if ($collection = attribute(EntityCollection::class, $class)) {
+            if (!$class->implementsInterface(ManagedCollection::class)) {
+                throw new EntityCollectionDoesNotImplementManagedCollection($class);
+            }
+
+            return new Collection($baseType->getName(), $collection->contentType);
         }
 
         return new Relation($relationName);
