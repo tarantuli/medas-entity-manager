@@ -94,4 +94,11 @@ class TypeFinderTest extends BaseTestClass
         $class = new \ReflectionClass(MockEntityTypes::class);
         self::assertInstanceOf(DateTime::class, $finder->find($class->getProperty('dateTime')));
     }
+
+    public function testEnumType(): void
+    {
+        $finder = service(TypeFinder::class);
+        $class = new \ReflectionClass(MockEntityTypes::class);
+        self::assertInstanceOf(Relation::class, $finder->find($class->getProperty('enum')));
+    }
 }

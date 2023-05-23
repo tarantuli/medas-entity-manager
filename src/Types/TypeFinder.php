@@ -81,6 +81,10 @@ class TypeFinder
     {
         $relationName = $baseType->getName();
 
+        if (enum_exists($relationName)) {
+            return new Relation($relationName);
+        }
+
         $class = new \ReflectionClass($relationName);
 
         if ($collection = attribute(EntityCollection::class, $class)) {

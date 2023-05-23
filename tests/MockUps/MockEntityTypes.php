@@ -34,4 +34,6 @@ class MockEntityTypes
     private \DateTime $dateTime;
 
     private Guid $guid;
+
+    private MockEnum $enum;
 }

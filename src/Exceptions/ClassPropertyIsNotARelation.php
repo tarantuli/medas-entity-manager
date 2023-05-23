@@ -22,8 +22,8 @@ class ClassPropertyIsNotARelation extends BaseException implements Suggestions
     public function suggestions(): array
     {
         return [
-            'if the class is an entity, decorate it with Entity or implement HasId',
-            'if the class is an entity collection, decorate it with EntityCollection and implement ManagedCollection',
+            'if the relation is an entity, decorate it with Entity or implement HasId',
+            'if the relation is an entity collection, decorate it with EntityCollection and implement ManagedCollection',
             'extend LazyGenericCollection to implement ManagedCollection',
         ];
     }
