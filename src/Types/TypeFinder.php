@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Types;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Guid as GuidProperty, ManagedCollection, Type};
-use Medas\EntityManager\Attributes\EntityCollection;
-use Medas\EntityManager\Exceptions\EntityCollectionDoesNotImplementManagedCollection;
-use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
-use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
+use Medas\Core\Interfaces\{Guid as GuidProperty, HasId, ManagedCollection, Type};
+use Medas\EntityManager\Attributes\{Entity, EntityCollection};
+use Medas\EntityManager\Exceptions\{ClassPropertyIsNotARelation,
+    EntityCollectionDoesNotImplementManagedCollection,
+    PropertyHasMultipleImplicitTypes,
+    PropertyHasNoImplicitType
+};
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\EntityManager\Properties\PropertyManager;
 
@@ -43,9 +45,9 @@ class TypeFinder
         $baseType = $this->getBaseType($property);
 
         return match (true) {
-            $baseType->getName() === 'DateTime' => new DateTime(),
+            $baseType->getName() === \DateTime::class => new DateTime(),
             $baseType->getName() === GuidProperty::class => new Guid(),
-            !$baseType->isBuiltin() => $this->findRelationType($baseType),
+            !$baseType->isBuiltin() => $this->findRelationType($property, $baseType),
             $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),
             $baseType->getName() === 'string' => new Text(),
@@ -75,7 +77,7 @@ class TypeFinder
         return $baseType;
     }
 
-    private function findRelationType(\ReflectionNamedType $baseType): Type
+    private function findRelationType(\ReflectionProperty $property, \ReflectionNamedType $baseType): Type
     {
         $relationName = $baseType->getName();
 
@@ -89,6 +91,14 @@ class TypeFinder
             return new Collection($baseType->getName(), $collection->contentType);
         }
 
-        return new Relation($relationName);
+        if (attribute(Entity::class, $class)) {
+            return new Relation($relationName);
+        }
+
+        if ($class->implementsInterface(HasId::class)) {
+            return new Relation($relationName);
+        }
+
+        throw new ClassPropertyIsNotARelation($property);
     }
 }
