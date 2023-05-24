@@ -24,7 +24,7 @@ class ClassPropertyIsNotARelation extends BaseException implements Suggestions
         return [
             'if the relation is an entity, decorate it with Entity or implement HasId',
             'if the relation is an entity collection, decorate it with EntityCollection and implement ManagedCollection',
-            'extend LazyGenericCollection to implement ManagedCollection',
+            '    extend LazyGenericCollection to implement ManagedCollection',
         ];
     }
 }
