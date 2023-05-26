@@ -115,8 +115,8 @@ class EntityManager
     /**
      * The return value is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
      */
-    public function create(string $className, array $conditions): object
+    public function create(string $className, array $values = []): object
     {
-        return $this->initializer->initialize($className, $conditions);
+        return $this->initializer->initialize($className, $values);
     }
 }
