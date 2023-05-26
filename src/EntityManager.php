@@ -17,6 +17,9 @@ class EntityManager
     protected array $entitiesToDelete;
     protected \SplObjectStorage $savedStates;
 
+    private bool $autoPersistOnCreate = false;
+    private bool $autoFlushOnCreate = false;
+
     public function __construct(
         private readonly FlushManager    $flushManager,
         private readonly IdValue         $idValue,
@@ -26,6 +29,16 @@ class EntityManager
     )
     {
         $this->clear();
+    }
+
+    public function autoPersistOnCreate(bool $value): void
+    {
+        $this->autoPersistOnCreate = $value;
+    }
+
+    public function autoFlushOnCreate(bool $value): void
+    {
+        $this->autoFlushOnCreate = $value;
     }
 
     public function clear(): void
@@ -117,6 +130,16 @@ class EntityManager
      */
     public function create(string $className, array $values = []): object
     {
-        return $this->initializer->initialize($className, $values);
+        $entity = $this->initializer->initialize($className, $values);
+
+        if ($this->autoPersistOnCreate) {
+            $this->persist($entity);
+
+            if ($this->autoFlushOnCreate) {
+                $this->flush();
+            }
+        }
+
+        return $entity;
     }
 }
