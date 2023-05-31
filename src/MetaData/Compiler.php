@@ -52,7 +52,9 @@ class Compiler
 
     private function processProperties(\ReflectionClass $class, MetaData $metaData): void
     {
-        foreach ($class->getProperties() as $property) {
+        $properties = $this->getSortedProperties($class);
+
+        foreach ($properties as $property) {
             $this->processProperty($property, $metaData);
             $this->processReferences($property, $metaData);
         }
@@ -142,5 +144,30 @@ class Compiler
         if (!$foundProperty) {
             throw new EntityHasNoIdProperty($metaData->className);
         }
+    }
+
+    private function getSortedProperties(\ReflectionClass $class): array
+    {
+        $parents = $this->gatherParents($class);
+        $properties = $class->getProperties();
+
+        usort($properties, function (\ReflectionProperty $a, \ReflectionProperty $b) use ($parents) {
+            // Parents deeper in the chain have lower values, sorting them in front
+            return $parents[$a->class] - $parents[$b->class];
+        });
+
+        return $properties;
+    }
+
+    private function gatherParents(\ReflectionClass $parent): array
+    {
+        $counter = 0;
+        $parents = [$parent->name => $counter];
+
+        while (false !== $parent = $parent->getParentClass()) {
+            $parents[$parent->name] = --$counter;
+        }
+
+        return $parents;
     }
 }
