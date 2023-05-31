@@ -31,9 +31,13 @@ class EntityManager
         $this->clear();
     }
 
-    public function autoPersistOnCreate(bool $value): void
+    public function autoPersistOnCreate(bool $value = true, bool $alsoFlush = true): void
     {
         $this->autoPersistOnCreate = $value;
+
+        if ($value) {
+            $this->autoFlushOnCreate($alsoFlush);
+        }
     }
 
     public function autoFlushOnCreate(bool $value): void
