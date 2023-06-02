@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Types;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Guid as GuidProperty, HasId, ManagedCollection, Type};
+use Medas\Core\Interfaces\{FileEntity, Guid as GuidProperty, HasId, ManagedCollection, Type};
 use Medas\EntityManager\Attributes\{Entity, EntityCollection};
 use Medas\EntityManager\Exceptions\{ClassPropertyIsNotARelation,
     EntityCollectionDoesNotImplementManagedCollection,
@@ -86,6 +86,10 @@ class TypeFinder
         }
 
         $class = new \ReflectionClass($relationName);
+
+        if ($class->implementsInterface(FileEntity::class)) {
+            return new File($relationName);
+        }
 
         if ($collection = attribute(EntityCollection::class, $class)) {
             if (!$class->implementsInterface(ManagedCollection::class)) {
