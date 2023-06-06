@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConfigOptions;
 
-use Medas\Core\{AsSingleton, Interfaces\ConfigGroup, Interfaces\ConfigOption};
+use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption};
 
+#[Service]
 class EntityDirectories implements ConfigOption
 {
-    use AsSingleton;
+    public function __construct(
+        private readonly EntityManagerGroup $group,
+    )
+    {
+    }
 
     public function group(): ConfigGroup
     {
-        return EntityManagerGroup::instance();
+        return $this->group;
     }
 
     public function name(): string
