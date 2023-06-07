@@ -27,7 +27,7 @@ class EntityDirectories implements ConfigOption
 
     public function description(): string
     {
-        return 'The directories where entity files reside.';
+        return 'The directories where entity files reside';
     }
 
     public function hasDefault(): bool
