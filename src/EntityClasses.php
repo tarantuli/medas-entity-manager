@@ -63,7 +63,8 @@ class EntityClasses
     private function isEntityClass(string $className): bool
     {
         $reflectionClass = new \ReflectionClass($className);
-        $hasEntityAttribute = ($reflectionClass)->getAttributes(Entity::class, \ReflectionAttribute::IS_INSTANCEOF);
+        $hasEntityAttribute = $reflectionClass
+            ->getAttributes(Entity::class, \ReflectionAttribute::IS_INSTANCEOF);
 
         if (!$hasEntityAttribute) {
             return false;
