@@ -10,16 +10,16 @@ use Medas\EntityManager\Entities\Generator\{Exceptions\ClassHasNoNamespace, Name
 #[Service]
 class EntityClassGenerator
 {
-    private const PHP_TEMPLATE = <<<'PHP'
+    private const PHP_GUID_TEMPLATE = <<<'PHP'
 <?php
 
 declare(strict_types=1);
 
 namespace {{namespace}};
 
+use Medas\Core\Interfaces\{Guid, HasId};
 use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Traits\Timestamps;
-use Medas\Core\Interfaces\{Guid, HasId};
 
 #[Entity(store: '{{storeName}}')]
 class {{shortClassName}} implements HasId
@@ -37,6 +37,33 @@ class {{shortClassName}} implements HasId
 
 PHP;
 
+    private const PHP_INT_TEMPLATE = <<<'PHP'
+<?php
+
+declare(strict_types=1);
+
+namespace {{namespace}};
+
+use Medas\Core\Interfaces\HasId;
+use Medas\EntityManager\Attributes\{Entity, Id};
+use Medas\EntityManager\Traits\Timestamps;
+
+#[Entity(store: '{{storeName}}')]
+class {{shortClassName}} implements HasId
+{
+    use Timestamps;
+
+    #[Id]
+    private int $id;
+
+    public function id(): int
+    {
+        return $this->id;
+    }
+}
+
+PHP;
+
     public function __construct(
         private readonly ClassNameNormalizer $classNameNormalizer,
         private readonly FileNameFinder      $fileNameFinder,
@@ -45,7 +72,7 @@ PHP;
     {
     }
 
-    public function generate(string $className): string
+    public function generate(string $className, bool $useGuid = true): string
     {
         $className = $this->classNameNormalizer->normalize($className);
 
@@ -61,7 +88,7 @@ PHP;
         return str_replace(
             array_keys($replacements),
             array_values($replacements),
-            self::PHP_TEMPLATE
+            $useGuid ? self::PHP_GUID_TEMPLATE : self::PHP_INT_TEMPLATE
         );
     }
 

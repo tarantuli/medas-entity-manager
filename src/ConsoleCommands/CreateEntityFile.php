@@ -44,7 +44,9 @@ class CreateEntityFile extends BaseConsoleCommand
     {
         $className = $arguments[1];
 
-        $code = $this->entityClassGenerator->generate($className);
+        $useGuid = ($arguments[2] ?? null) !== '--id';
+
+        $code = $this->entityClassGenerator->generate($className, $useGuid);
         $fileName = $this->fileNameFinder->find($className);
 
         $this->directoryManager->create(dirname($fileName));
