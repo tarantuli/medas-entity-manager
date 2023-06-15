@@ -27,7 +27,7 @@ class {{shortClassName}} implements HasId
     use Timestamps;
 
     #[Id]
-    private Guid $guid;
+    public Guid $guid;
 
     public function id(): Guid
     {
@@ -54,7 +54,7 @@ class {{shortClassName}} implements HasId
     use Timestamps;
 
     #[Id]
-    private int $id;
+    public int $id;
 
     public function id(): int
     {
