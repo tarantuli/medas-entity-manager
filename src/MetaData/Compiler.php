@@ -44,7 +44,8 @@ class Compiler
         $metaData->properties = [];
         $metaData->references = [];
 
-        $metaData->parent = $class->getParentClass()?->name;
+        $parentClass = $class->getParentClass();
+        $metaData->parent = $parentClass ? $parentClass->name : null;
 
         $this->processProperties($class, $metaData);
         $this->findIdProperty($metaData);
