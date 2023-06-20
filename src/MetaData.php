@@ -19,9 +19,13 @@ class MetaData
 
     public MetaData\Property|null $idProperty;
 
+    public string|null $parent;
+
     public int $sourceFileDate;
 
-    public function __construct(public string $className)
+    public function __construct(
+        public string $className,
+    )
     {
     }
 
