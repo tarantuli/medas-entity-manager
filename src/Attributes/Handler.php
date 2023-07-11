@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Attributes;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-class Property
+class Handler
 {
     public function __construct(
-        public readonly string|null $handler = null,
+        public readonly string|null $className = null,
     )
     {
     }

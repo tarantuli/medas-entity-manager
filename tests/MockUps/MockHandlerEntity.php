@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\EntityManager\Attributes\{Entity, Id, Property};
+use Medas\EntityManager\Attributes\{Entity, Handler, Id};
 use Medas\EntityManager\Properties\SerializingHandler;
 use Medas\EntityManager\Types\Guid;
 
@@ -14,6 +14,6 @@ class MockHandlerEntity
     #[Id]
     private Guid $guid;
 
-    #[Property(handler: SerializingHandler::class)]
+    #[Handler(SerializingHandler::class)]
     private PropertyClass $propertyClass;
 }
