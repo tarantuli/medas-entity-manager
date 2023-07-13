@@ -6,6 +6,7 @@ use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\Interfaces\ConfigManager;
 use Medas\EntityManager\EntityManagerPackage;
+use Medas\FileSystem\FileSystemPackage;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
 chdir(__DIR__);
@@ -14,9 +15,10 @@ new ServiceManager(
     function (): ServiceConfig {
         $config = new ServiceConfig();
         $config->addPackages([
-            EntityManagerPackage::instance(),
             ConfigManagerPackage::instance(),
             ConfigOptionsPackage::instance(),
+            EntityManagerPackage::instance(),
+            FileSystemPackage::instance(),
         ]);
 
         return $config;
