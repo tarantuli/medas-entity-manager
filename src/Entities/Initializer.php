@@ -24,7 +24,10 @@ class Initializer
         $entity = new $className();
 
         if ($values) {
-                $metaData ?? $metaData = $this->metaDataManager->get($className);
+            if ($metaData === null) {
+                $metaData = $this->metaDataManager->get($className);
+            }
+
             $this->hydrator->setValues($metaData, $entity, $values);
         }
 
