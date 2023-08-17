@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a55d64dea5d06b0542cc5c816474c15",
+    "content-hash": "6c2b78908ff9948944d0bc094caf8d41",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -2665,7 +2665,6 @@
     "stability-flags": {
         "morphp/medas-console": 20,
         "morphp/medas-core": 20,
-        "morphp/medas-object-instantiator": 20,
         "morphp/medas-service-manager": 20,
         "morphp/medas-config-manager": 20,
         "morphp/medas-config-options": 20,
