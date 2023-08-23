@@ -9,11 +9,11 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\ConfigOptions\GeneratorRootNamespace;
 
 #[Service]
-class ClassNameNormalizer
+readonly class ClassNameNormalizer
 {
     public function __construct(
         #[ConfigValue(GeneratorRootNamespace::class)]
-        private readonly string|null $rootNamespace,
+        private string|null $rootNamespace,
     )
     {
     }

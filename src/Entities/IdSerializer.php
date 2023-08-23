@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{Guid, HasId, StringSerializer, Type};
 
 #[Service]
-class IdSerializer implements StringSerializer
+readonly class IdSerializer implements StringSerializer
 {
     public function serialize(mixed $value): string
     {

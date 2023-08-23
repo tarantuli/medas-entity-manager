@@ -11,7 +11,7 @@ use Medas\EntityManager\Selector\Selector;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class TestFetcher implements Fetcher
+readonly class TestFetcher implements Fetcher
 {
 
     public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult

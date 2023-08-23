@@ -8,11 +8,11 @@ use Medas\Core\Attributes\{PreferredDefault, Service};
 use Medas\Core\Interfaces\Serializer;
 
 #[Service]
-class KeyMaker
+readonly class KeyMaker
 {
     public function __construct(
         #[PreferredDefault(IdSerializer::class)]
-        private readonly Serializer $idSerializer,
+        private Serializer $idSerializer,
     )
     {
     }

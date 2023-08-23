@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\Generator\{Exceptions\ClassHasNoNamespace, NameConverters\NameConverter};
 
 #[Service]
-class EntityClassGenerator
+readonly class EntityClassGenerator
 {
     private const PHP_GUID_TEMPLATE = <<<'PHP'
 <?php
@@ -65,9 +65,9 @@ class {{shortClassName}} implements HasId
 PHP;
 
     public function __construct(
-        private readonly ClassNameNormalizer $classNameNormalizer,
-        private readonly FileNameFinder      $fileNameFinder,
-        private readonly NameConverter       $storeNameConverter,
+        private ClassNameNormalizer $classNameNormalizer,
+        private FileNameFinder      $fileNameFinder,
+        private NameConverter       $storeNameConverter,
     )
     {
     }

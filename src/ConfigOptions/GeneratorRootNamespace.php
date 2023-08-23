@@ -8,10 +8,10 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\{ConfigGroup, ConfigOption};
 
 #[Service]
-class GeneratorRootNamespace implements ConfigOption
+readonly class GeneratorRootNamespace implements ConfigOption
 {
     public function __construct(
-        private readonly EntityManagerGroup $group,
+        private EntityManagerGroup $group,
     )
     {
     }
@@ -36,7 +36,7 @@ class GeneratorRootNamespace implements ConfigOption
         return false;
     }
 
-    public function default(): mixed
+    public function default(): null
     {
         return null;
     }

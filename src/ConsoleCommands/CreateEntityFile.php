@@ -13,14 +13,14 @@ use Medas\Core\Interfaces\DirectoryManager;
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
 
 #[Service]
-class CreateEntityFile extends BaseConsoleCommand
+readonly class CreateEntityFile extends BaseConsoleCommand
 {
     public function __construct(
-        private readonly DirectoryManager      $directoryManager,
-        private readonly Printer               $printer,
-        private readonly EntityClassGenerator  $entityClassGenerator,
-        private readonly EntityManagerCommands $entityManagerCommands,
-        private readonly FileNameFinder        $fileNameFinder,
+        private DirectoryManager      $directoryManager,
+        private Printer               $printer,
+        private EntityClassGenerator  $entityClassGenerator,
+        private EntityManagerCommands $entityManagerCommands,
+        private FileNameFinder        $fileNameFinder,
     )
     {
     }

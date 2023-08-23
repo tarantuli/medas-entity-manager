@@ -7,10 +7,10 @@ namespace Medas\EntityManager\Selector\Selectors;
 use Medas\Core\Interfaces\NotCacheable;
 use Medas\EntityManager\Selector\{Definition, Selector};
 
-class AllEntities implements Selector, NotCacheable
+readonly class AllEntities implements Selector, NotCacheable
 {
     public function __construct(
-        private readonly string $entity
+        private string $entity
     )
     {
     }

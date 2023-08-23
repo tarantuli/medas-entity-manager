@@ -9,12 +9,12 @@ use Medas\EntityManager\Entities\{Fetcher, IdValue};
 use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
 
 #[Service]
-class Repository
+readonly class Repository
 {
     public function __construct(
-        private readonly IdValue         $idValue,
-        private readonly Fetcher         $fetcher,
-        private readonly MetaDataManager $metaDataManager,
+        private IdValue         $idValue,
+        private Fetcher         $fetcher,
+        private MetaDataManager $metaDataManager,
     )
     {
     }

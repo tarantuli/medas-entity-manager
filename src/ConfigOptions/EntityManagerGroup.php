@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\ConfigGroup;
 
 #[Service]
-class EntityManagerGroup implements ConfigGroup
+readonly class EntityManagerGroup implements ConfigGroup
 {
     public function parent(): ConfigGroup|null
     {

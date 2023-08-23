@@ -10,7 +10,7 @@ use Medas\EntityManager\Exceptions\InvalidHandler;
 use Medas\ServiceManager\Exceptions\ServiceNotFoundByType;
 
 #[Service]
-class PropertyManager
+readonly class PropertyManager
 {
     public function getHandler(\ReflectionProperty $property): Handler|null
     {

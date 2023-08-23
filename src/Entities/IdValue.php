@@ -11,11 +11,11 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
-class IdValue
+readonly class IdValue
 {
     public function __construct(
-        private readonly MetaDataManager $metaDataManager,
-        private readonly ValueGetter     $valueGetter,
+        private MetaDataManager $metaDataManager,
+        private ValueGetter     $valueGetter,
     )
     {
     }

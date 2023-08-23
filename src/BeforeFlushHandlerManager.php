@@ -10,12 +10,12 @@ use Medas\Core\Interfaces\ImplementorFinder;
 use Medas\EntityManager\Entities\{BeforeFlushHandler, Changes};
 
 #[Service]
-class BeforeFlushHandlerManager
+readonly class BeforeFlushHandlerManager
 {
     private const HANDLERS_CACHE_KEY = 'BeforeFlushHandlerManager::handlers';
 
     public function __construct(
-        private readonly CacheManager $cacheManager,
+        private CacheManager $cacheManager,
     )
     {
     }

@@ -10,11 +10,11 @@ use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
-class Initializer
+readonly class Initializer
 {
     public function __construct(
-        private readonly Hydrator        $hydrator,
-        private readonly MetaDataManager $metaDataManager
+        private Hydrator        $hydrator,
+        private MetaDataManager $metaDataManager
     )
     {
     }

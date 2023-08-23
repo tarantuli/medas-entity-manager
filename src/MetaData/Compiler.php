@@ -15,12 +15,12 @@ use Medas\EntityManager\{Attributes,
     Types\TypeFinder};
 
 #[Service]
-class Compiler
+readonly class Compiler
 {
     public function __construct(
-        private readonly PropertyTypeNormalizer $propertyTypeNormalizer,
-        private readonly PropertyManager        $propertyManager,
-        private readonly TypeFinder             $typeFinder,
+        private PropertyTypeNormalizer $propertyTypeNormalizer,
+        private PropertyManager        $propertyManager,
+        private TypeFinder             $typeFinder,
     )
     {
     }

@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\MetaData;
 
 #[Service]
-class ValueGetter
+readonly class ValueGetter
 {
     /** @param MetaData\Property[] $fields */
     public function getValues(object $entity, array $fields): array

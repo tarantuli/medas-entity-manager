@@ -9,10 +9,10 @@ use Medas\Core\Identifier;
 use Medas\EntityManager\Entities\Generator\Pluralizers\Pluralizer;
 
 #[Service]
-class SnakeCaseNames implements NameConverter
+readonly class SnakeCaseNames implements NameConverter
 {
     public function __construct(
-        private readonly Pluralizer $pluralizer,
+        private Pluralizer $pluralizer,
     )
     {
     }

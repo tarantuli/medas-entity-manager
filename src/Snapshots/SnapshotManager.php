@@ -9,10 +9,10 @@ use Medas\Core\Interfaces\TracksChanges;
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
-class SnapshotManager
+readonly class SnapshotManager
 {
     public function __construct(
-        private readonly MetaDataManager $metaDataManager,
+        private MetaDataManager $metaDataManager,
     )
     {
     }

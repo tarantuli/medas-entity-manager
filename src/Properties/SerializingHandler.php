@@ -8,7 +8,7 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Types\{Binary, Text};
 
 #[Service]
-class SerializingHandler implements Handler
+readonly class SerializingHandler implements Handler
 {
     private Text $type;
 

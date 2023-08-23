@@ -9,10 +9,10 @@ use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\Generator\Exceptions\NoPathFoundForClassName;
 
 #[Service]
-class FileNameFinder
+readonly class FileNameFinder
 {
     public function __construct(
-        private readonly ClassNameNormalizer $classNameNormalizer,
+        private ClassNameNormalizer $classNameNormalizer,
     )
     {
     }

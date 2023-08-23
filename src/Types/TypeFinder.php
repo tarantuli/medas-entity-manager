@@ -10,17 +10,16 @@ use Medas\EntityManager\Attributes\{Entity, EntityCollection};
 use Medas\EntityManager\Exceptions\{ClassPropertyIsNotARelation,
     EntityCollectionDoesNotImplementManagedCollection,
     PropertyHasMultipleImplicitTypes,
-    PropertyHasNoImplicitType
-};
+    PropertyHasNoImplicitType};
 use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
 use Medas\EntityManager\Properties\PropertyManager;
 
 #[Service]
-class TypeFinder
+readonly class TypeFinder
 {
     public function __construct(
-        private readonly PropertyTypeNormalizer $normalizer,
-        private readonly PropertyManager        $propertyManager,
+        private PropertyTypeNormalizer $normalizer,
+        private PropertyManager        $propertyManager,
     )
     {
     }

@@ -9,12 +9,12 @@ use Medas\Core\Interfaces\CacheManager;
 use Medas\EntityManager\MetaData\Compiler;
 
 #[Service]
-class MetaDataManager
+readonly class MetaDataManager
 {
     public function __construct(
-        private readonly CacheManager          $cacheManager,
-        private readonly Compiler              $compiler,
-        private readonly PropertyAccessManager $propertyAccessManager,
+        private CacheManager          $cacheManager,
+        private Compiler              $compiler,
+        private PropertyAccessManager $propertyAccessManager,
     )
     {
     }

@@ -7,10 +7,10 @@ namespace Medas\EntityManager\ConfigOptions;
 use Medas\Core\{Attributes\Service, Interfaces\ConfigGroup, Interfaces\ConfigOption};
 
 #[Service]
-class EntityDirectories implements ConfigOption
+readonly class EntityDirectories implements ConfigOption
 {
     public function __construct(
-        private readonly EntityManagerGroup $group,
+        private EntityManagerGroup $group,
     )
     {
     }

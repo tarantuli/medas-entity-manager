@@ -12,15 +12,15 @@ use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\ConfigOptions\EntityDirectories;
 
 #[Service]
-class EntityClasses
+readonly class EntityClasses
 {
     private const CACHE_KEY = 'Medas\EntityManager\EntityClasses::get';
 
     public function __construct(
-        private readonly CacheManager     $cacheManager,
-        private readonly DirectoryManager $directoryManager,
+        private CacheManager     $cacheManager,
+        private DirectoryManager $directoryManager,
         #[ConfigValue(EntityDirectories::class)]
-        private readonly array            $entityDirectories,
+        private array            $entityDirectories,
     )
     {
     }

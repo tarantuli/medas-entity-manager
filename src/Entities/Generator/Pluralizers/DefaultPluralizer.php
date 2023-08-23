@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Entities\Generator\Pluralizers;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class DefaultPluralizer implements Pluralizer
+readonly class DefaultPluralizer implements Pluralizer
 {
     public function pluralize(string $string): string
     {

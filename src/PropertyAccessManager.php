@@ -7,7 +7,7 @@ namespace Medas\EntityManager;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class PropertyAccessManager
+readonly class PropertyAccessManager
 {
     public function makeAccessible(MetaData $metaData): void
     {

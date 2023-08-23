@@ -7,11 +7,11 @@ namespace Medas\EntityManager\Selector\Selectors;
 use Medas\Core\Interfaces\NotCacheable;
 use Medas\EntityManager\Selector\{Conditions\WhereIs, Definition, Operants\Property, Operants\Value, Selector};
 
-class WithValues implements Selector, NotCacheable
+readonly class WithValues implements Selector, NotCacheable
 {
     public function __construct(
-        private readonly string $entity,
-        private readonly array  $values,
+        private string $entity,
+        private array  $values,
     )
     {
     }

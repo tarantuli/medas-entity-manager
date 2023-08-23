@@ -8,7 +8,7 @@ use Medas\EntityManager\Entities\{Changes, Flusher};
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class MockFlusher implements Flusher
+readonly class MockFlusher implements Flusher
 {
     public function flush(Changes $changes): void
     {

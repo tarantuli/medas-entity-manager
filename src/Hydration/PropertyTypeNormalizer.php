@@ -7,7 +7,7 @@ namespace Medas\EntityManager\Hydration;
 use Medas\Core\Attributes\Service;
 
 #[Service]
-class PropertyTypeNormalizer
+readonly class PropertyTypeNormalizer
 {
     /**@return string[] */
     public function names(\ReflectionProperty $property): array

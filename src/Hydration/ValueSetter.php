@@ -10,10 +10,10 @@ use Medas\EntityManager\Exceptions\InvalidPropertyType;
 use Medas\EntityManager\MetaData;
 
 #[Service]
-class ValueSetter
+readonly class ValueSetter
 {
     public function __construct(
-        private readonly GuidProvider|null $guidProvider,
+        private GuidProvider|null $guidProvider,
     )
     {
     }
