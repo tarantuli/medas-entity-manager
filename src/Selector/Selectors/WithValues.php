@@ -16,6 +16,11 @@ readonly class WithValues implements Selector, NotCacheable
     {
     }
 
+    public function entity(): string
+    {
+        return $this->entity;
+    }
+
     public function definition(): Definition
     {
         $definition = new Definition($this->entity);

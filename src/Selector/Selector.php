@@ -7,4 +7,6 @@ namespace Medas\EntityManager\Selector;
 interface Selector
 {
     public function definition(): Definition;
+
+    public function entity(): string;
 }

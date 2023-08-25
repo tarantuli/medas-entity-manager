@@ -32,7 +32,7 @@ readonly class Repository
     {
         $entities = [];
         $records = $this->fetcher->fetch($selector, $arguments);
-        $metaData = $this->metaDataManager->get($selector->definition()->entity);
+        $metaData = $this->metaDataManager->get($selector->entity());
 
         foreach ($records as $record) {
             $idValue = $this->idValue->get($record, $metaData);
@@ -74,7 +74,7 @@ readonly class Repository
         }
 
         $object = em()->create(
-            $selector->definition()->entity,
+            $selector->entity(),
             $creationValues ? array_merge($values, $creationValues()) : $values
         );
 
