@@ -8,20 +8,24 @@ use Medas\EntityManager\Hydration\Hydrator;
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\EntityManager\Types\Collection;
 use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\References\{ChildEntities, ChildEntity, ParentEntity, TestFetcher};
+use Medas\EntityManagerTest\MockUps\References\{ChildEntities,
+    ChildEntity,
+    ParentEntity,
+    TestEntityValueFetcher,
+    TestSelectorRecordsFetcher};
 
 class ReferenceTest extends BaseTestClass
 {
     public function testCollectionInitialization(): void
     {
-        $flusher = medas()->objectInstantiator()->instantiate(TestFetcher::class);
-        service(Hydrator::class)->setFetcher($flusher);
+        service(Hydrator::class)->setEntityValueFetcher(medas()->objectInstantiator()->instantiate(TestEntityValueFetcher::class));
+        service(Hydrator::class)->setSelectorRecordsFetcher(medas()->objectInstantiator()->instantiate(TestSelectorRecordsFetcher::class));
         $parent = em()->get(ParentEntity::class, 1);
 
         self::assertInstanceOf(ChildEntities::class, $parent->children);
         self::assertInstanceOf(ChildEntity::class, $parent->children[0]);
 
-        service(Hydrator::class)->setFetcher(null);
+        service(Hydrator::class)->setEntityValueFetcher(null);
     }
 
     public function testCollectionMetaData(): void

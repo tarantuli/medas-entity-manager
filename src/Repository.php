@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{Fetcher, IdValue};
+use Medas\EntityManager\Entities\{IdValue, SelectorRecordsFetcher};
 use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
 
 #[Service]
 readonly class Repository
 {
     public function __construct(
-        private IdValue         $idValue,
-        private Fetcher         $fetcher,
-        private MetaDataManager $metaDataManager,
+        private IdValue                $idValue,
+        private SelectorRecordsFetcher $fetcher,
+        private MetaDataManager        $metaDataManager,
     )
     {
     }

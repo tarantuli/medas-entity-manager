@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{Fetcher, IdValue};
+use Medas\EntityManager\Entities\{EntityValueFetcher, IdValue, SelectorRecordsFetcher};
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
@@ -14,28 +14,34 @@ use Medas\EntityManager\Selector\Selectors\WithValues;
 class Hydrator
 {
     public function __construct(
-        private readonly IdValue         $idValue,
-        private Fetcher|null             $fetcher,
-        private readonly MetaDataManager $metaDataManager,
-        private readonly ValueGetter     $valueGetter,
-        private readonly ValueSetter     $valueSetter,
+        private readonly IdValue            $idValue,
+        private EntityValueFetcher|null     $entityValueFetcher,
+        private SelectorRecordsFetcher|null $selectorRecordsFetcher,
+        private readonly MetaDataManager    $metaDataManager,
+        private readonly ValueGetter        $valueGetter,
+        private readonly ValueSetter        $valueSetter,
     )
     {
     }
 
-    public function setFetcher(Fetcher|null $fetcher): void
+    public function setEntityValueFetcher(EntityValueFetcher|null $entityValueFetcher): void
     {
-        $this->fetcher = $fetcher;
+        $this->entityValueFetcher = $entityValueFetcher;
+    }
+
+    public function setSelectorRecordsFetcher(?SelectorRecordsFetcher $selectorRecordsFetcher): void
+    {
+        $this->selectorRecordsFetcher = $selectorRecordsFetcher;
     }
 
     public function hydrate(MetaData $metaData, object $entity): void
     {
-        if (!$this->fetcher) {
+        if (!$this->entityValueFetcher) {
             return;
         }
 
         foreach ($metaData->properties as $property) {
-            $fetchResult = $this->fetcher->fetchValue($metaData, $entity, $property);
+            $fetchResult = $this->entityValueFetcher->fetch($metaData, $entity, $property);
 
             if ($fetchResult->foundValue) {
                 $this->valueSetter->set($metaData, $entity, $property->name, $fetchResult->value);
@@ -53,7 +59,7 @@ class Hydrator
     private function fetchReferences(object $entity, MetaData\Reference $reference): array
     {
         $entities = [];
-        $records = $this->fetcher->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
+        $records = $this->selectorRecordsFetcher->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
         $metaData = $this->metaDataManager->get($reference->entity);
 
         foreach ($records as $record) {

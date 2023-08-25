@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\EntityManager\MetaData;
 use Medas\EntityManager\Selector\Selector;
 
-interface Fetcher
+interface SelectorRecordsFetcher
 {
-    public function fetchValue(MetaData $metaData, object $entity, MetaData\Property $property): FetchResult;
-
     public function fetch(Selector $selector, array $arguments = []): array;
 }
