@@ -15,9 +15,4 @@ readonly class TestEntityValueFetcher implements EntityValueFetcher
     {
         return new FetchResult(false, null);
     }
-
-    public function clearCaches(): void
-    {
-        // Do nothing
-    }
 }
