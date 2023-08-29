@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\TracksChanges;
+use Medas\Core\Interfaces\{EventDispatcher, TracksChanges};
 use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
 use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\Events\Interfaces\EventDispatcher;
 
 #[Service]
 class EntityManager
@@ -23,12 +22,12 @@ class EntityManager
     private bool $autoFlushOnCreate = false;
 
     public function __construct(
+        private readonly EventDispatcher $eventDispatcher,
         private readonly FlushManager    $flushManager,
         private readonly IdValue         $idValue,
         private readonly Initializer     $initializer,
         private readonly KeyMaker        $keyMaker,
         private readonly SnapshotManager $snapshotManager,
-        private readonly EventDispatcher $eventDispatcher,
     )
     {
         $this->entities = [];
