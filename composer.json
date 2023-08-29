@@ -14,6 +14,7 @@
         "ext-pdo": "*",
         "morphp/medas-console": "dev-dev",
         "morphp/medas-core": "dev-dev",
+        "morphp/medas-events": "dev-dev",
         "morphp/medas-service-manager": "dev-dev"
     },
     "require-dev": {

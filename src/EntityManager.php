@@ -7,7 +7,9 @@ namespace Medas\EntityManager;
 use Medas\Core\Attributes\Service;
 use Medas\Core\Interfaces\TracksChanges;
 use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
+use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\Snapshots\SnapshotManager;
+use Medas\Events\Interfaces\EventDispatcher;
 
 #[Service]
 class EntityManager
@@ -26,6 +28,7 @@ class EntityManager
         private readonly Initializer     $initializer,
         private readonly KeyMaker        $keyMaker,
         private readonly SnapshotManager $snapshotManager,
+        private readonly EventDispatcher $eventDispatcher,
     )
     {
         $this->clear();
@@ -51,6 +54,7 @@ class EntityManager
         $this->entityCount = 0;
         $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
+        $this->eventDispatcher->dispatch(new MustClearEntityValueCaches());
     }
 
     public function delete(object $entity): void

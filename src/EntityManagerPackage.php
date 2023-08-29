@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\AsSingleton;
+use Medas\Events\EventsPackage;
 use Medas\ServiceManager\{BasePackage, ServiceConfig};
 
 class EntityManagerPackage extends BasePackage
@@ -13,7 +14,9 @@ class EntityManagerPackage extends BasePackage
 
     public function dependencies(): array
     {
-        return [];
+        return [
+            EventsPackage::instance(),
+        ];
     }
 
     public function sourceDirectory(): string

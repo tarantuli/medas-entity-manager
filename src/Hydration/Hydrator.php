@@ -6,12 +6,14 @@ namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{EntityValueFetcher, IdValue, SelectorRecordsFetcher};
+use Medas\EntityManager\Events\MustClearEntityValueCaches;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
+use Medas\Events\Interfaces\Listener;
 
 #[Service]
-class Hydrator
+class Hydrator implements Listener
 {
     public function __construct(
         private readonly IdValue            $idValue,
@@ -73,5 +75,15 @@ class Hydrator
     public function setValues(MetaData $metaData, object $entity, array $values): void
     {
         $this->valueSetter->setValues($metaData, $entity, $values);
+    }
+
+    public function eventName(): string
+    {
+        return MustClearEntityValueCaches::class;
+    }
+
+    public function callable(): callable
+    {
+        return fn() => $this->entityValueFetcher->clearCaches();
     }
 }
