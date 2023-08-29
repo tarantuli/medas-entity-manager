@@ -31,7 +31,10 @@ class EntityManager
         private readonly EventDispatcher $eventDispatcher,
     )
     {
-        $this->clear();
+        $this->entities = [];
+        $this->entityCount = 0;
+        $this->entitiesToDelete = [];
+        $this->savedStates = new \SplObjectStorage();
     }
 
     public function autoPersistOnCreate(bool $value = true, bool $alsoFlush = true): void
@@ -68,6 +71,7 @@ class EntityManager
     {
         $this->flushManager->flush(fn() => $this->entities, fn() => $this->savedStates, fn() => $this->entitiesToDelete);
         $this->updateEntityStates();
+        $this->eventDispatcher->dispatch(new MustClearEntityValueCaches());
     }
 
     private function updateEntityStates(): void
