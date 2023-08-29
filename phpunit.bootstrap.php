@@ -6,6 +6,7 @@ use Medas\ConfigManager\ConfigManagerPackage;
 use Medas\ConfigOptions\ConfigOptionsPackage;
 use Medas\Core\Interfaces\ConfigManager;
 use Medas\EntityManager\EntityManagerPackage;
+use Medas\Events\EventsPackage;
 use Medas\FileSystem\FileSystemPackage;
 use Medas\ServiceManager\{ServiceConfig, ServiceManager};
 
@@ -18,6 +19,7 @@ new ServiceManager(
             ConfigManagerPackage::instance(),
             ConfigOptionsPackage::instance(),
             EntityManagerPackage::instance(),
+            EventsPackage::instance(),
             FileSystemPackage::instance(),
         ]);
 
