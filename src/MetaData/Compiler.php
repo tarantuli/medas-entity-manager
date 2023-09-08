@@ -48,7 +48,7 @@ readonly class Compiler
         $metaData->properties = [];
         $metaData->references = [];
 
-        $metaData->parent = $class->getParentClass()?->name;
+        $metaData->parent = $class->getParentClass() ? $class->getParentClass()->name : null;
 
         $this->processProperties($class, $metaData);
         $this->findIdProperty($metaData);
