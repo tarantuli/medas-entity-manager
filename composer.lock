@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9313509ccc96ba7e7faa094472c0c811",
+    "content-hash": "bbd3aa2829c7db95a873b83c507c3068",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -58,12 +58,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "271db942deb90d49e67a58656bf9bc54fa85dcad"
+                "reference": "ace14307bbbdeea4074b9e858a9e01a8ea882e0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/271db942deb90d49e67a58656bf9bc54fa85dcad",
-                "reference": "271db942deb90d49e67a58656bf9bc54fa85dcad",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/ace14307bbbdeea4074b9e858a9e01a8ea882e0e",
+                "reference": "ace14307bbbdeea4074b9e858a9e01a8ea882e0e",
                 "shasum": ""
             },
             "require": {
@@ -97,48 +97,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2023-08-29T11:35:51+00:00"
-        },
-        {
-            "name": "morphp/medas-events",
-            "version": "dev-dev",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:tarantuli/medas-events.git",
-                "reference": "d301659d67b277eb0b47a27432f91da28852ab9f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/d301659d67b277eb0b47a27432f91da28852ab9f",
-                "reference": "d301659d67b277eb0b47a27432f91da28852ab9f",
-                "shasum": ""
-            },
-            "require": {
-                "morphp/medas-core": "dev-dev"
-            },
-            "require-dev": {
-                "morphp/medas-service-manager": "dev-dev",
-                "phpunit/phpunit": "^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Medas\\Events\\": "src/",
-                    "Medas\\EventsTest\\": "tests/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Patrick Morpey",
-                    "email": "patrick@morphp.nl"
-                }
-            ],
-            "description": "Medas events",
-            "support": {
-                "source": "https://github.com/tarantuli/medas-events/tree/dev",
-                "issues": "https://github.com/tarantuli/medas-events/issues"
-            },
-            "time": "2023-08-29T11:39:31+00:00"
+            "time": "2023-09-06T14:29:16+00:00"
         },
         {
             "name": "morphp/medas-object-instantiator",
@@ -418,12 +377,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-manager.git",
-                "reference": "60e5780de31be4b8798039902d91ae51dfc7574f"
+                "reference": "85ee4079b025178a16e941e7a5f5b5c9146c23e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/60e5780de31be4b8798039902d91ae51dfc7574f",
-                "reference": "60e5780de31be4b8798039902d91ae51dfc7574f",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-manager/zipball/85ee4079b025178a16e941e7a5f5b5c9146c23e2",
+                "reference": "85ee4079b025178a16e941e7a5f5b5c9146c23e2",
                 "shasum": ""
             },
             "require": {
@@ -453,7 +412,7 @@
                 "source": "https://github.com/tarantuli/medas-config-manager/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-manager/issues"
             },
-            "time": "2023-08-16T14:16:54+00:00"
+            "time": "2023-09-04T08:01:20+00:00"
         },
         {
             "name": "morphp/medas-config-options",
@@ -498,6 +457,47 @@
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
             "time": "2023-08-23T13:32:27+00:00"
+        },
+        {
+            "name": "morphp/medas-events",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-events.git",
+                "reference": "3678e737b347eae2b879dec741beac4d123297dd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/3678e737b347eae2b879dec741beac4d123297dd",
+                "reference": "3678e737b347eae2b879dec741beac4d123297dd",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-core": "dev-dev"
+            },
+            "require-dev": {
+                "morphp/medas-service-manager": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\Events\\": "src/",
+                    "Medas\\EventsTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas events",
+            "support": {
+                "source": "https://github.com/tarantuli/medas-events/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-events/issues"
+            },
+            "time": "2023-08-29T11:46:57+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -2757,10 +2757,10 @@
     "stability-flags": {
         "morphp/medas-console": 20,
         "morphp/medas-core": 20,
-        "morphp/medas-events": 20,
         "morphp/medas-service-manager": 20,
         "morphp/medas-config-manager": 20,
         "morphp/medas-config-options": 20,
+        "morphp/medas-events": 20,
         "morphp/medas-file-system": 20
     },
     "prefer-stable": true,
