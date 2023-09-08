@@ -21,6 +21,8 @@ class MetaData
 
     public string|null $parent;
 
+    public bool $storeOriginalEntityType;
+
     public int $sourceFileDate;
 
     public function __construct(

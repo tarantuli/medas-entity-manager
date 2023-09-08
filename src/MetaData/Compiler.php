@@ -39,13 +39,16 @@ readonly class Compiler
         }
 
         $metaData = new MetaData($className);
+
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
+        $metaData->storeOriginalEntityType
+            = (bool) $class->getAttributes(Attributes\StoreOriginalEntityType::class);
+
         $metaData->properties = [];
         $metaData->references = [];
 
-        $parentClass = $class->getParentClass();
-        $metaData->parent = $parentClass ? $parentClass->name : null;
+        $metaData->parent = $class->getParentClass()?->name;
 
         $this->processProperties($class, $metaData);
         $this->findIdProperty($metaData);
