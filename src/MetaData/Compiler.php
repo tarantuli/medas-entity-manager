@@ -42,8 +42,6 @@ readonly class Compiler
 
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
-        $metaData->storeOriginalEntityType
-            = (bool) $class->getAttributes(Attributes\StoreOriginalEntityType::class);
 
         $metaData->properties = [];
         $metaData->references = [];
@@ -52,8 +50,22 @@ readonly class Compiler
 
         $this->processProperties($class, $metaData);
         $this->findIdProperty($metaData);
+        $this->determineStoreOriginalEntityType($metaData, $class);
 
         return $metaData;
+    }
+
+    private function determineStoreOriginalEntityType(MetaData $metaData, \ReflectionClass $classToCheck): void
+    {
+        if ($classToCheck->getAttributes(Attributes\StoreOriginalEntityType::class)) {
+            $metaData->storeOriginalEntityType = true;
+            $metaData->storeRequestingParentClass = $classToCheck->name;
+            return;
+        }
+
+        if ($parentClass = $classToCheck->getParentClass()) {
+            $this->determineStoreOriginalEntityType($metaData, $parentClass);
+        }
     }
 
     private function processProperties(\ReflectionClass $class, MetaData $metaData): void

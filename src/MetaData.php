@@ -23,6 +23,8 @@ class MetaData
 
     public bool $storeOriginalEntityType;
 
+    public string $storeRequestingParentClass;
+
     public int $sourceFileDate;
 
     public function __construct(
