@@ -38,7 +38,7 @@ readonly class Initializer
     {
         $metaData = $this->metaDataManager->get($className);
 
-        if ($metaData->storeOriginalEntityType && $metaData->storeRequestingParentClass === $className) {
+        if ($metaData->inheritance->storeOriginalClass && $className === $metaData->inheritance->sharedParentClass) {
             $className = $this->hydrator->fetchOriginalClass($metaData, $id);
         }
 

@@ -46,25 +46,25 @@ readonly class Compiler
         $metaData->properties = [];
         $metaData->references = [];
 
-        $metaData->parent = $class->getParentClass() ? $class->getParentClass()->name : null;
+        $metaData->inheritance = new Inheritance($class->getParentClass() ? $class->getParentClass()->name : null);
 
         $this->processProperties($class, $metaData);
         $this->findIdProperty($metaData);
-        $this->determineStoreOriginalEntityType($metaData, $class);
+        $this->checkForStoreOriginalEntityType($metaData, $class);
 
         return $metaData;
     }
 
-    private function determineStoreOriginalEntityType(MetaData $metaData, \ReflectionClass $classToCheck): void
+    private function checkForStoreOriginalEntityType(MetaData $metaData, \ReflectionClass $classToCheck): void
     {
         if ($classToCheck->getAttributes(Attributes\StoreOriginalEntityType::class)) {
-            $metaData->storeOriginalEntityType = true;
-            $metaData->storeRequestingParentClass = $classToCheck->name;
+            $metaData->inheritance->storeOriginalClass = true;
+            $metaData->inheritance->sharedParentClass = $classToCheck->name;
             return;
         }
 
         if ($parentClass = $classToCheck->getParentClass()) {
-            $this->determineStoreOriginalEntityType($metaData, $parentClass);
+            $this->checkForStoreOriginalEntityType($metaData, $parentClass);
         }
     }
 

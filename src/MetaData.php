@@ -6,6 +6,7 @@ namespace Medas\EntityManager;
 
 use Medas\EntityManager\Attributes\Entity;
 use Medas\EntityManager\Exceptions\PropertyDoesNotExist;
+use Medas\EntityManager\MetaData\Inheritance;
 
 class MetaData
 {
@@ -19,11 +20,7 @@ class MetaData
 
     public MetaData\Property|null $idProperty;
 
-    public string|null $parent;
-
-    public bool $storeOriginalEntityType;
-
-    public string $storeRequestingParentClass;
+    public Inheritance $inheritance;
 
     public int $sourceFileDate;
 
