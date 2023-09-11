@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{EntityValueFetcher, IdValue, SelectorRecordsFetcher};
+use Medas\EntityManager\Entities\{EntityValueFetcher, IdValue, OriginalClassFetcher, SelectorRecordsFetcher};
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
@@ -17,6 +17,7 @@ class Hydrator
         private readonly IdValue            $idValue,
         private EntityValueFetcher|null     $entityValueFetcher,
         private SelectorRecordsFetcher|null $selectorRecordsFetcher,
+        private readonly OriginalClassFetcher|null $originalClassFetcher,
         private readonly MetaDataManager    $metaDataManager,
         private readonly ValueGetter        $valueGetter,
         private readonly ValueSetter        $valueSetter,
@@ -54,6 +55,11 @@ class Hydrator
                 $metaData, $entity, $reference->name,
                 new $collectionClass(fn() => $this->fetchReferences($entity, $reference)));
         }
+    }
+
+    public function fetchOriginalClass(MetaData $metaData, mixed $id): string
+    {
+        return $this->originalClassFetcher->fetch($metaData, $id);
     }
 
     private function fetchReferences(object $entity, MetaData\Reference $reference): array

@@ -37,6 +37,11 @@ readonly class Initializer
     public function initializeAndHydrate(string $className, mixed $id): object
     {
         $metaData = $this->metaDataManager->get($className);
+
+        if ($metaData->storeOriginalEntityType && $metaData->storeRequestingParentClass === $className) {
+            $className = $this->hydrator->fetchOriginalClass($metaData, $id);
+        }
+
         $entity = $this->initialize($className, [$metaData->idProperty->name => $id], $metaData);
 
         $this->hydrator->hydrate($metaData, $entity);
