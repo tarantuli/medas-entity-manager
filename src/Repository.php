@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{IdValue, SelectorRecordsFetcher};
+use Medas\EntityManager\Entities\{IdValue, ValueFetchers\SelectorRecordsFetcherManager};
 use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
 
 #[Service]
 readonly class Repository
 {
     public function __construct(
-        private IdValue                $idValue,
-        private SelectorRecordsFetcher $fetcher,
-        private MetaDataManager        $metaDataManager,
+        private IdValue                       $idValue,
+        private MetaDataManager               $metaDataManager,
+        private SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
     )
     {
     }
@@ -31,7 +31,17 @@ readonly class Repository
     public function fetch(Selector $selector, array $arguments = []): array
     {
         $entities = [];
-        $records = $this->fetcher->fetch($selector, $arguments);
+        $records = [];
+
+        foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
+            $fetchResult = $selectorRecordsFetcher->fetch($selector, $arguments);
+
+            if ($fetchResult->foundValue) {
+                $records = $fetchResult->value;
+                break;
+            }
+        }
+
         $metaData = $this->metaDataManager->get($selector->entity());
 
         foreach ($records as $record) {
