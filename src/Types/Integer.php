@@ -29,8 +29,8 @@ class Integer extends BaseType
     const SIGNED_8_BYTE_MAX = 9223372036854775807;
 
     public function __construct(
-        public int $minValue = 0,
-        public int $maxValue = self::SIGNED_8_BYTE_MAX
+        public int      $minValue = 0,
+        public int|null $maxValue = null
     )
     {
     }
