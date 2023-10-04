@@ -19,15 +19,20 @@ readonly class SelectorRecordsFetcherManager
     /** @return SelectorRecordsFetcher[] */
     public function get(): array
     {
-        return $this->cacheManager->get()->get(
+        $classNames = $this->cacheManager->get()->get(
             __CLASS__,
             fn() => $this->gather()
         );
+
+        return array_map(fn(string $name) => service($name), $classNames);
     }
 
-    /** @return SelectorRecordsFetcher[] */
+    /** @return string[] */
     private function gather(): array
     {
-        return service(ImplementorFinder::class)->find(SelectorRecordsFetcher::class);
+        return array_map(
+            fn(object $service) => $service::class,
+            service(ImplementorFinder::class)->find(SelectorRecordsFetcher::class)
+        );
     }
 }
