@@ -21,6 +21,9 @@ class EntityManager
     private bool $autoPersistOnCreate = false;
     private bool $autoFlushOnCreate = false;
 
+    private int|null $cachePurgeTriggerSize = null;
+    private int|null $cachePurgeAmount = null;
+
     public function __construct(
         private readonly EventDispatcher $eventDispatcher,
         private readonly FlushManager    $flushManager,
@@ -48,6 +51,35 @@ class EntityManager
     public function autoFlushOnCreate(bool $value): void
     {
         $this->autoFlushOnCreate = $value;
+    }
+
+    public function setPurgingParameters(int|null $triggerSize, int|null $purgeAmount = null): void
+    {
+        $this->cachePurgeTriggerSize = $triggerSize;
+        $this->cachePurgeAmount = $purgeAmount ?: (int) floor($triggerSize / 4);
+
+        if ($this->cachePurgeAmount >= $this->cachePurgeTriggerSize) {
+            throw new Exceptions\PurgeAmountShouldBeLessThanTriggerSize($this->cachePurgeAmount, $this->cachePurgeTriggerSize);
+        }
+    }
+
+    public function purge(): void
+    {
+        $this->flush();
+
+        $toClear = array_slice(
+            $this->entities,
+            0,
+            $this->cachePurgeAmount,
+            true
+        );
+
+        foreach ($toClear as $index => $entity) {
+            unset($this->entities[$index]);
+            $this->savedStates->offsetUnset($entity);
+        }
+
+        $this->entityCount = count($this->entities);
     }
 
     public function clear(): void
@@ -105,6 +137,10 @@ class EntityManager
 
                 $this->entities[$key] = $entity;
                 ++$this->entityCount;
+
+                if ($this->cachePurgeTriggerSize && $this->entityCount >= $this->cachePurgeTriggerSize) {
+                    $this->purge();
+                }
             }
         }
     }
@@ -131,6 +167,10 @@ class EntityManager
             $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
             $this->entities[$key] = $entity;
             ++$this->entityCount;
+
+            if ($this->cachePurgeTriggerSize && $this->entityCount >= $this->cachePurgeTriggerSize) {
+                $this->purge();
+            }
         }
 
         return $this->entities[$key];
