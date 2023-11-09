@@ -15,7 +15,7 @@ class WhereIs implements Condition
 
     public function __construct(
         public Operant $property,
-        public Operant $value
+        public Operant $value,
     )
     {
     }

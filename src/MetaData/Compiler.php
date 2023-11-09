@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\{Attributes,
+
+use Medas\EntityManager\{
+    Attributes,
     Exceptions\ClassIsNotAnEntity,
     Exceptions\EntityHasMultipleIdProperties,
     Exceptions\EntityHasNoIdProperty,
     Hydration\PropertyTypeNormalizer,
     MetaData,
     Properties\PropertyManager,
-    Types\TypeFinder};
+    Types\TypeFinder
+
+};
 
 #[Service]
 readonly class Compiler
@@ -39,13 +43,10 @@ readonly class Compiler
         }
 
         $metaData = new MetaData($className);
-
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
-
         $metaData->properties = [];
         $metaData->references = [];
-
         $metaData->inheritance = new Inheritance($class->getParentClass() ? $class->getParentClass()->name : null);
 
         $this->processProperties($class, $metaData);
@@ -60,6 +61,7 @@ readonly class Compiler
         if ($classToCheck->getAttributes(Attributes\StoreOriginalEntityType::class)) {
             $metaData->inheritance->storeOriginalClass = true;
             $metaData->inheritance->sharedParentClass = $classToCheck->name;
+
             return;
         }
 
@@ -86,7 +88,6 @@ readonly class Compiler
 
         $type = $this->typeFinder->find($property);
         $isNullable = $property->getType()->allowsNull();
-
         $handler = $this->propertyManager->getHandler($property);
 
         $metaData->properties[] = new Property(
@@ -117,7 +118,6 @@ readonly class Compiler
 
         if ($references->property === null) {
             $targetClass = new \ReflectionClass($references->entity);
-
             $targetProperties = [];
 
             foreach ($targetClass->getProperties() as $targetProperty) {

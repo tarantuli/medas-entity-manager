@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\Generator;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\EntityManager\ConfigOptions\GeneratorRootNamespace;
 
 #[Service]

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Snapshots;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\TracksChanges;
+use Medas\Core\{Attributes\Service, Interfaces\TracksChanges};
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]

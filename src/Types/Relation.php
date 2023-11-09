@@ -8,7 +8,7 @@ namespace Medas\EntityManager\Types;
 class Relation extends BaseType
 {
     public function __construct(
-        public string $entity
+        public string $entity,
     )
     {
     }

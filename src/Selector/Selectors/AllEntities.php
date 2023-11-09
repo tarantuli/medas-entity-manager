@@ -10,7 +10,7 @@ use Medas\EntityManager\Selector\{Definition, Selector};
 readonly class AllEntities implements Selector, NotCacheable
 {
     public function __construct(
-        private string $entity
+        private string $entity,
     )
     {
     }

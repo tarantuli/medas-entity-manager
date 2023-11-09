@@ -12,7 +12,7 @@ class Value implements Operant
     }
 
     public function __construct(
-        public mixed $value
+        public mixed $value,
     )
     {
     }

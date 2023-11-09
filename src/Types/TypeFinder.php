@@ -4,15 +4,26 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Types;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{FileEntity, Guid as GuidProperty, HasId, ManagedCollection, Type};
-use Medas\EntityManager\Attributes\{Entity, EntityCollection};
-use Medas\EntityManager\Exceptions\{ClassPropertyIsNotARelation,
-    EntityCollectionDoesNotImplementManagedCollection,
-    PropertyHasMultipleImplicitTypes,
-    PropertyHasNoImplicitType};
-use Medas\EntityManager\Hydration\PropertyTypeNormalizer;
-use Medas\EntityManager\Properties\PropertyManager;
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\FileEntity,
+    Interfaces\Guid as GuidProperty,
+    Interfaces\HasId,
+    Interfaces\ManagedCollection,
+    Interfaces\Type
+};
+
+use Medas\EntityManager\{
+    Attributes\Entity,
+    Attributes\EntityCollection,
+    Exceptions\ClassPropertyIsNotARelation,
+    Exceptions\EntityCollectionDoesNotImplementManagedCollection,
+    Exceptions\PropertyHasMultipleImplicitTypes,
+    Exceptions\PropertyHasNoImplicitType,
+    Hydration\PropertyTypeNormalizer,
+    Properties\PropertyManager
+
+};
 
 #[Service]
 readonly class TypeFinder
@@ -26,8 +37,7 @@ readonly class TypeFinder
 
     public function find(\ReflectionProperty $property): Type
     {
-        return $this->findExplicitType($property)
-            ?: $this->findImplicitType($property);
+        return $this->findExplicitType($property) ?: $this->findImplicitType($property);
     }
 
     private function findExplicitType(\ReflectionProperty $property): Type|null
@@ -46,8 +56,8 @@ readonly class TypeFinder
         return match (true) {
             $baseType->getName() === \DateTime::class => new DateTime(),
             $baseType->getName() === GuidProperty::class => new Guid(),
-            !$baseType->isBuiltin() => $this->findRelationType($property, $baseType),
-            $baseType->getName() === 'int' => new Integer(),
+            !$baseType->isBuiltin() => $this->findRelationType($property,
+            $baseType), $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),
             $baseType->getName() === 'string' => new Text(),
             $baseType->getName() === 'bool' => new Boolean(),

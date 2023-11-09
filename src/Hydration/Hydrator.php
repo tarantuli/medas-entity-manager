@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{IdValue,
+
+use Medas\EntityManager\Entities\{
+    IdValue,
     ValueFetchers\EntityValueFetchersManager,
     ValueFetchers\OriginalClassFetcherManager,
-    ValueFetchers\SelectorRecordsFetcherManager};
+    ValueFetchers\SelectorRecordsFetcherManager
+};
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
@@ -43,9 +46,13 @@ readonly class Hydrator
 
         foreach ($metaData->references as $reference) {
             $collectionClass = $metaData->property($reference->name)->phpTypes[0];
+
             $this->valueSetter->set(
-                $metaData, $entity, $reference->name,
-                new $collectionClass(fn() => $this->fetchReferences($entity, $reference)));
+                $metaData,
+                $entity,
+                $reference->name,
+                new $collectionClass(fn() => $this->fetchReferences($entity, $reference))
+            );
         }
     }
 
@@ -68,11 +75,15 @@ readonly class Hydrator
         $records = [];
 
         foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
-            $fetchResult = $selectorRecordsFetcher->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
+            $fetchResult = $selectorRecordsFetcher->fetch(new WithValues(
+                $reference->entity,
+                [$reference->property => $entity->id]
+            ));
 
             if ($fetchResult->foundValue) {
                 $records = $fetchResult->value;
                 $foundRecords = true;
+
                 break;
             }
         }

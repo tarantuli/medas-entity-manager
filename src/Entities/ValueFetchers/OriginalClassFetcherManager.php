@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\ValueFetchers;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{CacheManager, ImplementorFinder};
+use Medas\Core\{Attributes\Service, Interfaces\CacheManager, Interfaces\ImplementorFinder};
 
 #[Service]
 readonly class OriginalClassFetcherManager
@@ -19,10 +18,7 @@ readonly class OriginalClassFetcherManager
     /** @return OriginalClassFetcher[] */
     public function get(): array
     {
-        return $this->cacheManager->get()->get(
-            __CLASS__,
-            fn() => $this->gather()
-        );
+        return $this->cacheManager->get()->get(__CLASS__, fn() => $this->gather());
     }
 
     /** @return OriginalClassFetcher[] */

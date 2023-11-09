@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\Exceptions\PropertyDoesNotExist;
-use Medas\EntityManager\MetaData\Inheritance;
-
 class MetaData
 {
-    public Entity $entity;
+    public Attributes\Entity $entity;
 
     /** @var MetaData\Property[] */
     public array $properties;
 
     /** @var MetaData\Reference[] */
     public array $references;
-
     public MetaData\Property|null $idProperty;
-
-    public Inheritance $inheritance;
-
+    public MetaData\Inheritance $inheritance;
     public int $sourceFileDate;
 
     public function __construct(
@@ -38,6 +31,6 @@ class MetaData
             }
         }
 
-        throw new PropertyDoesNotExist($this->className, $propertyName);
+        throw new Exceptions\PropertyDoesNotExist($this->className, $propertyName);
     }
 }

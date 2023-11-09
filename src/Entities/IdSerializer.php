@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{Guid, HasId, StringSerializer, Type};
+use Medas\Core\{Attributes\Service, Interfaces\Guid, Interfaces\HasId, Interfaces\StringSerializer, Interfaces\Type};
 
 #[Service]
 readonly class IdSerializer implements StringSerializer

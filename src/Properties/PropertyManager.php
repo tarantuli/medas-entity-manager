@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Properties;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Attributes\Handler as HandlerAttribute;
-use Medas\EntityManager\Exceptions\InvalidHandler;
+use Medas\EntityManager\{Attributes\Handler as HandlerAttribute, Exceptions\InvalidHandler};
 use Medas\ServiceManager\Exceptions\ServiceNotFoundByType;
 
 #[Service]

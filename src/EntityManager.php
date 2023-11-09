@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\{EventDispatcher, TracksChanges};
-use Medas\EntityManager\Entities\{IdValue, Initializer, KeyMaker};
-use Medas\EntityManager\Events\MustClearEntityValueCaches;
-use Medas\EntityManager\Snapshots\SnapshotManager;
+use Medas\Core\{Attributes\Service, Interfaces\EventDispatcher, Interfaces\TracksChanges};
 
 #[Service]
 class EntityManager
@@ -17,20 +13,18 @@ class EntityManager
     protected int $entityCount;
     protected array $entitiesToDelete;
     protected \SplObjectStorage $savedStates;
-
     private bool $autoPersistOnCreate = false;
     private bool $autoFlushOnCreate = false;
-
     private int|null $cachePurgeTriggerSize = null;
     private int|null $cachePurgeAmount = null;
 
     public function __construct(
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly FlushManager    $flushManager,
-        private readonly IdValue         $idValue,
-        private readonly Initializer     $initializer,
-        private readonly KeyMaker        $keyMaker,
-        private readonly SnapshotManager $snapshotManager,
+        private readonly EventDispatcher           $eventDispatcher,
+        private readonly FlushManager              $flushManager,
+        private readonly Entities\IdValue          $idValue,
+        private readonly Entities\Initializer      $initializer,
+        private readonly Entities\KeyMaker         $keyMaker,
+        private readonly Snapshots\SnapshotManager $snapshotManager,
     )
     {
         $this->entities = [];
@@ -59,7 +53,10 @@ class EntityManager
         $this->cachePurgeAmount = $purgeAmount ?: (int) floor($triggerSize / 4);
 
         if ($this->cachePurgeAmount >= $this->cachePurgeTriggerSize) {
-            throw new Exceptions\PurgeAmountShouldBeLessThanTriggerSize($this->cachePurgeAmount, $this->cachePurgeTriggerSize);
+            throw new Exceptions\PurgeAmountShouldBeLessThanTriggerSize(
+                $this->cachePurgeAmount,
+                $this->cachePurgeTriggerSize
+            );
         }
     }
 
@@ -67,12 +64,7 @@ class EntityManager
     {
         $this->flush();
 
-        $toClear = array_slice(
-            $this->entities,
-            0,
-            $this->cachePurgeAmount,
-            true
-        );
+        $toClear = array_slice($this->entities, 0, $this->cachePurgeAmount, true);
 
         foreach ($toClear as $index => $entity) {
             unset($this->entities[$index]);
@@ -88,7 +80,8 @@ class EntityManager
         $this->entityCount = 0;
         $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
-        $this->eventDispatcher->dispatch(new MustClearEntityValueCaches());
+
+        $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
     }
 
     public function delete(object $entity): void
@@ -100,9 +93,14 @@ class EntityManager
 
     public function flush(): void
     {
-        $this->flushManager->flush(fn() => $this->entities, fn() => $this->savedStates, fn() => $this->entitiesToDelete);
+        $this->flushManager->flush(
+            fn() => $this->entities,
+            fn() => $this->savedStates,
+            fn() => $this->entitiesToDelete
+        );
+
         $this->updateEntityStates();
-        $this->eventDispatcher->dispatch(new MustClearEntityValueCaches());
+        $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
     }
 
     private function updateEntityStates(): void
@@ -134,8 +132,8 @@ class EntityManager
         foreach ($entities as $entity) {
             if (!in_array($entity, $this->entities, true)) {
                 $key = $entity::class . ':new:' . mt_rand();
-
                 $this->entities[$key] = $entity;
+
                 ++$this->entityCount;
 
                 if ($this->cachePurgeTriggerSize && $this->entityCount >= $this->cachePurgeTriggerSize) {
@@ -150,8 +148,8 @@ class EntityManager
         $id = $this->idValue->fromEntity($entity);
         $newKey = $this->keyMaker->get($entity::class, $id);
         $oldKey = array_search($entity, $this->entities);
-
         $this->entities[$newKey] = $entity;
+
         unset($this->entities[$oldKey]);
     }
 
@@ -166,6 +164,7 @@ class EntityManager
             $entity = $this->initializer->initializeAndHydrate($className, $id);
             $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
             $this->entities[$key] = $entity;
+
             ++$this->entityCount;
 
             if ($this->cachePurgeTriggerSize && $this->entityCount >= $this->cachePurgeTriggerSize) {

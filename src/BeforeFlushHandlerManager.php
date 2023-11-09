@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\CacheManager;
-use Medas\Core\Interfaces\ImplementorFinder;
-use Medas\EntityManager\Entities\{BeforeFlushHandler, Changes};
+use Medas\Core\{Attributes\Service, Interfaces\CacheManager, Interfaces\ImplementorFinder};
 
 #[Service]
 readonly class BeforeFlushHandlerManager
@@ -20,7 +17,7 @@ readonly class BeforeFlushHandlerManager
     {
     }
 
-    public function handle(Changes $changes): bool
+    public function handle(Entities\Changes $changes): bool
     {
         $madeChanges = false;
 
@@ -31,12 +28,12 @@ readonly class BeforeFlushHandlerManager
         return $madeChanges;
     }
 
-    /** @return BeforeFlushHandler[] */
+    /** @return Entities\BeforeFlushHandler[] */
     private function getHandlers(): array
     {
         return $this->cacheManager->get()->get(
             self::HANDLERS_CACHE_KEY,
-            fn() => service(ImplementorFinder::class)->find(BeforeFlushHandler::class)
+            fn() => service(ImplementorFinder::class)->find(Entities\BeforeFlushHandler::class)
         );
     }
 }

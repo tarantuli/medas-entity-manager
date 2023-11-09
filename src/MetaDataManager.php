@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\CacheManager;
-use Medas\EntityManager\MetaData\Compiler;
+use Medas\Core\{Attributes\Service, Interfaces\CacheManager};
 
 #[Service]
 readonly class MetaDataManager
 {
     public function __construct(
         private CacheManager          $cacheManager,
-        private Compiler              $compiler,
+        private MetaData\Compiler     $compiler,
         private PropertyAccessManager $propertyAccessManager,
     )
     {

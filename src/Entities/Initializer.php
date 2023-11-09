@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Hydration\Hydrator;
-use Medas\EntityManager\MetaData;
-use Medas\EntityManager\MetaDataManager;
+use Medas\EntityManager\{Hydration\Hydrator, MetaData, MetaDataManager};
 
 #[Service]
 readonly class Initializer
 {
     public function __construct(
         private Hydrator        $hydrator,
-        private MetaDataManager $metaDataManager
+        private MetaDataManager $metaDataManager,
     )
     {
     }

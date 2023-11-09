@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConsoleCommands;
 
-use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
-use Medas\Console\Formats\Color;
-use Medas\Console\Printer;
-use Medas\Console\Text;
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\DirectoryManager;
+use Medas\Console\{Commands\BaseConsoleCommand, Commands\ConsoleCommandGroup, Formats\Color, Printer, Text};
+use Medas\Core\{Attributes\Service, Interfaces\DirectoryManager};
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
 
 #[Service]
@@ -43,9 +39,7 @@ readonly class CreateEntityFile extends BaseConsoleCommand
     public function process(array $arguments): void
     {
         $className = $arguments[1];
-
         $useGuid = ($arguments[2] ?? null) !== '--id';
-
         $code = $this->entityClassGenerator->generate($className, $useGuid);
         $fileName = $this->fileNameFinder->find($className);
 

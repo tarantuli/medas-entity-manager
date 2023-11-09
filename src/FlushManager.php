@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\Flusher;
-use Medas\EntityManager\Snapshots\SnapshotManager;
 
 #[Service]
 class FlushManager
 {
     public function __construct(
-        private Flusher|null                       $flusher,
-        private readonly SnapshotManager           $snapshotManager,
+        private Entities\Flusher|null              $flusher,
+        private readonly Snapshots\SnapshotManager $snapshotManager,
         private readonly AfterFlushHandlerManager  $afterFlushHandlerManager,
         private readonly BeforeFlushHandlerManager $beforeFlushHandlerManager,
     )
@@ -29,18 +27,21 @@ class FlushManager
         }
 
         $this->flusher->flush($changes);
-
         $this->afterFlushHandlerManager->handle($changes);
     }
 
-    public function setFlusher(Flusher|null $flusher): self
+    public function setFlusher(Entities\Flusher|null $flusher): self
     {
         $this->flusher = $flusher;
 
         return $this;
     }
 
-    private function gatherChanges(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): Entities\Changes
+    private function gatherChanges(
+        array             $entities,
+        \SplObjectStorage $savedStates,
+        array             $entitiesToDelete
+    ): Entities\Changes
     {
         $changes = new Entities\Changes();
 

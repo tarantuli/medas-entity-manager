@@ -14,7 +14,7 @@ class Parameter implements Element
     public function __construct(
         public string $name,
         public bool   $hasDefault = false,
-        public mixed  $default = null
+        public mixed  $default = null,
     )
     {
     }

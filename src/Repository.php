@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{IdValue, ValueFetchers\SelectorRecordsFetcherManager};
-use Medas\EntityManager\Selector\{Selector, Selectors\AllEntities, Selectors\WithValues};
 
 #[Service]
 readonly class Repository
 {
     public function __construct(
-        private IdValue                       $idValue,
-        private MetaDataManager               $metaDataManager,
-        private SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
+        private Entities\IdValue                                     $idValue,
+        private MetaDataManager                                      $metaDataManager,
+        private Entities\ValueFetchers\SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
     )
     {
     }
@@ -24,11 +22,11 @@ readonly class Repository
      */
     public function fetchAll(string $entity): array
     {
-        return $this->fetch(new AllEntities($entity));
+        return $this->fetch(new Selector\Selectors\AllEntities($entity));
     }
 
     /** @return object[] */
-    public function fetch(Selector $selector, array $arguments = []): array
+    public function fetch(Selector\Selector $selector, array $arguments = []): array
     {
         $entities = [];
         $records = [];
@@ -38,6 +36,7 @@ readonly class Repository
 
             if ($fetchResult->foundValue) {
                 $records = $fetchResult->value;
+
                 break;
             }
         }
@@ -62,21 +61,18 @@ readonly class Repository
         bool   $flushOnPersist = true,
     ): object
     {
-        return $this->fetchOrCreate(
-            new WithValues($entity, $values),
-            $values,
-            fn() => $values,
-            $persistOnCreate,
-            $flushOnPersist
-        );
+        return $this->fetchOrCreate(new Selector\Selectors\WithValues(
+            $entity,
+            $values
+        ), $values, fn() => $values, $persistOnCreate, $flushOnPersist);
     }
 
     public function fetchOrCreate(
-        Selector $selector,
-        array    $values,
-        \Closure $creationValues = null,
-        bool     $persistOnCreate = true,
-        bool     $flushOnPersist = true,
+        Selector\Selector $selector,
+        array             $values,
+        \Closure          $creationValues = null,
+        bool              $persistOnCreate = true,
+        bool              $flushOnPersist = true,
     ): object
     {
         if ($object = $this->fetchOne($selector, $values)) {
@@ -84,8 +80,9 @@ readonly class Repository
         }
 
         $object = em()->create(
-            $selector->entity(),
-            $creationValues ? array_merge($values, $creationValues()) : $values
+            $selector->entity(), $creationValues
+            ? array_merge($values, $creationValues())
+            : $values
         );
 
         if ($persistOnCreate) {
@@ -99,13 +96,16 @@ readonly class Repository
         return $object;
     }
 
-    public function fetchOne(Selector $selector, array $arguments = []): object|null
+    public function fetchOne(Selector\Selector $selector, array $arguments = []): object|null
     {
         return $this->fetch($selector, $arguments)[0] ?? null;
     }
 
     public function fetchReferences(object $entity, MetaData\Reference $reference): array
     {
-        return $this->fetch(new WithValues($reference->entity, [$reference->property => $entity->id]));
+        return $this->fetch(new Selector\Selectors\WithValues(
+            $reference->entity,
+            [$reference->property => $entity->id]
+        ));
     }
 }

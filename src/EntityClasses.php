@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\Attributes\ConfigValue;
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\CacheManager;
-use Medas\Core\Interfaces\DirectoryManager;
-use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\ConfigOptions\EntityDirectories;
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\CacheManager, Interfaces\DirectoryManager};
 
 #[Service]
 readonly class EntityClasses
@@ -19,7 +14,7 @@ readonly class EntityClasses
     public function __construct(
         private CacheManager     $cacheManager,
         private DirectoryManager $directoryManager,
-        #[ConfigValue(EntityDirectories::class)]
+        #[ConfigValue(ConfigOptions\EntityDirectories::class)]
         private array            $entityDirectories,
     )
     {
@@ -27,10 +22,7 @@ readonly class EntityClasses
 
     public function get(): array
     {
-        return $this->cacheManager->get()->get(
-            self::CACHE_KEY,
-            fn() => $this->fetchAll()
-        );
+        return $this->cacheManager->get()->get(self::CACHE_KEY, fn() => $this->fetchAll());
     }
 
     private function fetchAll(): array
@@ -63,18 +55,18 @@ readonly class EntityClasses
     private function isEntityClass(string $className): bool
     {
         $reflectionClass = new \ReflectionClass($className);
-        $hasEntityAttribute = $reflectionClass
-            ->getAttributes(Entity::class, \ReflectionAttribute::IS_INSTANCEOF);
+
+        $hasEntityAttribute = $reflectionClass->getAttributes(
+            Attributes\Entity::class,
+            \ReflectionAttribute::IS_INSTANCEOF
+        );
 
         if (!$hasEntityAttribute) {
             return false;
         }
 
         foreach ($this->entityDirectories as $directory) {
-            if (str_starts_with(
-                $reflectionClass->getFileName(),
-                realpath($directory) . DIRECTORY_SEPARATOR
-            )) {
+            if (str_starts_with($reflectionClass->getFileName(), realpath($directory) . DIRECTORY_SEPARATOR)) {
                 return true;
             }
         }

@@ -14,7 +14,7 @@ class WhereIsNull implements Condition
     }
 
     public function __construct(
-        public Operant $property
+        public Operant $property,
     )
     {
     }

@@ -26,5 +26,4 @@ readonly class PropertyTypeNormalizer
 
         return $type instanceof \ReflectionUnionType ? $type->getTypes() : [$type];
     }
-
 }

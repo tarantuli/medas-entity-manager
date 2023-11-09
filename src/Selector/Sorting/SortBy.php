@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\Sorting;
 
-use Medas\EntityManager\Selector\Element;
-use Medas\EntityManager\Selector\Operants\Operant;
+use Medas\EntityManager\Selector\{Element, Operants\Operant};
 
 class SortBy implements Element
 {

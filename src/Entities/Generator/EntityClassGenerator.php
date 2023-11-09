@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities\Generator;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\Generator\{Exceptions\ClassHasNoNamespace, NameConverters\NameConverter};
 
 #[Service]
 readonly class EntityClassGenerator
@@ -36,7 +35,6 @@ class {{shortClassName}} implements HasId
 }
 
 PHP;
-
     private const PHP_INT_TEMPLATE = <<<'PHP'
 <?php
 
@@ -65,9 +63,9 @@ class {{shortClassName}} implements HasId
 PHP;
 
     public function __construct(
-        private ClassNameNormalizer $classNameNormalizer,
-        private FileNameFinder      $fileNameFinder,
-        private NameConverter       $storeNameConverter,
+        private ClassNameNormalizer          $classNameNormalizer,
+        private FileNameFinder               $fileNameFinder,
+        private NameConverters\NameConverter $storeNameConverter,
     )
     {
     }
@@ -75,7 +73,6 @@ PHP;
     public function generate(string $className, bool $useGuid = true): string
     {
         $className = $this->classNameNormalizer->normalize($className);
-
         [$namespace, $shortClassName] = $this->splitClassName($className);
         $storeName = $this->storeNameConverter->convert($shortClassName);
 
@@ -97,7 +94,7 @@ PHP;
         $pos = strrpos($className, '\\');
 
         if ($pos === false) {
-            throw new ClassHasNoNamespace($className);
+            throw new Exceptions\ClassHasNoNamespace($className);
         }
 
         return [

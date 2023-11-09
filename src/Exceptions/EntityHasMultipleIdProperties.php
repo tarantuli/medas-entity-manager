@@ -17,5 +17,4 @@ class EntityHasMultipleIdProperties extends BaseException
     {
         return 'entity class %s has multiple properties marked as ID';
     }
-
 }
