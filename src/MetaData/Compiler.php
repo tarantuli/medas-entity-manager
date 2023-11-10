@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\Core\Attributes\Service;
-
 use Medas\EntityManager\{
     Attributes,
     Exceptions\ClassIsNotAnEntity,
@@ -15,7 +14,6 @@ use Medas\EntityManager\{
     MetaData,
     Properties\PropertyManager,
     Types\TypeFinder
-
 };
 
 #[Service]

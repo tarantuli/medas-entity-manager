@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
-
 use Medas\EntityManager\Entities\{
     IdValue,
     ValueFetchers\EntityValueFetchersManager,

@@ -12,7 +12,6 @@ use Medas\Core\{
     Interfaces\ManagedCollection,
     Interfaces\Type
 };
-
 use Medas\EntityManager\{
     Attributes\Entity,
     Attributes\EntityCollection,
@@ -22,7 +21,6 @@ use Medas\EntityManager\{
     Exceptions\PropertyHasNoImplicitType,
     Hydration\PropertyTypeNormalizer,
     Properties\PropertyManager
-
 };
 
 #[Service]

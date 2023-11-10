@@ -14,6 +14,7 @@ readonly class EntityClasses
     public function __construct(
         private CacheManager     $cacheManager,
         private DirectoryManager $directoryManager,
+
         #[ConfigValue(ConfigOptions\EntityDirectories::class)]
         private array            $entityDirectories,
     )
