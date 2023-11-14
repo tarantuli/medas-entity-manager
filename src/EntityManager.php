@@ -68,6 +68,7 @@ class EntityManager
 
         foreach ($toClear as $index => $entity) {
             unset($this->entities[$index]);
+
             $this->savedStates->offsetUnset($entity);
         }
 

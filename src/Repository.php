@@ -61,10 +61,13 @@ readonly class Repository
         bool   $flushOnPersist = true,
     ): object
     {
-        return $this->fetchOrCreate(new Selector\Selectors\WithValues(
-            $entity,
-            $values
-        ), $values, fn() => $values, $persistOnCreate, $flushOnPersist);
+        return $this->fetchOrCreate(
+            new Selector\Selectors\WithValues($entity, $values),
+            $values,
+            fn() => $values,
+            $persistOnCreate,
+            $flushOnPersist
+        );
     }
 
     public function fetchOrCreate(
@@ -80,9 +83,8 @@ readonly class Repository
         }
 
         $object = em()->create(
-            $selector->entity(), $creationValues
-            ? array_merge($values, $creationValues())
-            : $values
+            $selector->entity(),
+            $creationValues ? array_merge($values, $creationValues()) : $values
         );
 
         if ($persistOnCreate) {
