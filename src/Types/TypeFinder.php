@@ -54,8 +54,8 @@ readonly class TypeFinder
         return match (true) {
             $baseType->getName() === \DateTime::class => new DateTime(),
             $baseType->getName() === GuidProperty::class => new Guid(),
-            !$baseType->isBuiltin() => $this->findRelationType($property,
-            $baseType), $baseType->getName() === 'int' => new Integer(),
+            !$baseType->isBuiltin() => $this->findRelationType($property, $baseType),
+            $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),
             $baseType->getName() === 'string' => new Text(),
             $baseType->getName() === 'bool' => new Boolean(),
