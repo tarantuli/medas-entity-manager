@@ -19,7 +19,9 @@ readonly class MetaDataManager
 
     public function get(string $className): MetaData
     {
-        $metaData = $this->cacheManager->get()->get([static::class, $className], function () use ($className) {
+        $metaData = $this->cacheManager->get()->get(
+            [static::class, $className],
+            function () use ($className) {
             return $this->compiler->compile($className);
         });
 

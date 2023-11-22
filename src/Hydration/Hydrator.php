@@ -37,7 +37,12 @@ readonly class Hydrator
                 $fetchResult = $entityValueFetcher->fetch($metaData, $entity, $property);
 
                 if ($fetchResult->foundValue) {
-                    $this->valueSetter->set($metaData, $entity, $property->name, $fetchResult->value);
+                    $this->valueSetter->set(
+                        $metaData,
+                        $entity,
+                        $property->name,
+                        $fetchResult->value
+                    );
 
                     break;
                 }

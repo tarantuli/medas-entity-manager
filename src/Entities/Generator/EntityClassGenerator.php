@@ -9,7 +9,8 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class EntityClassGenerator
 {
-    private const PHP_GUID_TEMPLATE = <<<'PHP'
+    private const PHP_GUID_TEMPLATE
+        = <<<'PHP'
 <?php
 
 declare(strict_types=1);
@@ -35,7 +36,9 @@ class {{shortClassName}} implements HasId
 }
 
 PHP;
-    private const PHP_INT_TEMPLATE = <<<'PHP'
+
+    private const PHP_INT_TEMPLATE
+        = <<<'PHP'
 <?php
 
 declare(strict_types=1);

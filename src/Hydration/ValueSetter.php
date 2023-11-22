@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\Core\{Attributes\Service, Interfaces\Collection, Interfaces\Guid, Interfaces\GuidProvider};
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\Collection,
+    Interfaces\Guid,
+    Interfaces\GuidProvider
+};
 use Medas\EntityManager\{Exceptions\InvalidPropertyType, MetaData};
 
 #[Service]
@@ -82,7 +87,12 @@ readonly class ValueSetter
         }
 
         if (!$property->allowsPhpType($valueType)) {
-            throw new InvalidPropertyType($metaData->className, $propertyName, $valueType, $property->phpTypes);
+            throw new InvalidPropertyType(
+                $metaData->className,
+                $propertyName,
+                $valueType,
+                $property->phpTypes
+            );
         }
 
         $property->reflection->setValue($entity, $value);

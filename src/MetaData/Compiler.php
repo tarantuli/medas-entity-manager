@@ -167,7 +167,9 @@ readonly class Compiler
         $parents = $this->gatherParents($class);
         $properties = $class->getProperties();
 
-        usort($properties, function (\ReflectionProperty $a, \ReflectionProperty $b) use ($parents) {
+        usort(
+            $properties,
+            function (\ReflectionProperty $a, \ReflectionProperty $b) use ($parents) {
             // Parents deeper in the chain have lower values, sorting them in front
             return $parents[$a->class] - $parents[$b->class];
         });

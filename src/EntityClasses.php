@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\CacheManager, Interfaces\DirectoryManager};
+use Medas\Core\{
+    Attributes\ConfigValue,
+    Attributes\Service,
+    Interfaces\CacheManager,
+    Interfaces\DirectoryManager
+};
 
 #[Service]
 readonly class EntityClasses
