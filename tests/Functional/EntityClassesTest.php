@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\EntityClasses;
-use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\MockEntity;
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntity};
 
 class EntityClassesTest extends BaseTestClass
 {

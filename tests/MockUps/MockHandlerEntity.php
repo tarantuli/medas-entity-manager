@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\EntityManager\Attributes\{Entity, Handler, Id};
-use Medas\EntityManager\Properties\SerializingHandler;
-use Medas\EntityManager\Types\Guid;
+use Medas\Core\Attributes\Handler;
+use Medas\EntityManager\{
+    Attributes\Entity,
+    Attributes\Id,
+    Properties\SerializingHandler,
+    Types\Guid
+};
 
 #[Entity]
 class MockHandlerEntity

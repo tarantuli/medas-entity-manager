@@ -41,6 +41,7 @@ readonly class Compiler
         }
 
         $metaData = new MetaData($className);
+
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
         $metaData->properties = [];

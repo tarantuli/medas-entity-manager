@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\EntityManager\Exceptions\PropertyHasMultipleImplicitTypes;
-use Medas\EntityManager\Exceptions\PropertyHasNoImplicitType;
-use Medas\EntityManager\Types\{Binary, DateTime, Guid, Integer, Relation, Text, TypeFinder};
-use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\MockEntityTypes;
+use Medas\EntityManager\{
+    Exceptions\PropertyHasMultipleImplicitTypes,
+    Exceptions\PropertyHasNoImplicitType,
+    Types\Binary,
+    Types\DateTime,
+    Types\Guid,
+    Types\Integer,
+    Types\Relation,
+    Types\Text,
+    Types\TypeFinder
+};
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntityTypes};
 
 class TypeFinderTest extends BaseTestClass
 {
@@ -16,6 +23,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Integer::class, $finder->find($class->getProperty('id')));
     }
 
@@ -23,6 +31,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Text::class, $finder->find($class->getProperty('implicitType')));
     }
 
@@ -30,6 +39,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Binary::class, $finder->find($class->getProperty('explicitType')));
     }
 
@@ -37,6 +47,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Relation::class, $finder->find($class->getProperty('relation')));
     }
 
@@ -44,6 +55,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Guid::class, $finder->find($class->getProperty('guid')));
     }
 
@@ -51,6 +63,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         $this->expectException(PropertyHasNoImplicitType::class);
 
         $finder->find($class->getProperty('noPhpType'));
@@ -60,6 +73,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         $this->expectException(PropertyHasNoImplicitType::class);
 
         $finder->find($class->getProperty('mixedType'));
@@ -69,6 +83,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         $this->expectException(PropertyHasMultipleImplicitTypes::class);
 
         $finder->find($class->getProperty('unionType'));
@@ -78,6 +93,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Text::class, $finder->find($class->getProperty('pipeNullableType')));
     }
 
@@ -85,13 +101,18 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
-        self::assertInstanceOf(Text::class, $finder->find($class->getProperty('questionMarkNullableType')));
+
+        self::assertInstanceOf(
+            Text::class,
+            $finder->find($class->getProperty('questionMarkNullableType'))
+        );
     }
 
     public function testDateTimeType(): void
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(DateTime::class, $finder->find($class->getProperty('dateTime')));
     }
 
@@ -99,6 +120,7 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
+
         self::assertInstanceOf(Relation::class, $finder->find($class->getProperty('enum')));
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\MockUps\References;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Entities\{ValueFetchers\EntityValueFetcher, ValueFetchers\FetchResult};
+use Medas\EntityManager\Entities\ValueFetchers\{EntityValueFetcher, FetchResult};
 use Medas\EntityManager\MetaData;
 
 #[Service]

@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\EntityManager\Snapshots\Snapshot;
-use Medas\EntityManager\Snapshots\SnapshotManager;
-use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\MockEntity;
+use Medas\EntityManager\Snapshots\{Snapshot, SnapshotManager};
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntity};
 
 class SnapshotTest extends BaseTestClass
 {
@@ -15,7 +13,6 @@ class SnapshotTest extends BaseTestClass
     {
         $snapshotManager = service(SnapshotManager::class);
         $entityManager = $this->entityManager();
-
         $entity = $entityManager->get(MockEntity::class, 1);
         $initialSnapshot = $snapshotManager->forEntity($entity);
 
@@ -30,7 +27,6 @@ class SnapshotTest extends BaseTestClass
     {
         $snapshotManager = service(SnapshotManager::class);
         $initialSnapshot = $snapshotManager->forEntity($entity);
-
         $entity->name = 'changed name';
         $diff = $snapshotManager->findChanges($entity, $initialSnapshot);
 

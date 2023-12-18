@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\EntityManager\Attributes\Entity;
-use Medas\EntityManager\Attributes\Id;
-use Medas\EntityManager\Types\Text;
+use Medas\EntityManager\{Attributes\Entity, Attributes\Id, Types\Text};
 
 #[Entity]
 class MockNullableProperties
@@ -23,6 +21,5 @@ class MockNullableProperties
     private string|int $unionType;
 
     private string|null $pipeNullableType;
-
-    private ?string $questionMarkNullableType;
+    private string|null $questionMarkNullableType;
 }

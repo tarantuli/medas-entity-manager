@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Properties;
 
-use Medas\Core\Attributes\Service;
-use Medas\Core\Interfaces\PropertyHandler;
-use Medas\EntityManager\{Attributes\Handler as HandlerAttribute, Exceptions\InvalidHandler};
+use Medas\Core\{Attributes\Handler, Attributes\Service, Interfaces\PropertyHandler};
+use Medas\EntityManager\Exceptions\InvalidHandler;
 use Medas\ServiceManager\Exceptions\ServiceNotFoundByType;
 
 #[Service]
@@ -14,7 +13,7 @@ readonly class PropertyManager
 {
     public function getHandler(\ReflectionProperty $property): PropertyHandler|null
     {
-        $attribute = attribute(HandlerAttribute::class, $property);
+        $attribute = attribute(Handler::class, $property);
 
         if ($attribute === null || !isset($attribute->className)) {
             return null;

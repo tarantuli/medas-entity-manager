@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Types\{Text, TypeFinder};
-use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\MockHandlerEntity;
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockHandlerEntity};
 
 class PropertyHandlerTest extends BaseTestClass
 {
