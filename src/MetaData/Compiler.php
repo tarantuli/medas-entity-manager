@@ -55,20 +55,6 @@ readonly class Compiler
         return $metaData;
     }
 
-    private function checkForStoreOriginalEntityType(MetaData $metaData, \ReflectionClass $classToCheck): void
-    {
-        if ($classToCheck->getAttributes(Attributes\StoreOriginalEntityType::class)) {
-            $metaData->inheritance->storeOriginalClass = true;
-            $metaData->inheritance->sharedParentClass = $classToCheck->name;
-
-            return;
-        }
-
-        if ($parentClass = $classToCheck->getParentClass()) {
-            $this->checkForStoreOriginalEntityType($metaData, $parentClass);
-        }
-    }
-
     private function processProperties(\ReflectionClass $class, MetaData $metaData): void
     {
         $properties = $this->getSortedProperties($class);
@@ -77,6 +63,33 @@ readonly class Compiler
             $this->processProperty($property, $metaData);
             $this->processReferences($property, $metaData);
         }
+    }
+
+    private function getSortedProperties(\ReflectionClass $class): array
+    {
+        $parents = $this->gatherParents($class);
+        $properties = $class->getProperties();
+
+        usort(
+            $properties,
+            function (\ReflectionProperty $a, \ReflectionProperty $b) use ($parents) {
+            // Parents deeper in the chain have lower values, sorting them in front
+            return $parents[$a->class] - $parents[$b->class];
+        });
+
+        return $properties;
+    }
+
+    private function gatherParents(\ReflectionClass $parent): array
+    {
+        $counter = 0;
+        $parents = [$parent->name => $counter];
+
+        while (false !== $parent = $parent->getParentClass()) {
+            $parents[$parent->name] = --$counter;
+        }
+
+        return $parents;
     }
 
     private function processProperty(\ReflectionProperty $property, MetaData $metaData): void
@@ -163,30 +176,17 @@ readonly class Compiler
         }
     }
 
-    private function getSortedProperties(\ReflectionClass $class): array
+    private function checkForStoreOriginalEntityType(MetaData $metaData, \ReflectionClass $classToCheck): void
     {
-        $parents = $this->gatherParents($class);
-        $properties = $class->getProperties();
+        if ($classToCheck->getAttributes(Attributes\StoreOriginalEntityType::class)) {
+            $metaData->inheritance->storeOriginalClass = true;
+            $metaData->inheritance->sharedParentClass = $classToCheck->name;
 
-        usort(
-            $properties,
-            function (\ReflectionProperty $a, \ReflectionProperty $b) use ($parents) {
-            // Parents deeper in the chain have lower values, sorting them in front
-            return $parents[$a->class] - $parents[$b->class];
-        });
-
-        return $properties;
-    }
-
-    private function gatherParents(\ReflectionClass $parent): array
-    {
-        $counter = 0;
-        $parents = [$parent->name => $counter];
-
-        while (false !== $parent = $parent->getParentClass()) {
-            $parents[$parent->name] = --$counter;
+            return;
         }
 
-        return $parents;
+        if ($parentClass = $classToCheck->getParentClass()) {
+            $this->checkForStoreOriginalEntityType($metaData, $parentClass);
+        }
     }
 }

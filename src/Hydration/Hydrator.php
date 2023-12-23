@@ -61,19 +61,6 @@ readonly class Hydrator
         }
     }
 
-    public function fetchOriginalClass(MetaData $metaData, mixed $id): string
-    {
-        foreach ($this->originalClassFetcherManager->get() as $originalClassFetcher) {
-            $result = $originalClassFetcher->fetch($metaData, $id);
-
-            if ($result->foundValue) {
-                return $result->value;
-            }
-        }
-
-        throw new \Exception('found no original class');
-    }
-
     private function fetchReferences(object $entity, MetaData\Reference $reference): array
     {
         $foundRecords = false;
@@ -106,6 +93,19 @@ readonly class Hydrator
         }
 
         return $entities;
+    }
+
+    public function fetchOriginalClass(MetaData $metaData, mixed $id): string
+    {
+        foreach ($this->originalClassFetcherManager->get() as $originalClassFetcher) {
+            $result = $originalClassFetcher->fetch($metaData, $id);
+
+            if ($result->foundValue) {
+                return $result->value;
+            }
+        }
+
+        throw new \Exception('found no original class');
     }
 
     public function setValues(MetaData $metaData, object $entity, array $values): void

@@ -30,13 +30,6 @@ class FlushManager
         $this->afterFlushHandlerManager->handle($changes);
     }
 
-    public function setFlusher(Entities\Flusher|null $flusher): self
-    {
-        $this->flusher = $flusher;
-
-        return $this;
-    }
-
     private function gatherChanges(
         array             $entities,
         \SplObjectStorage $savedStates,
@@ -61,5 +54,12 @@ class FlushManager
         }
 
         return $changes;
+    }
+
+    public function setFlusher(Entities\Flusher|null $flusher): self
+    {
+        $this->flusher = $flusher;
+
+        return $this;
     }
 }
