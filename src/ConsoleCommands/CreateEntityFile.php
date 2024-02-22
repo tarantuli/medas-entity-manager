@@ -11,14 +11,15 @@ use Medas\Console\{
     Printer,
     Text
 };
-use Medas\Core\{Attributes\Service, Interfaces\DirectoryManager};
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
+use Medas\FileSystem\DirectoryCreator;
 
 #[Service]
 readonly class CreateEntityFile extends BaseConsoleCommand
 {
     public function __construct(
-        private DirectoryManager      $directoryManager,
+        private DirectoryCreator      $directoryCreator,
         private Printer               $printer,
         private EntityClassGenerator  $entityClassGenerator,
         private EntityManagerCommands $entityManagerCommands,
@@ -49,7 +50,7 @@ readonly class CreateEntityFile extends BaseConsoleCommand
         $code = $this->entityClassGenerator->generate($className, $useGuid);
         $fileName = $this->fileNameFinder->find($className);
 
-        $this->directoryManager->create(dirname($fileName));
+        $this->directoryCreator->create(dirname($fileName));
 
         if (file_exists($fileName)) {
             $this->printer->print(new Text('file ' . $fileName . ' already exists', Color::LightRed));

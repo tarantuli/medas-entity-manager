@@ -8,7 +8,7 @@ use Medas\Core\{
     Attributes\ConfigValue,
     Attributes\Service,
     Interfaces\CacheManager,
-    Interfaces\DirectoryManager
+    Interfaces\FileLoader
 };
 
 #[Service]
@@ -17,11 +17,11 @@ readonly class EntityClasses
     private const CACHE_KEY = 'Medas\EntityManager\EntityClasses::get';
 
     public function __construct(
-        private CacheManager     $cacheManager,
-        private DirectoryManager $directoryManager,
+        private CacheManager $cacheManager,
+        private FileLoader   $fileLoader,
 
         #[ConfigValue(ConfigOptions\EntityDirectories::class)]
-        private array            $entityDirectories,
+        private array        $entityDirectories,
     )
     {
     }
@@ -41,7 +41,7 @@ readonly class EntityClasses
     private function loadClassesInEntityDirectories(): void
     {
         foreach ($this->entityDirectories as $directory) {
-            $this->directoryManager->loadPhpFiles(realpath($directory));
+            $this->fileLoader->load(realpath($directory));
         }
     }
 
