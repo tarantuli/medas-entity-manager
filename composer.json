@@ -1,6 +1,9 @@
 {
     "name": "morphp/medas-entity-manager",
     "description": "Medas entity manager",
+    "keywords": [
+        "entities"
+    ],
     "authors": [
         {
             "name": "Patrick Morpey",
