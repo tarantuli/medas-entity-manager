@@ -155,7 +155,10 @@ class EntityManager
     }
 
     /**
-     * The return value is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
+     * The return value is an object of type `$className`.
+     */
+    /*
+     * This is specified in PhpStorm in .phpstorm.meta.php
      */
     public function get(string $className, mixed $id): object
     {
@@ -177,7 +180,10 @@ class EntityManager
     }
 
     /**
-     * The return value is an object of type $className. This is specified in PhpStorm in .phpstorm.meta.php
+     * The return value is an object of type `$className`.
+     */
+    /*
+     * This is specified in PhpStorm in .phpstorm.meta.php
      */
     public function create(string $className, array $values = []): object
     {
