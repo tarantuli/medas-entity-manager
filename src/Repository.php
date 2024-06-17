@@ -54,6 +54,19 @@ readonly class Repository
         return $entities;
     }
 
+    public function fetchCount(Selector\Selector $selector, array $arguments = []): int|null
+    {
+        foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
+            $fetchResult = $selectorRecordsFetcher->fetchCount($selector, $arguments);
+
+            if ($fetchResult->foundValue) {
+                return $fetchResult->value;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * The return value is an object of type `$entity`.
      */

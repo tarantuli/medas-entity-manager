@@ -15,4 +15,9 @@ readonly class TestSelectorRecordsFetcher implements SelectorRecordsFetcher
     {
         return new FetchResult(true, [['id' => 1], ['id' => 2]]);
     }
+
+    public function fetchCount(Selector $selector, array $arguments = []): FetchResult
+    {
+        return new FetchResult(true, 2);
+    }
 }
