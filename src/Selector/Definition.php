@@ -31,8 +31,12 @@ class Definition
     {
     }
 
-    public function add(Element $element): self
+    public function add(Element|null $element): self
     {
+        if ($element === null) {
+            return $this;
+        }
+
         match (true) {
             $element instanceof Relations\Relation => $this->relations[] = $element,
             $element instanceof Conditions\Condition => $this->conditions[] = $element,
