@@ -31,20 +31,22 @@ class Definition
     {
     }
 
-    public function add(Element|null $element): self
+    public function add(Element|null ...$elements): self
     {
-        if ($element === null) {
-            return $this;
-        }
+        foreach ($elements as $element) {
+            if ($element === null) {
+                continue;
+            }
 
-        match (true) {
-            $element instanceof Relations\Relation => $this->relations[] = $element,
-            $element instanceof Conditions\Condition => $this->conditions[] = $element,
-            $element instanceof Sorting\SortBy => $this->sorts[] = $element,
-            $element instanceof Parameter => $this->parameters[] = $element,
-            $element instanceof Pagination => $this->pagination = $element,
-            default => throw new \Exception('unhandled element type ' . $element::class),
-        };
+            match (true) {
+                $element instanceof Relations\Relation => $this->relations[] = $element,
+                $element instanceof Conditions\Condition => $this->conditions[] = $element,
+                $element instanceof Sorting\SortBy => $this->sorts[] = $element,
+                $element instanceof Parameter => $this->parameters[] = $element,
+                $element instanceof Pagination => $this->pagination = $element,
+                default => throw new \Exception('unhandled element type ' . $element::class),
+            };
+        }
 
         return $this;
     }
