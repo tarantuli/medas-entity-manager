@@ -19,6 +19,7 @@ class Property
         public bool                $isModificationTimestamp,
         public bool                $isNullable,
         public bool                $isUnique,
+        public bool                $isIndex,
         public bool                $onDeleteCascade,
         public array               $phpTypes,
         public \ReflectionProperty $reflection,

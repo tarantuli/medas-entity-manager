@@ -113,6 +113,7 @@ readonly class Compiler
             isModificationTimestamp: !empty($property->getAttributes(Attributes\IsModificationTimestmap::class)),
             isNullable: $isNullable,
             isUnique: !empty($property->getAttributes(Attributes\IsUnique::class)),
+            isIndex: !empty($property->getAttributes(Attributes\IsIndex::class)),
             onDeleteCascade: !empty($property->getAttributes(Attributes\OnDeleteCascade::class)),
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property,
