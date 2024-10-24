@@ -10,13 +10,19 @@ use Medas\Core\{
     Interfaces\Guid,
     Interfaces\GuidProvider
 };
-use Medas\EntityManager\{Attributes\EntityCollection, Exceptions\InvalidPropertyType, MetaData};
+use Medas\EntityManager\{
+    Attributes\EntityCollection,
+    Entities\Initializer,
+    Exceptions\InvalidPropertyType,
+    MetaData
+};
 
 #[Service]
 readonly class ValueSetter
 {
     public function __construct(
         private GuidProvider|null $guidProvider,
+        private Initializer       $initializer,
     )
     {
     }
@@ -56,11 +62,11 @@ readonly class ValueSetter
 
                 if (class_exists($phpType)) {
                     if ($attribute = attribute(EntityCollection::class, new \ReflectionClass($phpType))) {
-                        // do nothing
                         $collection = new $phpType();
+                        $itemType = $attribute->contentType;
 
-                        foreach ($value as $subValue) {
-                            $collection[] = em()->get($attribute->contentType, $subValue);
+                        foreach ($value as $itemValues) {
+                            $collection[] = $this->initializer->initialize($itemType, $itemValues);
                         }
 
                         $value = $collection;
