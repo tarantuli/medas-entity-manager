@@ -11,6 +11,7 @@ use Medas\Core\{
     Interfaces\StringSerializer,
     Interfaces\Type
 };
+use Medas\EntityManager\Exceptions\CannotCastValueToId;
 
 #[Service]
 readonly class IdSerializer implements StringSerializer
@@ -25,7 +26,11 @@ readonly class IdSerializer implements StringSerializer
             $value = $value->toBytes();
         }
 
-        return (string) $value;
+        if ($value === null || is_scalar($value) || $value instanceof \Stringable) {
+            return (string) $value;
+        }
+
+        throw new CannotCastValueToId($value);
     }
 
     public function unserialize(mixed $value, Type $type = null): mixed
