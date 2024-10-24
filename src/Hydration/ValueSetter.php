@@ -22,7 +22,6 @@ readonly class ValueSetter
 {
     public function __construct(
         private GuidProvider|null $guidProvider,
-        private Initializer       $initializer,
     )
     {
     }
@@ -62,11 +61,13 @@ readonly class ValueSetter
 
                 if (class_exists($phpType)) {
                     if ($attribute = attribute(EntityCollection::class, new \ReflectionClass($phpType))) {
+                        // We cannot inject the Initializer in the constructor because that already depends on this class
+                        $initializer = service(Initializer::class);
                         $collection = new $phpType();
                         $itemType = $attribute->contentType;
 
                         foreach ($value as $itemValues) {
-                            $collection[] = $this->initializer->initialize($itemType, $itemValues);
+                            $collection[] = $initializer->initialize($itemType, $itemValues);
                         }
 
                         $value = $collection;
