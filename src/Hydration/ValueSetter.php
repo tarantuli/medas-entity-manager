@@ -8,7 +8,8 @@ use Medas\Core\{
     Attributes\Service,
     Interfaces\Collection,
     Interfaces\Guid,
-    Interfaces\GuidProvider
+    Interfaces\GuidProvider,
+    Interfaces\TracksChanges
 };
 use Medas\EntityManager\{
     Attributes\EntityCollection,
@@ -68,6 +69,10 @@ readonly class ValueSetter
 
                         foreach ($value as $itemValues) {
                             $collection[] = $initializer->initialize($itemType, $itemValues);
+                        }
+
+                        if ($collection instanceof TracksChanges) {
+                            $collection->resetChangeTracking();
                         }
 
                         $value = $collection;
