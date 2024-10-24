@@ -10,7 +10,7 @@ use Medas\Core\{
     Interfaces\Guid,
     Interfaces\GuidProvider
 };
-use Medas\EntityManager\{Exceptions\InvalidPropertyType, MetaData};
+use Medas\EntityManager\{Attributes\EntityCollection, Exceptions\InvalidPropertyType, MetaData};
 
 #[Service]
 readonly class ValueSetter
@@ -55,7 +55,17 @@ readonly class ValueSetter
                 }
 
                 if (class_exists($phpType)) {
-                    if (!$value instanceof Collection) {
+                    if ($attribute = attribute(EntityCollection::class, new \ReflectionClass($phpType))) {
+                        // do nothing
+                        $collection = new $phpType();
+
+                        foreach ($value as $subValue) {
+                            $collection[] = em()->get($attribute->contentType, $subValue);
+                        }
+
+                        $value = $collection;
+                    }
+                    elseif (!$value instanceof Collection) {
                         $value = em()->get($phpType, $value);
                     }
 
