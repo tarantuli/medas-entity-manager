@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Exceptions;
 
 use Medas\Core\Exceptions\BaseException;
+use Medas\Core\Interfaces\PropertyHandler;
 
 class InvalidHandler extends BaseException
 {
@@ -15,6 +16,6 @@ class InvalidHandler extends BaseException
 
     public function pattern(): string
     {
-        return 'property handler %s should be a service implementing \Medas\EntityManager\Properties\Handler';
+        return 'property handler %s should be a service implementing ' . PropertyHandler::class;
     }
 }
