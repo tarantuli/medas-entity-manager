@@ -1,3 +1,1 @@
-# Entity manager
-
 * [Relations](relations) 
