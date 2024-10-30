@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Exceptions;
 
-use Medas\Core\Exceptions\BaseException;
-use Medas\Core\Interfaces\PropertyHandler;
+use Medas\Core\{Exceptions\BaseException, Interfaces\PropertyHandler};
 
 class InvalidHandler extends BaseException
 {

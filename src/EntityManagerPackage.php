@@ -27,4 +27,9 @@ class EntityManagerPackage extends BasePackage
 
         parent::initialize($config);
     }
+
+    public function hasMarkdownDocumentation(): bool
+    {
+        return true;
+    }
 }
