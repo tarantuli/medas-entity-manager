@@ -27,17 +27,31 @@ readonly class ValueSetter
     {
     }
 
-    public function setValues(MetaData $metaData, object $entity, array $values): void
+    public function setValues(
+        MetaData $metaData,
+        object   $entity,
+        array    $values,
+        bool     $ignoreUnknownProperties = false
+    ): void
     {
         foreach ($values as $propertyName => $value) {
-            $this->set($metaData, $entity, $propertyName, $value);
+            $this->set($metaData, $entity, $propertyName, $value, $ignoreUnknownProperties);
         }
     }
 
-    public function set(MetaData $metaData, object $entity, string $propertyName, mixed $value): void
+    public function set(
+        MetaData $metaData,
+        object   $entity,
+        string   $propertyName,
+        mixed    $value,
+        bool     $ignoreUnknownProperties = false
+    ): void
     {
         // If value is null, don't return, but set the value to null
-        $property = $metaData->property($propertyName);
+        if (null === $property = $metaData->property($propertyName, $ignoreUnknownProperties)) {
+            return;
+        }
+
         $valueType = get_debug_type($value);
 
         if (!$property->allowsPhpType($valueType) && $value !== null) {

@@ -24,7 +24,7 @@ class MetaData
     {
     }
 
-    public function property(string $propertyName): MetaData\Property
+    public function property(string $propertyName, bool $ignoreUnknownProperties = false): MetaData\Property|null
     {
         foreach ($this->properties as $property) {
             if ($property->name === $propertyName) {
@@ -32,6 +32,10 @@ class MetaData
             }
         }
 
-        throw new Exceptions\PropertyDoesNotExist($this->className, $propertyName);
+        if (!$ignoreUnknownProperties) {
+            throw new Exceptions\PropertyDoesNotExist($this->className, $propertyName);
+        }
+
+        return null;
     }
 }
