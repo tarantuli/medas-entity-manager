@@ -74,6 +74,8 @@ class Property
 
     public function allowsPhpType(string $type): bool
     {
-        return ($type === 'null' && $this->isNullable) || in_array($type, $this->phpTypes);
+        return ($type === 'null' && $this->isNullable)
+            || in_array($type, $this->phpTypes)
+            || in_array('mixed', $this->phpTypes);
     }
 }
