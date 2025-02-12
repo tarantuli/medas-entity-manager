@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Types;
 
 use Medas\Core\{
     Attributes\Service,
-    Interfaces\FileEntity,
+    File as FileInterface,
     Interfaces\Guid as GuidProperty,
     Interfaces\HasId,
     Interfaces\ManagedCollection,
@@ -94,7 +94,7 @@ readonly class TypeFinder
 
         $class = new \ReflectionClass($relationName);
 
-        if ($class->implementsInterface(FileEntity::class)) {
+        if ($class->implementsInterface(FileInterface::class)) {
             return new File($relationName);
         }
 
