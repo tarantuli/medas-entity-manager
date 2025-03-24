@@ -10,6 +10,7 @@ use Medas\EntityManager\{
     Exceptions\ClassIsNotAnEntity,
     Exceptions\EntityHasMultipleIdProperties,
     Exceptions\EntityHasNoIdProperty,
+    Exceptions\NoConfigOptionControllerFound,
     Hydration\PropertyTypeNormalizer,
     MetaData,
     Properties\PropertyManager,
@@ -20,10 +21,10 @@ use Medas\EntityManager\{
 readonly class Compiler
 {
     public function __construct(
-        private PropertyTypeNormalizer $propertyTypeNormalizer,
-        private PropertyManager        $propertyManager,
-        private TypeFinder             $typeFinder,
-        private ConfigOptionController $configOptionController,
+        private PropertyTypeNormalizer      $propertyTypeNormalizer,
+        private PropertyManager             $propertyManager,
+        private TypeFinder                  $typeFinder,
+        private ConfigOptionController|null $configOptionController,
     )
     {
     }
@@ -44,12 +45,20 @@ readonly class Compiler
         $metaData = new MetaData($className);
 
         if ($storeConfigOption = attribute(Attributes\Entity\StoreConfigOption::class, $class)) {
+            if (!$this->configOptionController) {
+                throw new NoConfigOptionControllerFound();
+            }
+
             /** @var ConfigOption $option */
             $option = service($storeConfigOption->className);
             $entity->store = $this->configOptionController->getValue($option);
         }
 
         if ($storageConfigOption = attribute(Attributes\Entity\StorageConfigOption::class, $class)) {
+            if (!$this->configOptionController) {
+                throw new NoConfigOptionControllerFound();
+            }
+
             /** @var ConfigOption $option */
             $option = service($storageConfigOption->className);
             $entity->storage = $this->configOptionController->getValue($option);
