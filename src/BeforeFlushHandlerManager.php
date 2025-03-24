@@ -22,7 +22,7 @@ readonly class BeforeFlushHandlerManager
         $madeChanges = false;
 
         foreach ($this->getHandlers() as $handler) {
-            $madeChanges = $madeChanges || $handler->handle($changes);
+            $madeChanges = ($madeChanges or $handler->handle($changes));
         }
 
         return $madeChanges;

@@ -17,11 +17,15 @@ readonly class AfterFlushHandlerManager
     {
     }
 
-    public function handle(Entities\Changes $changes): void
+    public function handle(Entities\Changes $changes): bool
     {
+        $madeChanges = false;
+
         foreach ($this->getHandlers() as $handler) {
-            $handler->handle($changes);
+            $madeChanges = ($madeChanges or $handler->handle($changes));
         }
+
+        return $madeChanges;
     }
 
     /** @return Entities\AfterFlushHandler[] */

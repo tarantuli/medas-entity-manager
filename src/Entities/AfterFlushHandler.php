@@ -6,5 +6,5 @@ namespace Medas\EntityManager\Entities;
 
 interface AfterFlushHandler
 {
-    public function handle(Changes $changes): void;
+    public function handle(Changes $changes): bool;
 }
