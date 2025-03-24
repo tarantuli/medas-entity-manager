@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\ConfigOption, Interfaces\ConfigOptionController};
 use Medas\EntityManager\{
     Attributes,
     Exceptions\ClassIsNotAnEntity,
@@ -23,6 +23,7 @@ readonly class Compiler
         private PropertyTypeNormalizer $propertyTypeNormalizer,
         private PropertyManager        $propertyManager,
         private TypeFinder             $typeFinder,
+        private ConfigOptionController $configOptionController,
     )
     {
     }
@@ -41,6 +42,18 @@ readonly class Compiler
         }
 
         $metaData = new MetaData($className);
+
+        if ($storeConfigOption = attribute(Attributes\Entity\StoreConfigOption::class, $class)) {
+            /** @var ConfigOption $option */
+            $option = service($storeConfigOption->className);
+            $entity->store = $this->configOptionController->getValue($option);
+        }
+
+        if ($storageConfigOption = attribute(Attributes\Entity\StorageConfigOption::class, $class)) {
+            /** @var ConfigOption $option */
+            $option = service($storageConfigOption->className);
+            $entity->storage = $this->configOptionController->getValue($option);
+        }
 
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
