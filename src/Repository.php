@@ -74,16 +74,17 @@ readonly class Repository
      * This is specified in PhpStorm in .phpstorm.meta.php
      */
     public function getOrCreate(
-        string $entity,
-        array  $values,
-        bool   $persistOnCreate = true,
-        bool   $flushOnPersist = true,
+        string   $entity,
+        array    $values,
+        \Closure $creationValues = null,
+        bool     $persistOnCreate = true,
+        bool     $flushOnPersist = true,
     ): object
     {
         return $this->fetchOrCreate(
             new Selector\Selectors\WithValues($entity, $values),
             $values,
-            fn() => $values,
+            $creationValues,
             $persistOnCreate,
             $flushOnPersist
         );
