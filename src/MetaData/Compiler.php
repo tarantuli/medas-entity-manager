@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData;
 
-use Medas\Core\{Attributes\Service, Interfaces\ConfigOption, Interfaces\ConfigOptionController};
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{
     Attributes,
     Exceptions\ClassIsNotAnEntity,
     Exceptions\EntityHasMultipleIdProperties,
     Exceptions\EntityHasNoIdProperty,
-    Exceptions\NoConfigOptionControllerFound,
     Hydration\PropertyTypeNormalizer,
     MetaData,
     Properties\PropertyManager,
@@ -21,10 +20,10 @@ use Medas\EntityManager\{
 readonly class Compiler
 {
     public function __construct(
-        private PropertyTypeNormalizer      $propertyTypeNormalizer,
-        private PropertyManager             $propertyManager,
-        private TypeFinder                  $typeFinder,
-        private ConfigOptionController|null $configOptionController,
+        private EntityCompiler         $entityCompiler,
+        private PropertyManager        $propertyManager,
+        private PropertyTypeNormalizer $propertyTypeNormalizer,
+        private TypeFinder             $typeFinder,
     )
     {
     }
@@ -38,31 +37,11 @@ readonly class Compiler
             throw new ClassIsNotAnEntity($className);
         }
 
-        if (!$entity = attribute(Attributes\Entity::class, $class)) {
+        if (!$entity = $this->entityCompiler->compile($class)) {
             throw new ClassIsNotAnEntity($className);
         }
 
         $metaData = new MetaData($className);
-
-        if ($storeConfigOption = attribute(Attributes\Entity\StoreConfigOption::class, $class)) {
-            if (!$this->configOptionController) {
-                throw new NoConfigOptionControllerFound();
-            }
-
-            /** @var ConfigOption $option */
-            $option = service($storeConfigOption->className);
-            $entity->store = $this->configOptionController->getValue($option);
-        }
-
-        if ($storageConfigOption = attribute(Attributes\Entity\StorageConfigOption::class, $class)) {
-            if (!$this->configOptionController) {
-                throw new NoConfigOptionControllerFound();
-            }
-
-            /** @var ConfigOption $option */
-            $option = service($storageConfigOption->className);
-            $entity->storage = $this->configOptionController->getValue($option);
-        }
 
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
