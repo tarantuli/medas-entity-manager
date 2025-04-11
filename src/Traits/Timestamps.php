@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Traits;
 
-use Medas\EntityManager\Attributes\{IsCreationTimestamp, IsModificationTimestmap};
+use Medas\EntityManager\Attributes\{
+    Changes\DontLogChanges,
+    IsCreationTimestamp,
+    IsModificationTimestmap
+};
 
 trait Timestamps
 {
-    #[IsCreationTimestamp]
+    #[IsCreationTimestamp, DontLogChanges]
     private \DateTime $createdAt;
 
-    #[IsModificationTimestmap]
+    #[IsModificationTimestmap, DontLogChanges]
     private \DateTime $modifiedAt;
 
     public function createdAt(): \DateTime
