@@ -24,7 +24,7 @@ readonly class SnapshotManager
 
         foreach ($this->forEntity($entity)->data as $property => $current) {
             if ($this->valueHasChanged($current, $initialValues[$property])) {
-                $changes[] = new PropertyChange($initialValues[$property], $current);
+                $changes[$property] = new PropertyChange($initialValues[$property], $current);
             }
         }
 
