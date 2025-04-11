@@ -102,7 +102,6 @@ class EntityManager
             fn() => $this->entitiesToDelete
         );
 
-        $this->guidSetter->processEntities($changes->createdEntities());
         $this->updateEntityStates();
         $this->flushManager->flush($changes);
         $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
@@ -137,6 +136,9 @@ class EntityManager
         foreach ($entities as $entity) {
             if (!in_array($entity, $this->entities, true)) {
                 $key = $entity::class . ':new:' . mt_rand();
+
+                $this->guidSetter->processEntity($entity);
+
                 $this->entities[$key] = $entity;
 
                 ++$this->entityCount;
