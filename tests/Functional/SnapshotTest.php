@@ -28,9 +28,9 @@ class SnapshotTest extends BaseTestClass
         $snapshotManager = service(SnapshotManager::class);
         $initialSnapshot = $snapshotManager->forEntity($entity);
         $entity->name = 'changed name';
-        $diff = $snapshotManager->findChanges($entity, $initialSnapshot);
+        $diff = $snapshotManager->findPropertyChanges($entity, $initialSnapshot);
 
         self::assertIsArray($diff);
-        self::assertEquals(['name' => 'changed name'], $diff);
+        self::assertEquals('changed name', $diff[0]->current);
     }
 }

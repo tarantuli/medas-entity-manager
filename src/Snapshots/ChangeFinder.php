@@ -34,7 +34,7 @@ readonly class ChangeFinder
 
         foreach ($entities as $entity) {
             if ($savedStates[$entity] ?? null) {
-                if ($diff = $this->snapshotManager->findChanges($entity, $savedStates[$entity])) {
+                if ($diff = $this->snapshotManager->findPropertyChanges($entity, $savedStates[$entity])) {
                     $changes->addUpdate($entity, $diff);
                 }
             }

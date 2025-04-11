@@ -16,22 +16,28 @@ readonly class SnapshotManager
     {
     }
 
-    public function findChanges(object $entity, Snapshot|null $initial): array
+    /** @return PropertyChange[] */
+    public function findPropertyChanges(object $entity, Snapshot|null $initial): array
     {
-        return array_udiff_assoc(
-            $this->forEntity($entity)->data,
-            $initial === null ? [] : $initial->data,
-            $this->compareValues(...)
-        );
-    }
+        $changes = [];
+        $initialValues = $initial === null ? [] : $initial->data;
 
-    private function compareValues(mixed $current, mixed $initial): int
-    {
-        if ($current instanceof TracksChanges) {
-            return (int) $current->hasChanged();
+        foreach ($this->forEntity($entity)->data as $property => $current) {
+            if ($this->valueHasChanged($current, $initialValues[$property])) {
+                $changes[] = new PropertyChange($initialValues[$property], $current);
+            }
         }
 
-        return (int) ($current !== $initial);
+        return $changes;
+    }
+
+    private function valueHasChanged(mixed $current, mixed $initial): bool
+    {
+        if ($current instanceof TracksChanges) {
+            return $current->hasChanged();
+        }
+
+        return $current !== $initial;
     }
 
     public function forEntity(object $entity): Snapshot

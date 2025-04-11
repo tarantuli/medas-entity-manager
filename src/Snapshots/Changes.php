@@ -6,9 +6,16 @@ namespace Medas\EntityManager\Snapshots;
 
 class Changes
 {
+    /** @var object[] */
     private array $creates = [];
+
+    /** @var object[] */
     private array $updates = [];
+
+    /** @var PropertyChange[][] */
     private array $diffs = [];
+
+    /** @var object[] */
     private array $deletes = [];
 
     public function addCreate(object $entity): void
@@ -21,6 +28,7 @@ class Changes
         return $this->creates;
     }
 
+    /** @param PropertyChange[] $changes */
     public function addUpdate(object $entity, array $changes): void
     {
         $this->updates[] = $entity;
