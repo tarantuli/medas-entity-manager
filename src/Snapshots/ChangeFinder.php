@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Medas\EntityManager;
+namespace Medas\EntityManager\Snapshots;
 
 use Medas\Core\Attributes\Service;
+use Medas\EntityManager\BeforeFlushHandlerManager;
 
 #[Service]
 readonly class ChangeFinder
 {
     public function __construct(
-        private Snapshots\SnapshotManager $snapshotManager,
+        private SnapshotManager           $snapshotManager,
         private BeforeFlushHandlerManager $beforeFlushHandlerManager,
     )
     {
     }
 
-    public function gather(\Closure $entities, \Closure $savedStates, \Closure $entitiesToDelete): Entities\Changes
+    public function gather(\Closure $entities, \Closure $savedStates, \Closure $entitiesToDelete): Changes
     {
         $changes = $this->gatherChanges($entities(), $savedStates(), $entitiesToDelete());
 
@@ -27,13 +28,9 @@ readonly class ChangeFinder
         return $changes;
     }
 
-    private function gatherChanges(
-        array             $entities,
-        \SplObjectStorage $savedStates,
-        array             $entitiesToDelete
-    ): Entities\Changes
+    private function gatherChanges(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): Changes
     {
-        $changes = new Entities\Changes();
+        $changes = new Changes();
 
         foreach ($entities as $entity) {
             if ($savedStates[$entity] ?? null) {

@@ -17,7 +17,7 @@ readonly class AfterFlushHandlerManager
     {
     }
 
-    public function handle(Entities\Changes $changes): bool
+    public function handle(Snapshots\Changes $changes): bool
     {
         $madeChanges = false;
 

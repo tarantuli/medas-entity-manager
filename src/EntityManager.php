@@ -25,7 +25,7 @@ class EntityManager
         private readonly Entities\Initializer      $initializer,
         private readonly Entities\KeyMaker         $keyMaker,
         private readonly Snapshots\SnapshotManager $snapshotManager,
-        private readonly ChangeFinder              $changeFinder,
+        private readonly Snapshots\ChangeFinder    $changeFinder,
     )
     {
         $this->entities = [];

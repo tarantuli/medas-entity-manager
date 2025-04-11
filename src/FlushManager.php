@@ -16,7 +16,7 @@ class FlushManager
     {
     }
 
-    public function flush(Entities\Changes $changes): void
+    public function flush(Snapshots\Changes $changes): void
     {
         $this->flusher->flush($changes);
         $this->afterFlushHandlerManager->handle($changes);
