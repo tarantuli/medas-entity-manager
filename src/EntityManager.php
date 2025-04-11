@@ -25,6 +25,7 @@ class EntityManager
         private readonly Entities\Initializer      $initializer,
         private readonly Entities\KeyMaker         $keyMaker,
         private readonly Snapshots\SnapshotManager $snapshotManager,
+        private readonly ChangeFinder              $changeFinder,
     )
     {
         $this->entities = [];
@@ -94,17 +95,18 @@ class EntityManager
 
     public function flush(): void
     {
-        $this->flushManager->flush(
+        $changes = $this->changeFinder->gather(
             fn() => $this->entities,
             fn() => $this->savedStates,
             fn() => $this->entitiesToDelete
         );
 
         $this->updateEntityStates();
+        $this->flushManager->flush($changes);
         $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
     }
 
-    private function updateEntityStates(): void
+    public function updateEntityStates(): void
     {
         foreach ($this->entities as $key => $entity) {
             if (in_array($entity, $this->entitiesToDelete, true)) {
