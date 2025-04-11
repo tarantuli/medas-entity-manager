@@ -40,6 +40,7 @@ class Changes
         return $this->updates;
     }
 
+    /** @return PropertyChange[] */
     public function entityChanges(object $entity): array
     {
         return $this->diffs[spl_object_id($entity)] ?? [];
