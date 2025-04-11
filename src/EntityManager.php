@@ -21,6 +21,7 @@ class EntityManager
     public function __construct(
         private readonly EventDispatcher           $eventDispatcher,
         private readonly FlushManager              $flushManager,
+        private readonly Entities\GuidSetter       $guidSetter,
         private readonly Entities\IdValue          $idValue,
         private readonly Entities\Initializer      $initializer,
         private readonly Entities\KeyMaker         $keyMaker,
@@ -101,6 +102,7 @@ class EntityManager
             fn() => $this->entitiesToDelete
         );
 
+        $this->guidSetter->processEntities($changes->createdEntities());
         $this->updateEntityStates();
         $this->flushManager->flush($changes);
         $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
