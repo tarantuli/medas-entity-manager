@@ -39,7 +39,9 @@ readonly class ChangeFinder
                 }
             }
             else {
-                $changes->addCreate($entity);
+                $diff = $this->snapshotManager->findPropertyChanges($entity, null);
+
+                $changes->addCreate($entity, $diff);
             }
         }
 

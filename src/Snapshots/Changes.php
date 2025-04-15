@@ -9,6 +9,9 @@ class Changes
     /** @var object[] */
     private array $creates = [];
 
+    /** @var PropertyChange[][] */
+    private array $createValues = [];
+
     /** @var object[] */
     private array $updates = [];
 
@@ -18,14 +21,21 @@ class Changes
     /** @var object[] */
     private array $deletes = [];
 
-    public function addCreate(object $entity): void
+    public function addCreate(object $entity, array $values): void
     {
         $this->creates[] = $entity;
+        $this->createValues[spl_object_id($entity)] = $values;
     }
 
     public function createdEntities(): array
     {
         return $this->creates;
+    }
+
+    /** @return PropertyChange[] */
+    public function createValues(object $entity): array
+    {
+        return $this->createValues[spl_object_id($entity)] ?? [];
     }
 
     /** @param PropertyChange[] $changes */
