@@ -23,8 +23,10 @@ readonly class SnapshotManager
         $initialValues = $initial === null ? [] : $initial->data;
 
         foreach ($this->forEntity($entity)->data as $property => $current) {
-            if ($this->valueHasChanged($current, $initialValues[$property])) {
-                $changes[$property] = new PropertyChange($initialValues[$property], $current);
+            $initialValue = $initialValues[$property] ?? null;
+
+            if ($this->valueHasChanged($current, $initialValue)) {
+                $changes[$property] = new PropertyChange($initialValue, $current);
             }
         }
 
