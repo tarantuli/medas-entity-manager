@@ -6,14 +6,13 @@ namespace Medas\EntityManager\Selector\Operants;
 
 class ArgumentArray implements Operant
 {
-    public static function c(string $name, array $value): static
+    public static function c(string $name): static
     {
-        return new static($name, $value);
+        return new static($name);
     }
 
     public function __construct(
         public string $name,
-        public array  $value,
     )
     {
     }
