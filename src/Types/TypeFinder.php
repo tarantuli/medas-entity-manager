@@ -6,10 +6,10 @@ namespace Medas\EntityManager\Types;
 
 use Medas\Core\{
     Attributes\Service,
-    Interfaces\Guid as GuidProperty,
     Interfaces\HasId,
     Interfaces\ManagedCollection,
-    Interfaces\Type
+    Interfaces\Type,
+    Interfaces\Uuid as UuidProperty
 };
 use Medas\EntityManager\{
     Attributes\Entity,
@@ -52,7 +52,7 @@ readonly class TypeFinder
 
         return match (true) {
             $baseType->getName() === \DateTime::class => new DateTime(),
-            $baseType->getName() === GuidProperty::class => new Guid(),
+            $baseType->getName() === UuidProperty::class => new Uuid(),
             !$baseType->isBuiltin() => $this->findRelationType($property, $baseType),
             $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),

@@ -46,8 +46,8 @@ readonly class CreateEntityFile extends BaseConsoleCommand
     public function process(array $arguments): void
     {
         $className = $arguments[1];
-        $useGuid = ($arguments[2] ?? null) !== '--id';
-        $code = $this->entityClassGenerator->generate($className, $useGuid);
+        $useUuid = ($arguments[2] ?? null) !== '--id';
+        $code = $this->entityClassGenerator->generate($className, $useUuid);
         $fileName = $this->fileNameFinder->find($className);
 
         $this->directoryCreator->create(dirname($fileName));

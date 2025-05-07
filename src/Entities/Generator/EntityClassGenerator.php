@@ -9,7 +9,7 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class EntityClassGenerator
 {
-    private const PHP_GUID_TEMPLATE
+    private const PHP_UUID_TEMPLATE
         = <<<'PHP'
 <?php
 
@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace {{namespace}};
 
-use Medas\Core\Interfaces\{Guid, HasId};
+use Medas\Core\Interfaces\{Uuid, HasId};
 use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Traits\Timestamps;
 
@@ -27,11 +27,11 @@ class {{shortClassName}} implements HasId
     use Timestamps;
 
     #[Id]
-    public Guid $guid;
+    public Uuid $uuid;
 
-    public function id(): Guid
+    public function id(): Uuid
     {
-        return $this->guid;
+        return $this->uuid;
     }
 }
 
@@ -73,7 +73,7 @@ PHP;
     {
     }
 
-    public function generate(string $className, bool $useGuid = true): string
+    public function generate(string $className, bool $useUuid = true): string
     {
         $className = $this->classNameNormalizer->normalize($className);
         [$namespace, $shortClassName] = $this->splitClassName($className);
@@ -88,7 +88,7 @@ PHP;
         return str_replace(
             array_keys($replacements),
             array_values($replacements),
-            $useGuid ? self::PHP_GUID_TEMPLATE : self::PHP_INT_TEMPLATE
+            $useUuid ? self::PHP_UUID_TEMPLATE : self::PHP_INT_TEMPLATE
         );
     }
 

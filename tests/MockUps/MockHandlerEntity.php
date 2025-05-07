@@ -9,14 +9,14 @@ use Medas\EntityManager\{
     Attributes\Entity,
     Attributes\Id,
     Properties\SerializingHandler,
-    Types\Guid
+    Types\Uuid
 };
 
 #[Entity]
 class MockHandlerEntity
 {
     #[Id]
-    private Guid $guid;
+    private Uuid $uuid;
 
     #[Handler(SerializingHandler::class)]
     private PropertyClass $propertyClass;

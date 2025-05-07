@@ -6,10 +6,10 @@ namespace Medas\EntityManager\Entities;
 
 use Medas\Core\{
     Attributes\Service,
-    Interfaces\Guid,
     Interfaces\HasId,
     Interfaces\StringSerializer,
-    Interfaces\Type
+    Interfaces\Type,
+    Interfaces\Uuid
 };
 use Medas\EntityManager\Exceptions\CannotCastValueToId;
 
@@ -22,7 +22,7 @@ readonly class IdSerializer implements StringSerializer
             $value = $value->id();
         }
 
-        if ($value instanceof Guid) {
+        if ($value instanceof Uuid) {
             $value = $value->toBytes();
         }
 

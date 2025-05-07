@@ -9,11 +9,11 @@ use Medas\EntityManager\{
     Exceptions\PropertyHasNoImplicitType,
     Types\Binary,
     Types\DateTime,
-    Types\Guid,
     Types\Integer,
     Types\Relation,
     Types\Text,
-    Types\TypeFinder
+    Types\TypeFinder,
+    Types\Uuid
 };
 use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntityTypes};
 
@@ -51,12 +51,12 @@ class TypeFinderTest extends BaseTestClass
         self::assertInstanceOf(Relation::class, $finder->find($class->getProperty('relation')));
     }
 
-    public function testGuidType(): void
+    public function testUuidType(): void
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
 
-        self::assertInstanceOf(Guid::class, $finder->find($class->getProperty('guid')));
+        self::assertInstanceOf(Uuid::class, $finder->find($class->getProperty('uuid')));
     }
 
     public function testNoPhpType(): void

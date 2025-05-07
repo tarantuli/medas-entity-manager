@@ -7,9 +7,9 @@ namespace Medas\EntityManager\Hydration;
 use Medas\Core\{
     Attributes\Service,
     Interfaces\Collection,
-    Interfaces\Guid,
-    Interfaces\GuidProvider,
-    Interfaces\TracksChanges
+    Interfaces\TracksChanges,
+    Interfaces\Uuid,
+    Interfaces\UuidProvider
 };
 use Medas\EntityManager\{
     Attributes\EntityCollection,
@@ -22,7 +22,7 @@ use Medas\EntityManager\{
 readonly class ValueSetter
 {
     public function __construct(
-        private GuidProvider|null $guidProvider,
+        private UuidProvider|null $uuidProvider,
     )
     {
     }
@@ -63,8 +63,8 @@ readonly class ValueSetter
                     break;
                 }
 
-                if ($phpType === Guid::class && is_string($value)) {
-                    $value = $this->guidProvider->fromString($value);
+                if ($phpType === Uuid::class && is_string($value)) {
+                    $value = $this->uuidProvider->fromString($value);
                 }
 
                 if (enum_exists($phpType)) {

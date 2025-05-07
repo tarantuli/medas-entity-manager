@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\Core\Interfaces\{Guid, HasId};
+use Medas\Core\Interfaces\{Uuid, HasId};
 use Medas\EntityManager\Attributes\{Entity, Id};
 use Medas\EntityManager\Traits\Timestamps;
 
@@ -27,11 +27,11 @@ class MockEntity implements HasId
     use Timestamps;
 
     #[Id]
-    public Guid $guid;
+    public Uuid $uuid;
 
-    public function id(): Guid
+    public function id(): Uuid
     {
-        return $this->guid;
+        return $this->uuid;
     }
 }
 

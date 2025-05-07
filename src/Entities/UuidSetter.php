@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\{Attributes\Service, Exceptions\GuidProviderIsNotAvailable, Interfaces\GuidProvider};
-use Medas\EntityManager\{MetaDataManager, Types\Guid};
+use Medas\Core\{Attributes\Service, Exceptions\UuidProviderIsNotAvailable, Interfaces\UuidProvider};
+use Medas\EntityManager\{MetaDataManager, Types\Uuid};
 
 #[Service]
-readonly class GuidSetter
+readonly class UuidSetter
 {
     public function __construct(
-        private GuidProvider|null $guidProvider,
+        private UuidProvider|null $uuidProvider,
         private MetaDataManager   $metaDataManager,
     )
     {
@@ -30,7 +30,7 @@ readonly class GuidSetter
         $metaData = $this->metaDataManager->get($entity::class);
 
         foreach ($metaData->properties as $property) {
-            if (!$property->type instanceof Guid) {
+            if (!$property->type instanceof Uuid) {
                 continue;
             }
 
@@ -38,11 +38,11 @@ readonly class GuidSetter
                 continue;
             }
 
-            if ($this->guidProvider === null) {
-                throw new GuidProviderIsNotAvailable();
+            if ($this->uuidProvider === null) {
+                throw new UuidProviderIsNotAvailable();
             }
 
-            $property->reflection->setValue($entity, $this->guidProvider->create());
+            $property->reflection->setValue($entity, $this->uuidProvider->create());
         }
     }
 }

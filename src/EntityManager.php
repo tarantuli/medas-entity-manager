@@ -21,7 +21,7 @@ class EntityManager
     public function __construct(
         private readonly EventDispatcher           $eventDispatcher,
         private readonly FlushManager              $flushManager,
-        private readonly Entities\GuidSetter       $guidSetter,
+        private readonly Entities\UuidSetter       $uuidSetter,
         private readonly Entities\IdValue          $idValue,
         private readonly Entities\Initializer      $initializer,
         private readonly Entities\KeyMaker         $keyMaker,
@@ -137,7 +137,7 @@ class EntityManager
             if (!in_array($entity, $this->entities, true)) {
                 $key = $entity::class . ':new:' . mt_rand();
 
-                $this->guidSetter->processEntity($entity);
+                $this->uuidSetter->processEntity($entity);
 
                 $this->entities[$key] = $entity;
 
