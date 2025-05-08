@@ -31,9 +31,11 @@ readonly class AfterFlushHandlerManager
     /** @return Entities\AfterFlushHandler[] */
     private function getHandlers(): array
     {
-        return $this->cacheManager->get()->get(
+        $names = $this->cacheManager->get()->get(
             self::HANDLERS_CACHE_KEY,
-            fn() => service(ImplementorFinder::class)->find(Entities\AfterFlushHandler::class)
+            fn() => servicesToNames(service(ImplementorFinder::class)->find(Entities\AfterFlushHandler::class))
         );
+
+        return namesToServices($names);
     }
 }

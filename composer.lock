@@ -61,12 +61,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "0142ca016209c5e99f0e69fb49b63718f78c98b4"
+                "reference": "abcd09dedc2d5954f394499eab06eb0d16fd0a79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/0142ca016209c5e99f0e69fb49b63718f78c98b4",
-                "reference": "0142ca016209c5e99f0e69fb49b63718f78c98b4",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/abcd09dedc2d5954f394499eab06eb0d16fd0a79",
+                "reference": "abcd09dedc2d5954f394499eab06eb0d16fd0a79",
                 "shasum": ""
             },
             "require": {
@@ -104,7 +104,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2025-05-07T08:55:16+00:00"
+            "time": "2025-05-08T07:34:03+00:00"
         },
         {
             "name": "morphp/medas-object-instantiator",
@@ -483,12 +483,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-events.git",
-                "reference": "287fa5b1bab9542ae03da35c94305501f13249a2"
+                "reference": "989d4bde8def2e26b435115a533eb2b7d0d82677"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/287fa5b1bab9542ae03da35c94305501f13249a2",
-                "reference": "287fa5b1bab9542ae03da35c94305501f13249a2",
+                "url": "https://api.github.com/repos/tarantuli/medas-events/zipball/989d4bde8def2e26b435115a533eb2b7d0d82677",
+                "reference": "989d4bde8def2e26b435115a533eb2b7d0d82677",
                 "shasum": ""
             },
             "require": {
@@ -519,7 +519,7 @@
                 "source": "https://github.com/tarantuli/medas-events/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-events/issues"
             },
-            "time": "2025-02-04T09:08:52+00:00"
+            "time": "2025-05-07T13:55:04+00:00"
         },
         {
             "name": "morphp/medas-file-system",
