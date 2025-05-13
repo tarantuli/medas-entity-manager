@@ -7,4 +7,11 @@ namespace Medas\EntityManager\Attributes;
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 class UniquePropertySet
 {
+    /** @var string[] */
+    public array $properties;
+
+    public function __construct(string ...$properties)
+    {
+        $this->properties = $properties;
+    }
 }
