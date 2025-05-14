@@ -27,11 +27,11 @@ class {{shortClassName}} implements HasId
     use Timestamps;
 
     #[Id]
-    public Uuid $uuid;
+    public Uuid $id;
 
     public function id(): Uuid
     {
-        return $this->uuid;
+        return $this->id;
     }
 }
 
