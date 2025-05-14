@@ -34,6 +34,11 @@ readonly class CreateCollectionFile extends BaseFileCreator
         return 'create-collection-file';
     }
 
+    public function aliases(): array
+    {
+        return ['c.collection'];
+    }
+
     public function description(): string
     {
         return 'Creates an entity collection file for the given fully qualified class name';

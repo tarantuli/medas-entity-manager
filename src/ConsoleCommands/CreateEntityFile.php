@@ -34,6 +34,11 @@ readonly class CreateEntityFile extends BaseFileCreator
         return 'create-entity-file';
     }
 
+    public function aliases(): array
+    {
+        return ['c.entity'];
+    }
+
     public function description(): string
     {
         return 'Creates an entity file for the given fully qualified class name';
