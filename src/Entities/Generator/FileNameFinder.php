@@ -40,14 +40,6 @@ readonly class FileNameFinder
         throw new Exceptions\NoPathFoundForClassName($className);
     }
 
-    private function getPsr4Prefixes(): array
-    {
-        /** @var ClassLoader $loader */
-        $loader = require 'vendor/autoload.php';
-
-        return $loader->getPrefixesPsr4();
-    }
-
     private function normalizePath($path): string
     {
         return array_reduce(explode(DIRECTORY_SEPARATOR, $path), function ($a, $b) {
@@ -61,6 +53,28 @@ readonly class FileNameFinder
 
             return $a === '' && DIRECTORY_SEPARATOR === '\\' ? $b : $a . DIRECTORY_SEPARATOR . $b;
         }, '');
+    }
+
+    public function findPrefix(string $className): string|null
+    {
+        $className = $this->classNameNormalizer->normalize($className);
+        $psr4Prefixes = $this->getPsr4Prefixes();
+
+        foreach ($psr4Prefixes as $prefix => $paths) {
+            if (str_starts_with($className, $prefix)) {
+                return $prefix;
+            }
+        }
+
+        return null;
+    }
+
+    private function getPsr4Prefixes(): array
+    {
+        /** @var ClassLoader $loader */
+        $loader = require 'vendor/autoload.php';
+
+        return $loader->getPrefixesPsr4();
     }
 
     public function writeToFile(string $code, string $fileName): void
