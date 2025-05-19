@@ -82,16 +82,16 @@ readonly class FileNameFinder
         $this->directoryCreator->create(dirname($fileName));
 
         if (file_exists($fileName)) {
-            $this->printer->print(new Text('file ' . $fileName . ' already exists', Color::LightRed));
+            $this->printer->printLine(new Text('file ' . $fileName . ' already exists', Color::Gray));
         }
         elseif (file_put_contents($fileName, $code)) {
-            $this->printer->print(
+            $this->printer->printLine(
                 new Text('created entity file '),
                 new Text($fileName, Color::LightYellow)
             );
         }
         else {
-            $this->printer->print(new Text('could not creat entity file ' . $fileName, Color::Red));
+            $this->printer->printLine(new Text('could not creat entity file ' . $fileName, Color::Red));
         }
     }
 }
