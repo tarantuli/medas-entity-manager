@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConsoleCommands;
 
-use Medas\Console\{Commands\ConsoleCommandGroup, Printer};
+use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\BaseFileCreator;
 use Medas\EntityManager\Entities\Generator\{CollectionClassGenerator, FileNameFinder};
-use Medas\FileSystem\DirectoryCreator;
 
 #[Service]
-readonly class CreateCollectionFile extends BaseFileCreator
+readonly class CreateCollectionFile extends BaseConsoleCommand
 {
     public function __construct(
-        DirectoryCreator                 $directoryCreator,
-        Printer                          $printer,
         private CollectionClassGenerator $collectionClassGenerator,
         private EntityManagerCommands    $entityManagerCommands,
         private FileNameFinder           $fileNameFinder,
     )
     {
-        parent::__construct($directoryCreator, $printer);
     }
 
     public function group(): ConsoleCommandGroup
@@ -50,6 +45,6 @@ readonly class CreateCollectionFile extends BaseFileCreator
         $code = $this->collectionClassGenerator->generate($className);
         $fileName = $this->fileNameFinder->find($className . 'Collection');
 
-        $this->writeToFile($code, $fileName);
+        $this->fileNameFinder->writeToFile($code, $fileName);
     }
 }

@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities\Generator;
 
 use Composer\Autoload\ClassLoader;
+use Medas\Console\{Formats\Color, Printer, Text};
 use Medas\Core\Attributes\Service;
+use Medas\FileSystem\DirectoryCreator;
 
 #[Service]
 readonly class FileNameFinder
 {
     public function __construct(
         private ClassNameNormalizer $classNameNormalizer,
+        private DirectoryCreator    $directoryCreator,
+        private Printer             $printer,
     )
     {
     }
@@ -57,5 +61,23 @@ readonly class FileNameFinder
 
             return $a === '' && DIRECTORY_SEPARATOR === '\\' ? $b : $a . DIRECTORY_SEPARATOR . $b;
         }, '');
+    }
+
+    public function writeToFile(string $code, string $fileName): void
+    {
+        $this->directoryCreator->create(dirname($fileName));
+
+        if (file_exists($fileName)) {
+            $this->printer->print(new Text('file ' . $fileName . ' already exists', Color::LightRed));
+        }
+        elseif (file_put_contents($fileName, $code)) {
+            $this->printer->print(
+                new Text('created entity file '),
+                new Text($fileName, Color::LightYellow)
+            );
+        }
+        else {
+            $this->printer->print(new Text('could not creat entity file ' . $fileName, Color::Red));
+        }
     }
 }
