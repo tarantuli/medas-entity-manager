@@ -68,6 +68,12 @@ readonly class ValueSetter
                 }
 
                 if (enum_exists($phpType)) {
+                    $backingType = (new \ReflectionEnum($phpType))->getBackingType();
+
+                    if (((string) $backingType === 'int') && is_string($value)) {
+                        $value = intval($value);
+                    }
+
                     $value = $phpType::from($value);
                     $valueType = $phpType;
 
