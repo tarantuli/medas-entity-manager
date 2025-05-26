@@ -125,6 +125,13 @@ readonly class ValueSetter
 
                     break;
                 }
+
+                if ($phpType === 'float' && is_int($value)) {
+                    $value = (float) $value;
+                    $valueType = 'float';
+
+                    break;
+                }
             }
         }
 
