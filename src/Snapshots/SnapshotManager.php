@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Snapshots;
 
-use Medas\Core\{Attributes\Service, Interfaces\TracksChanges};
+use Medas\Core\{Attributes\Service, Interfaces\HasId, Interfaces\TracksChanges, Interfaces\Uuid};
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
@@ -37,6 +37,22 @@ readonly class SnapshotManager
     {
         if ($current instanceof TracksChanges) {
             return $current->hasChanged();
+        }
+
+        if ($current instanceof Uuid && $initial instanceof Uuid) {
+            return $current->toBytes() !== $initial->toBytes();
+        }
+
+        if ($current instanceof HasId && $initial instanceof HasId && $current::class === $initial::class) {
+            $currentId = $current->id();
+            $initialId = $initial->id();
+
+            if ($currentId instanceof Uuid && $initialId instanceof Uuid) {
+                return $currentId->toBytes() !== $initialId->toBytes();
+            }
+            else {
+                return $currentId !== $initialId;
+            }
         }
 
         return $current !== $initial;
