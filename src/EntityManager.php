@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{Attributes\Service, Interfaces\EventDispatcher, Interfaces\TracksChanges};
+use Medas\Core\{Attributes\Service, Interfaces\TracksChanges};
 
 #[Service]
 class EntityManager
@@ -19,7 +19,6 @@ class EntityManager
     private int|null $cachePurgeAmount = null;
 
     public function __construct(
-        private readonly EventDispatcher           $eventDispatcher,
         private readonly FlushManager              $flushManager,
         private readonly Entities\UuidSetter       $uuidSetter,
         private readonly Entities\IdValue          $idValue,
@@ -84,7 +83,7 @@ class EntityManager
         $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
 
-        $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
+        dispatch(new Events\MustClearEntityValueCaches());
     }
 
     public function delete(object $entity): void
@@ -104,7 +103,8 @@ class EntityManager
 
         $this->updateEntityStates();
         $this->flushManager->flush($changes);
-        $this->eventDispatcher->dispatch(new Events\MustClearEntityValueCaches());
+
+        dispatch(new Events\MustClearEntityValueCaches());
     }
 
     public function updateEntityStates(): void
