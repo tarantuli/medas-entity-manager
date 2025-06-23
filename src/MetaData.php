@@ -14,6 +14,7 @@ class MetaData
     /** @var MetaData\Reference[] */
     public array $references;
 
+    public array $uniquePropertySets;
     public MetaData\Property|null $idProperty;
     public MetaData\Inheritance $inheritance;
     public int $sourceFileDate;

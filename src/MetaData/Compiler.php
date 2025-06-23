@@ -5,21 +5,20 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\Attributes;
-use Medas\EntityManager\Exceptions\{
-    ClassIsNotAnEntity,
-    EntityHasMultipleIdProperties,
-    EntityHasNoIdProperty
+use Medas\EntityManager\{
+    Attributes,
+    Exceptions\ClassIsNotAnEntity,
+    Exceptions\EntityHasMultipleIdProperties,
+    Exceptions\EntityHasNoIdProperty,
+    MetaData
 };
-use Medas\EntityManager\MetaData;
-use Medas\EntityManager\MetaData\Compiler\PropertyProcessor;
 
 #[Service]
 readonly class Compiler
 {
     public function __construct(
-        private EntityCompiler    $entityCompiler,
-        private PropertyProcessor $propertyProcessor,
+        private EntityCompiler             $entityCompiler,
+        private Compiler\PropertyProcessor $propertyProcessor,
     )
     {
     }
@@ -48,6 +47,7 @@ readonly class Compiler
         $this->propertyProcessor->processProperties($class, $metaData);
         $this->findIdProperty($metaData);
         $this->checkForStoreOriginalEntityType($metaData, $class);
+        $this->checkForUniquePropertySets($metaData, $class);
 
         return $metaData;
     }
@@ -83,6 +83,17 @@ readonly class Compiler
 
         if ($parentClass = $classToCheck->getParentClass()) {
             $this->checkForStoreOriginalEntityType($metaData, $parentClass);
+        }
+    }
+
+    private function checkForUniquePropertySets(MetaData $metaData, \ReflectionClass $class): void
+    {
+        $metaData->uniquePropertySets = [];
+
+        foreach ($class->getAttributes(Attributes\UniquePropertySet::class) as $attribute) {
+            /** @var Attributes\UniquePropertySet $instance */
+            $instance = $attribute->newInstance();
+            $metaData->uniquePropertySets[] = $instance->properties;
         }
     }
 }
