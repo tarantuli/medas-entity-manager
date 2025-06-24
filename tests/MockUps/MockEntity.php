@@ -6,7 +6,7 @@ namespace Medas\EntityManagerTest\MockUps;
 
 use Medas\EntityManager\Attributes\{Entity, Id, IsUnique};
 
-#[Entity]
+#[Entity('mock_entities')]
 class MockEntity
 {
     #[Id]
