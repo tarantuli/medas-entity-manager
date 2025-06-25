@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{
-    Attributes\ConfigValue,
-    Attributes\Service,
-    Interfaces\CacheManager,
-    Interfaces\FileLoader
-};
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\FileLoader};
 
 #[Service]
 readonly class EntityClasses
@@ -17,18 +12,17 @@ readonly class EntityClasses
     private const CACHE_KEY = 'Medas\EntityManager\EntityClasses::get';
 
     public function __construct(
-        private CacheManager $cacheManager,
-        private FileLoader   $fileLoader,
+        private FileLoader $fileLoader,
 
         #[ConfigValue(ConfigOptions\EntityDirectories::class)]
-        private array        $entityDirectories,
+        private array      $entityDirectories,
     )
     {
     }
 
     public function get(): array
     {
-        return $this->cacheManager->get()->get(self::CACHE_KEY, fn() => $this->fetchAll());
+        return cache(self::CACHE_KEY, fn() => $this->fetchAll());
     }
 
     private function fetchAll(): array
