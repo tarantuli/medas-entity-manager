@@ -10,6 +10,7 @@ use Medas\Core\{Attributes\Service, Interfaces\TracksChanges};
 class EntityManager
 {
     protected array $entities;
+    protected array $initializing;
     protected int $entityCount;
     protected array $entitiesToDelete;
     protected \SplObjectStorage $savedStates;
@@ -29,6 +30,7 @@ class EntityManager
     )
     {
         $this->entities = [];
+        $this->initializing = [];
         $this->entityCount = 0;
         $this->entitiesToDelete = [];
         $this->savedStates = new \SplObjectStorage();
@@ -171,7 +173,12 @@ class EntityManager
         $key = $this->keyMaker->get($className, $id);
 
         if (!array_key_exists($key, $this->entities)) {
+            $this->doCircularDependencyCheck($className, $id, $key);
+
             $entity = $this->initializer->initializeAndHydrate($className, $id);
+
+            $this->updateCircularDependencyCheck($key);
+
             $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
             $this->entities[$key] = $entity;
 
@@ -183,6 +190,22 @@ class EntityManager
         }
 
         return $this->entities[$key];
+    }
+
+    private function doCircularDependencyCheck(string $className, mixed $id, string $key): void
+    {
+        $identifyingName = $className . ':' . $id;
+
+        if (array_key_exists($key, $this->initializing)) {
+            throw new Exceptions\CircularDependencyFound($this->initializing, $identifyingName);
+        }
+
+        $this->initializing[$key] = $identifyingName;
+    }
+
+    private function updateCircularDependencyCheck(string $key): void
+    {
+        unset($this->initializing[$key]);
     }
 
     /**
