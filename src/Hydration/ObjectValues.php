@@ -24,7 +24,7 @@ readonly class ObjectValues
 
     public function is(Property $property, object $entity, mixed $value): bool
     {
-        $value = $this->cast($property, $value);
+        $value = $this->caster->cast($property, $value);
 
         return $this->comparer->hasValue($property, $entity, $value);
     }
@@ -36,7 +36,7 @@ readonly class ObjectValues
 
     public function set(object $entity, Property $property, mixed $value): void
     {
-        $value = $this->cast($property, $value);
+        $value = $this->caster->cast($property, $value);
 
         $property->reflection->setValue($entity, $value);
     }
