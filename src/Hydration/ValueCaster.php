@@ -15,7 +15,6 @@ use Medas\EntityManager\{
     Attributes\EntityCollection,
     Entities\Initializer,
     Exceptions\InvalidPropertyType,
-    MetaData,
     MetaData\Property
 };
 
@@ -28,7 +27,7 @@ readonly class ValueCaster
     {
     }
 
-    public function cast(MetaData $metaData, Property $property, mixed $value): mixed
+    public function cast(Property $property, mixed $value): mixed
     {
         $valueType = get_debug_type($value);
 
@@ -115,7 +114,7 @@ readonly class ValueCaster
 
         if (!$property->allowsPhpType($valueType)) {
             throw new InvalidPropertyType(
-                $metaData->className,
+                $property->reflection->class,
                 $property->name,
                 $valueType,
                 $property->phpTypes

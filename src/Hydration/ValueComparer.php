@@ -16,25 +16,29 @@ readonly class ValueComparer
     {
     }
 
-    public function isEqual(Property $property, object $entity, mixed $value): bool
+    public function hasValue(Property $property, object $entity, mixed $value): bool
     {
         $entityValue = $this->getter->getValue($entity, $property);
 
-        foreach ([$value, $entityValue] as &$aValue) {
-            if ($aValue instanceof HasId) {
-                $aValue = $aValue->id();
-            }
-
-            // This check MUST be after checking for instances of HasId
-            if ($aValue instanceof Uuid) {
-                $aValue = $aValue->toBytes();
-            }
-
-            if ($aValue instanceof \DateTime) {
-                $aValue = $aValue->getTimestamp();
-            }
-        }
+        $this->normalize($value);
+        $this->normalize($entityValue);
 
         return $value === $entityValue;
+    }
+
+    private function normalize(mixed &$aValue): void
+    {
+        if ($aValue instanceof HasId) {
+            $aValue = $aValue->id();
+        }
+
+        // This check MUST be after checking for instances of HasId
+        if ($aValue instanceof Uuid) {
+            $aValue = $aValue->toBytes();
+        }
+
+        if ($aValue instanceof \DateTime) {
+            $aValue = $aValue->getTimestamp();
+        }
     }
 }

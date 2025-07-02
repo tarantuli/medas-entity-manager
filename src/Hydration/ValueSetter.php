@@ -41,7 +41,7 @@ readonly class ValueSetter
             return;
         }
 
-        $value = $this->valueCaster->cast($metaData, $property, $value);
+        $value = $this->valueCaster->cast($property, $value);
 
         $property->reflection->setValue($entity, $value);
     }
