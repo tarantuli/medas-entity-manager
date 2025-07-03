@@ -48,6 +48,7 @@ readonly class Compiler
         $this->findIdProperty($metaData);
         $this->checkForStoreOriginalEntityType($metaData, $class);
         $this->checkForUniquePropertySets($metaData, $class);
+        $this->checkForCompoudIndexes($metaData, $class);
 
         return $metaData;
     }
@@ -94,6 +95,17 @@ readonly class Compiler
             /** @var Attributes\UniquePropertySet $instance */
             $instance = $attribute->newInstance();
             $metaData->uniquePropertySets[] = $instance->properties;
+        }
+    }
+
+    private function checkForCompoudIndexes(MetaData $metaData, \ReflectionClass $class): void
+    {
+        $metaData->compoundIndexes = [];
+
+        foreach ($class->getAttributes(Attributes\CompoundIndex::class) as $attribute) {
+            /** @var Attributes\CompoundIndex $instance */
+            $instance = $attribute->newInstance();
+            $metaData->compoundIndexes[] = $instance->properties;
         }
     }
 }
