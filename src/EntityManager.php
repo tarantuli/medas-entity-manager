@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{Attributes\Service, Interfaces\TracksChanges};
+use Medas\Core\{Attributes\Service, Events\DebugInformation, Interfaces\TracksChanges};
 
 #[Service]
 class EntityManager
@@ -97,6 +97,8 @@ class EntityManager
 
     public function flush(): void
     {
+        dispatch(new DebugInformation('[entity-manager] flushing'));
+
         $changes = $this->changeFinder->gather(
             fn() => $this->entities,
             fn() => $this->savedStates,
