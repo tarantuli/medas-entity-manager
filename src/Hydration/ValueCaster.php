@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\{
+    Attributes\DumpObject,
     Attributes\Service,
     Interfaces\Collection,
     Interfaces\TracksChanges,
@@ -17,12 +18,14 @@ use Medas\EntityManager\{
     Exceptions\InvalidPropertyType,
     MetaData\Property
 };
+use Medas\ObjectToArraySerializer\ArrayToObjectCaster;
 
 #[Service]
 readonly class ValueCaster
 {
     public function __construct(
-        private UuidProvider|null $uuidProvider,
+        private UuidProvider|null   $uuidProvider,
+        private ArrayToObjectCaster $arrayToObjectCaster,
     )
     {
     }
@@ -58,7 +61,9 @@ readonly class ValueCaster
                 }
 
                 if (class_exists($phpType)) {
-                    if ($attribute = attribute(EntityCollection::class, new \ReflectionClass($phpType))) {
+                    $reflectionClass = new \ReflectionClass($phpType);
+
+                    if ($attribute = attribute(EntityCollection::class, $reflectionClass)) {
                         // We cannot inject the Initializer in the constructor because that already depends on this class
                         $initializer = service(Initializer::class);
                         $collection = new $phpType();
@@ -73,6 +78,9 @@ readonly class ValueCaster
                         }
 
                         $value = $collection;
+                    }
+                    elseif (attribute(DumpObject::class, $reflectionClass) && is_array($value)) {
+                        $value = $this->arrayToObjectCaster->cast($value, $phpType);
                     }
                     elseif (!$value instanceof Collection) {
                         $value = em()->get($phpType, $value);

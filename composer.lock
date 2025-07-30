@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7684474e4f7c0a80eba2cf93aeca58f3",
+    "content-hash": "48d27ab5a91b0ee8e9a0c13a7a22ab4e",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -61,12 +61,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-core.git",
-                "reference": "4429ed314ebb69d87bde2d75fdfbb0d34afffe42"
+                "reference": "5603d1eac6eaf6c0a1ba2d88387498ebdcb622dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/4429ed314ebb69d87bde2d75fdfbb0d34afffe42",
-                "reference": "4429ed314ebb69d87bde2d75fdfbb0d34afffe42",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/5603d1eac6eaf6c0a1ba2d88387498ebdcb622dc",
+                "reference": "5603d1eac6eaf6c0a1ba2d88387498ebdcb622dc",
                 "shasum": ""
             },
             "require": {
@@ -104,7 +104,7 @@
                 "source": "https://github.com/tarantuli/medas-core/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2025-07-30T08:35:25+00:00"
+            "time": "2025-07-30T14:33:05+00:00"
         },
         {
             "name": "morphp/medas-file-system",
@@ -194,6 +194,143 @@
                 "issues": "https://github.com/tarantuli/medas-object-instantiator/issues"
             },
             "time": "2025-06-05T09:41:21+00:00"
+        },
+        {
+            "name": "morphp/medas-object-to-array-serializer",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-object-to-array-serializer.git",
+                "reference": "294b9a433a9a527307b82506efe558e37e69c48b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-object-to-array-serializer/zipball/294b9a433a9a527307b82506efe558e37e69c48b",
+                "reference": "294b9a433a9a527307b82506efe558e37e69c48b",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-core": "dev-dev",
+                "morphp/medas-php-class-analysis": "dev-dev"
+            },
+            "require-dev": {
+                "morphp/medas-entity-manager": "dev-dev",
+                "morphp/medas-service-manager": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\ObjectToArraySerializer\\": "src/",
+                    "Medas\\ObjectToArraySerializerTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas object to array serializer",
+            "keywords": [
+                "data manipulation"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-object-to-array-serializer/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-object-to-array-serializer/issues"
+            },
+            "time": "2024-10-29T11:18:10+00:00"
+        },
+        {
+            "name": "morphp/medas-php-class-analysis",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-php-class-analysis.git",
+                "reference": "3e41b6d4a909e096e0097b56e9466c0f86090c1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-class-analysis/zipball/3e41b6d4a909e096e0097b56e9466c0f86090c1c",
+                "reference": "3e41b6d4a909e096e0097b56e9466c0f86090c1c",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-core": "dev-dev",
+                "morphp/medas-php-tokenizer": "dev-dev"
+            },
+            "require-dev": {
+                "morphp/medas-service-manager": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PhpClassAnalysis\\": "src/",
+                    "Medas\\PhpClassAnalysisTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas PHP class analysis",
+            "keywords": [
+                "backend"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-class-analysis/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-php-class-analysis/issues"
+            },
+            "time": "2024-10-14T12:28:59+00:00"
+        },
+        {
+            "name": "morphp/medas-php-tokenizer",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:tarantuli/medas-php-tokenizer.git",
+                "reference": "479fdf3d68c8bee5616e131c1c1a95f4588f5559"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-php-tokenizer/zipball/479fdf3d68c8bee5616e131c1c1a95f4588f5559",
+                "reference": "479fdf3d68c8bee5616e131c1c1a95f4588f5559",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-console": "dev-dev",
+                "morphp/medas-core": "dev-dev"
+            },
+            "require-dev": {
+                "morphp/medas-console-printer": "dev-dev",
+                "morphp/medas-service-manager": "dev-dev",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\PhpTokenizer\\": "src/",
+                    "Medas\\PhpTokenizerTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas PHP tokenizer",
+            "keywords": [
+                "backend"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-php-tokenizer/tree/dev",
+                "issues": "https://github.com/tarantuli/medas-php-tokenizer/issues"
+            },
+            "time": "2024-12-03T14:02:24+00:00"
         },
         {
             "name": "morphp/medas-service-manager",
@@ -481,12 +618,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:tarantuli/medas-config-options.git",
-                "reference": "b07372e201917e67fd54d83b594b17dc7c4656a7"
+                "reference": "51df3adcbf0fe055f5e0a613cd835fed152c5076"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/b07372e201917e67fd54d83b594b17dc7c4656a7",
-                "reference": "b07372e201917e67fd54d83b594b17dc7c4656a7",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/51df3adcbf0fe055f5e0a613cd835fed152c5076",
+                "reference": "51df3adcbf0fe055f5e0a613cd835fed152c5076",
                 "shasum": ""
             },
             "require": {
@@ -520,7 +657,7 @@
                 "source": "https://github.com/tarantuli/medas-config-options/tree/dev",
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
-            "time": "2025-03-24T12:12:25+00:00"
+            "time": "2025-07-30T09:12:51+00:00"
         },
         {
             "name": "morphp/medas-events",
@@ -2793,6 +2930,7 @@
         "morphp/medas-console": 20,
         "morphp/medas-core": 20,
         "morphp/medas-file-system": 20,
+        "morphp/medas-object-to-array-serializer": 20,
         "morphp/medas-service-manager": 20,
         "morphp/medas-config-manager": 20,
         "morphp/medas-config-options": 20,
