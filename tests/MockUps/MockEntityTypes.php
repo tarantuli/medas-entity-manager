@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\MockUps;
 
 use Medas\Core\Interfaces\Uuid;
-use Medas\EntityManager\{Attributes\Entity, Attributes\Id, Types\Binary};
+use Medas\Core\Types\Binary;
+use Medas\EntityManager\{Attributes\Entity,Attributes\Id};
 
 #[Entity]
 class MockEntityTypes

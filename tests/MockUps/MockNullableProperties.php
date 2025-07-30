@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps;
 
-use Medas\EntityManager\{Attributes\Entity, Attributes\Id, Types\Text};
+use Medas\Core\Types\Text;
+use Medas\EntityManager\{Attributes\Entity,Attributes\Id};
 
 #[Entity]
 class MockNullableProperties

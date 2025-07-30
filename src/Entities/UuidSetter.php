@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\{Attributes\Service, Exceptions\UuidProviderIsNotAvailable, Interfaces\UuidProvider};
-use Medas\EntityManager\{MetaDataManager, Types\Uuid};
+use Medas\Core\{
+    Attributes\Service,
+    Exceptions\UuidProviderIsNotAvailable,
+    Interfaces\UuidProvider,
+    Types\Uuid
+};
+use Medas\EntityManager\MetaDataManager;
 
 #[Service]
 readonly class UuidSetter

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\EntityManager\{MetaData\Compiler, Types\Collection};
+use Medas\Core\Types\Collection;
+use Medas\EntityManager\{MetaData\Compiler};
 use Medas\EntityManagerTest\BaseTestClass;
-use Medas\EntityManagerTest\MockUps\References\{ChildEntities, ChildEntity, ParentEntity};
+use Medas\EntityManagerTest\MockUps\References\{ChildEntities,ChildEntity,ParentEntity};
 
 class ReferenceTest extends BaseTestClass
 {

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Properties;
 
-use Medas\Core\{Attributes\Service, Interfaces\PropertyHandler};
-use Medas\EntityManager\Types\{Binary, Text};
+use Medas\Core\{Attributes\Service, Interfaces\PropertyHandler, Types\Binary, Types\Text};
 
 #[Service]
 readonly class SerializingHandler implements PropertyHandler

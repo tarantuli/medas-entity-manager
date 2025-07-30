@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\EntityManager\{
-    Exceptions\PropertyHasMultipleImplicitTypes,
-    Exceptions\PropertyHasNoImplicitType,
-    Types\Binary,
-    Types\DateTime,
-    Types\Integer,
-    Types\Relation,
-    Types\Text,
-    Types\TypeFinder,
-    Types\Uuid
-};
-use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntityTypes};
+use Medas\Core\Types\Binary;
+use Medas\Core\Types\DateTime;
+use Medas\Core\Types\Integer;
+use Medas\Core\Types\Relation;
+use Medas\Core\Types\Text;
+use Medas\Core\Types\Uuid;
+use Medas\EntityManager\{Exceptions\PropertyHasMultipleImplicitTypes,Exceptions\PropertyHasNoImplicitType,Types\TypeFinder};
+use Medas\EntityManagerTest\{BaseTestClass,MockUps\MockEntityTypes};
 
 class TypeFinderTest extends BaseTestClass
 {

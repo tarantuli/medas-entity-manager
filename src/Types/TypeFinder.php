@@ -9,7 +9,15 @@ use Medas\Core\{
     Interfaces\HasId,
     Interfaces\ManagedCollection,
     Interfaces\Type,
-    Interfaces\Uuid as UuidProperty
+    Interfaces\Uuid as UuidProperty,
+    Types\Boolean,
+    Types\Collection,
+    Types\DateTime,
+    Types\FloatingPoint,
+    Types\Integer,
+    Types\Relation,
+    Types\Text,
+    Types\Uuid
 };
 use Medas\EntityManager\{
     Attributes\Entity,
