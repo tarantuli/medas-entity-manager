@@ -18,7 +18,7 @@ class FlushManager
 
     public function flush(Snapshots\Changes $changes): void
     {
-        $this->flusher->flush($changes);
+        $this->flusher?->flush($changes);
         $this->afterFlushHandlerManager->handle($changes);
     }
 
