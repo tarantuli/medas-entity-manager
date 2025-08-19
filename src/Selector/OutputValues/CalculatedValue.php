@@ -16,10 +16,19 @@ class CalculatedValue implements OutputValue
     /** @var Calculation[] */
     public array $calculations;
 
+    public string|null $alias = null;
+
     public function __construct(
         Calculation ...$calculations,
     )
     {
         $this->calculations = $calculations;
+    }
+
+    public function as(string|null $alias): self
+    {
+        $this->alias = $alias;
+
+        return $this;
     }
 }
