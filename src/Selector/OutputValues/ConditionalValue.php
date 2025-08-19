@@ -14,7 +14,7 @@ abstract class ConditionalValue implements OutputValue
     }
 
     /** @var Condition[] */
-    protected array $conditions;
+    public array $conditions;
 
     public function __construct(
         Condition ...$conditions,
