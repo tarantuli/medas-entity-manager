@@ -6,7 +6,7 @@ namespace Medas\EntityManager\Selector\OutputValues;
 
 use Medas\EntityManager\Selector\Calculations\Calculation;
 
-abstract class CalculatedValue implements OutputValue
+class CalculatedValue implements OutputValue
 {
     public static function c(Calculation ...$calculations): static
     {
