@@ -20,8 +20,14 @@ class Definition
     /** @var Sorting\SortBy[] */
     public array $sorts = [];
 
+    /** @var Grouping\GroupBy[] */
+    public array $groupings = [];
+
     /** @var Parameter[] */
     public array $parameters = [];
+
+    /** @var OutputValues\OutputValue[] */
+    public array $outputValues = [];
 
     public Pagination|null $pagination = null;
 
@@ -42,9 +48,11 @@ class Definition
                 $element instanceof Relations\Relation => $this->relations[] = $element,
                 $element instanceof Conditions\Condition => $this->conditions[] = $element,
                 $element instanceof Sorting\SortBy => $this->sorts[] = $element,
+                $element instanceof Grouping\GroupBy => $this->groupings[] = $element,
                 $element instanceof Parameter => $this->parameters[] = $element,
                 $element instanceof Pagination => $this->pagination = $element,
-                default => throw new \Exception('unhandled element type ' . $element::class),
+                $element instanceof OutputValues\OutputValue => $this->outputValues[] = $element,
+                default => throw new Exceptions\UnhandledElementType($element),
             };
         }
 
