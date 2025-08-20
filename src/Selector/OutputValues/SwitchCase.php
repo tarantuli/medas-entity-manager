@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\OutputValues;
 
-class SwitchResult implements OutputValue
+class SwitchCase implements OutputValue
 {
     public static function c(mixed ...$cases): static
     {
