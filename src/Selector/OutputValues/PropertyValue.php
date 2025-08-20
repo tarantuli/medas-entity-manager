@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\OutputValues;
 
-class PropertyValue implements OutputValue
+class PropertyValue extends BaseOutputValue
 {
     public static function c(string $name, string|null $entity = null): static
     {
