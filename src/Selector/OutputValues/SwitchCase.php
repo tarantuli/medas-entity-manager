@@ -11,7 +11,7 @@ class SwitchCase implements OutputValue
         return new static(...$cases);
     }
 
-    private array $cases;
+    public array $cases;
 
     public function __construct(mixed ...$cases)
     {
