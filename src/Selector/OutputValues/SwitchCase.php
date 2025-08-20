@@ -8,15 +8,15 @@ use Medas\EntityManager\Selector\Calculations\Calculation;
 
 class SwitchCase extends BaseOutputValue
 {
-    public static function c(Calculation ...$cases): static
+    public static function c(mixed ...$cases): static
     {
         return new static(...$cases);
     }
 
-    /** @var Calculation[] */
+    /** @var Calculation[]|Calculation[][]} */
     public array $cases;
 
-    public function __construct(Calculation ...$cases)
+    public function __construct(mixed ...$cases)
     {
         $this->cases = $cases;
     }
