@@ -20,11 +20,13 @@ readonly class EntityClasses
     {
     }
 
+    /** @return string[] */
     public function get(): array
     {
         return cache(self::CACHE_KEY, fn() => $this->fetchAll());
     }
 
+    /** @return string[] */
     private function fetchAll(): array
     {
         $this->loadClassesInEntityDirectories();
@@ -39,6 +41,7 @@ readonly class EntityClasses
         }
     }
 
+    /** @return string[] */
     private function processLoadedClasses(): array
     {
         $entities = [];
