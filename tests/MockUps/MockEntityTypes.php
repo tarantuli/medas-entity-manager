@@ -6,7 +6,10 @@ namespace Medas\EntityManagerTest\MockUps;
 
 use Medas\Core\Interfaces\Uuid;
 use Medas\Core\Types\Binary;
-use Medas\EntityManager\{Attributes\Entity,Attributes\Id};
+use Medas\EntityManager\{Attributes\Entity,
+    Attributes\Id,
+    Attributes\Relations\Action,
+    Attributes\Relations\OnDelete};
 
 #[Entity]
 class MockEntityTypes
@@ -20,11 +23,13 @@ class MockEntityTypes
     private string $explicitType;
 
     private MockEntity $relation;
+    #[OnDelete(Action::Cascade)]
+    private MockEntity $onCascadeDelete;
     private $noPhpType;
     private mixed $mixedType;
     private string|int $unionType;
     private string|null $pipeNullableType;
-    private string|null $questionMarkNullableType;
+    private ?string $questionMarkNullableType;
     private \DateTime $dateTime;
     private Uuid $uuid;
     private MockEnum $enum;

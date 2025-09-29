@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\Core\Interfaces\Type;
+use Medas\EntityManager\Attributes\Relations\Action;
 
 class Property
 {
@@ -20,7 +21,8 @@ class Property
         public bool                $isNullable,
         public bool                $isUnique,
         public bool                $isIndex,
-        public bool                $onDeleteCascade,
+        public Action              $onDelete,
+        public Action              $onUpdate,
         public array               $phpTypes,
         public \ReflectionProperty $reflection,
         public string|null         $handler,
@@ -42,7 +44,8 @@ class Property
             'isNullable' => $this->isNullable,
             'isUnique' => $this->isUnique,
             'isIndex' => $this->isIndex,
-            'onDeleteCascade' => $this->onDeleteCascade,
+            'onDelete' => $this->onDelete,
+            'onUpdate' => $this->onUpdate,
             'phpTypes' => $this->phpTypes,
             'reflectionClass' => $this->reflection->class,
             'reflectionName' => $this->reflection->name,
@@ -64,7 +67,8 @@ class Property
             $this->isNullable,
             $this->isUnique,
             $this->isIndex,
-            $this->onDeleteCascade,
+            $this->onDelete,
+            $this->onUpdate,
             $this->phpTypes,
             $reflectionClass,
             $reflectionName,

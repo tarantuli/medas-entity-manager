@@ -71,6 +71,8 @@ readonly class PropertyProcessor
 
         $type = $this->typeFinder->find($property);
         $isNullable = $property->getType()->allowsNull();
+        $onDelete = attribute(Attributes\Relations\OnDelete::class, $property);
+        $onUpdate = attribute(Attributes\Relations\OnUpdate::class, $property);
         $handler = $this->propertyManager->getHandler($property);
 
         $metaData->properties[] = new Property(
@@ -85,7 +87,8 @@ readonly class PropertyProcessor
             isNullable: $isNullable,
             isUnique: !empty($property->getAttributes(Attributes\IsUnique::class)),
             isIndex: !empty($property->getAttributes(Attributes\IsIndex::class)),
-            onDeleteCascade: !empty($property->getAttributes(Attributes\OnDeleteCascade::class)),
+            onDelete: $onDelete ? $onDelete->action : Attributes\Relations\Action::NoAction,
+            onUpdate: $onUpdate ? $onUpdate->action : Attributes\Relations\Action::NoAction,
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property,
             handler: $handler ? $handler::class : null,

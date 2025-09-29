@@ -47,6 +47,15 @@ class TypeFinderTest extends BaseTestClass
         self::assertInstanceOf(Relation::class, $finder->find($class->getProperty('relation')));
     }
 
+    public function testOnCascadeDelete(): void
+    {
+        $finder = service(TypeFinder::class);
+        $class = new \ReflectionClass(MockEntityTypes::class);
+
+        $type = $finder->find($class->getProperty('onCascadeDelete'));
+        self::assertInstanceOf(Relation::class, $type);;
+    }
+
     public function testUuidType(): void
     {
         $finder = service(TypeFinder::class);
