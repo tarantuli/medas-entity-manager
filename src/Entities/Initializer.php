@@ -17,7 +17,7 @@ readonly class Initializer
     {
     }
 
-    public function initialize(string $className, array $values = [], MetaData $metaData = null): object
+    public function initialize(string $className, array $values = [], MetaData|null $metaData = null): object
     {
         $entity = new $className();
 

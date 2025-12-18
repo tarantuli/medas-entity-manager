@@ -23,7 +23,7 @@ readonly class IdSerializer implements StringSerializer
         throw new CannotCastValueToId($value);
     }
 
-    public function unserialize(mixed $value, Type $type = null): mixed
+    public function unserialize(mixed $value, Type|null $type = null): mixed
     {
         // No need to implement this
         return $value;

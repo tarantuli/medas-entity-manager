@@ -12,8 +12,6 @@ class UnhandledElementType extends BaseException
     public function __construct(Element $element)
     {
         parent::__construct($element::class);
-
-        ;
     }
 
     public function pattern(): string

@@ -9,7 +9,7 @@ use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Interfaces\FileLoade
 #[Service]
 readonly class EntityClasses
 {
-    private const CACHE_KEY = 'Medas\EntityManager\EntityClasses::get';
+    private const string CACHE_KEY = 'Medas\EntityManager\EntityClasses::get';
 
     public function __construct(
         private FileLoader $fileLoader,
@@ -68,12 +68,12 @@ readonly class EntityClasses
             return false;
         }
 
-        foreach ($this->entityDirectories as $directory) {
-            if (str_starts_with($reflectionClass->getFileName(), realpath($directory) . DIRECTORY_SEPARATOR)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any(
+            $this->entityDirectories,
+            fn($directory) => str_starts_with(
+                $reflectionClass->getFileName(),
+                realpath($directory) . DIRECTORY_SEPARATOR
+            )
+        );
     }
 }
