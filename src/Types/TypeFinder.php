@@ -34,8 +34,8 @@ use Medas\EntityManager\{
 readonly class TypeFinder
 {
     public function __construct(
-        private PropertyTypeNormalizer $normalizer,
         private PropertyManager        $propertyManager,
+        private PropertyTypeNormalizer $normalizer,
     )
     {
     }

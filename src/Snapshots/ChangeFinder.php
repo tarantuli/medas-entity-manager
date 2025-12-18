@@ -11,8 +11,8 @@ use Medas\EntityManager\BeforeFlushHandlerManager;
 readonly class ChangeFinder
 {
     public function __construct(
-        private SnapshotManager           $snapshotManager,
         private BeforeFlushHandlerManager $beforeFlushHandlerManager,
+        private SnapshotManager           $snapshotManager,
     )
     {
     }

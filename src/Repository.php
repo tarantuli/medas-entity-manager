@@ -11,8 +11,8 @@ readonly class Repository
 {
     public function __construct(
         private Entities\IdValue                                     $idValue,
-        private MetaDataManager                                      $metaDataManager,
         private Entities\ValueFetchers\SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
+        private MetaDataManager                                      $metaDataManager,
     )
     {
     }

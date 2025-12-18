@@ -19,11 +19,11 @@ use Medas\EntityManager\Selector\Selectors\WithValues;
 readonly class Hydrator
 {
     public function __construct(
-        private IdValue                       $idValue,
         private EntityValueFetchersManager    $entityValueFetchersManager,
-        private SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
-        private OriginalClassFetcherManager   $originalClassFetcherManager,
+        private IdValue                       $idValue,
         private MetaDataManager               $metaDataManager,
+        private OriginalClassFetcherManager   $originalClassFetcherManager,
+        private SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
         private ValueGetter                   $valueGetter,
         private ValueSetter                   $valueSetter,
     )

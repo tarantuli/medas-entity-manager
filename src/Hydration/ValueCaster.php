@@ -24,8 +24,8 @@ use Medas\ObjectToArraySerializer\ArrayToObjectCaster;
 readonly class ValueCaster
 {
     public function __construct(
-        private UuidProvider|null   $uuidProvider,
         private ArrayToObjectCaster $arrayToObjectCaster,
+        private UuidProvider|null   $uuidProvider,
     )
     {
     }

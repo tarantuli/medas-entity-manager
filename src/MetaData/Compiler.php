@@ -17,8 +17,8 @@ use Medas\EntityManager\{
 readonly class Compiler
 {
     public function __construct(
-        private EntityCompiler             $entityCompiler,
         private Compiler\PropertyProcessor $propertyProcessor,
+        private EntityCompiler             $entityCompiler,
     )
     {
     }

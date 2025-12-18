@@ -10,8 +10,8 @@ use Medas\Core\Attributes\Service;
 class FlushManager
 {
     public function __construct(
-        private Entities\Flusher|null             $flusher,
         private readonly AfterFlushHandlerManager $afterFlushHandlerManager,
+        private Entities\Flusher|null             $flusher,
     )
     {
     }

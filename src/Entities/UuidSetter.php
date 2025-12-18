@@ -16,8 +16,8 @@ use Medas\EntityManager\MetaDataManager;
 readonly class UuidSetter
 {
     public function __construct(
-        private UuidProvider|null $uuidProvider,
         private MetaDataManager   $metaDataManager,
+        private UuidProvider|null $uuidProvider,
     )
     {
     }

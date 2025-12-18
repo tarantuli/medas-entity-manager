@@ -20,13 +20,13 @@ class EntityManager
     private int|null $cachePurgeAmount = null;
 
     public function __construct(
-        private readonly FlushManager              $flushManager,
-        private readonly Entities\UuidSetter       $uuidSetter,
         private readonly Entities\IdValue          $idValue,
         private readonly Entities\Initializer      $initializer,
         private readonly Entities\KeyMaker         $keyMaker,
-        private readonly Snapshots\SnapshotManager $snapshotManager,
+        private readonly Entities\UuidSetter       $uuidSetter,
+        private readonly FlushManager              $flushManager,
         private readonly Snapshots\ChangeFinder    $changeFinder,
+        private readonly Snapshots\SnapshotManager $snapshotManager,
     )
     {
         $this->entities = [];

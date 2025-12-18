@@ -11,8 +11,8 @@ use Medas\EntityManager\Entities\Generator\Pluralizers\Pluralizer;
 readonly class SnakeCaseNames implements NameConverter
 {
     public function __construct(
-        private Pluralizer      $pluralizer,
         private IdentifierMaker $identifierMaker,
+        private Pluralizer      $pluralizer,
     )
     {
     }
