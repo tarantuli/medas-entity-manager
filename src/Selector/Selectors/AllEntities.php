@@ -9,10 +9,13 @@ use Medas\EntityManager\Selector\{Definition, Selector};
 
 readonly class AllEntities implements Selector, NotCacheable
 {
+    private Definition $definition;
+
     public function __construct(
         private string $entity,
     )
     {
+        $this->definition = new Definition($this->entity);
     }
 
     public function entity(): string
@@ -22,6 +25,6 @@ readonly class AllEntities implements Selector, NotCacheable
 
     public function definition(): Definition
     {
-        return new Definition($this->entity);
+        return $this->definition;
     }
 }
