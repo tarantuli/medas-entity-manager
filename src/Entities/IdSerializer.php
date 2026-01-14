@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\{Attributes\Service, Interfaces\HasId, Interfaces\StringSerializer, Interfaces\Type};
+use Medas\Core\{
+    Attributes\Service,
+    Interfaces\HasId,
+    Interfaces\StringSerializer,
+    Interfaces\Type,
+    Interfaces\Uuid
+};
 use Medas\EntityManager\Exceptions\CannotCastValueToId;
 
 #[Service]
@@ -14,6 +20,10 @@ readonly class IdSerializer implements StringSerializer
     {
         if ($value instanceof HasId) {
             $value = $value->id();
+        }
+
+        if ($value instanceof Uuid) {
+            $value = $value->toBytes();
         }
 
         if ($value === null || is_scalar($value) || $value instanceof \Stringable) {

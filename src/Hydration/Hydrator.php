@@ -33,6 +33,10 @@ readonly class Hydrator
     public function hydrate(MetaData $metaData, object $entity): void
     {
         foreach ($metaData->properties as $property) {
+            if ($property->isId) {
+                continue;
+            }
+
             foreach ($this->entityValueFetchersManager->get() as $entityValueFetcher) {
                 $fetchResult = $entityValueFetcher->fetch($metaData, $entity, $property);
 

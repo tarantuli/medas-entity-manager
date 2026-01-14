@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Interfaces\ManagedCollection};
 use Medas\EntityManager\MetaData;
 
 #[Service]
@@ -42,7 +42,17 @@ readonly class ValueSetter
         }
 
         $value = $this->valueCaster->cast($property, $value);
+        $reference = &$entity->{$propertyName};
 
-        $property->reflection->setValue($entity, $value);
+        if (isset($reference) && $reference instanceof ManagedCollection) {
+            foreach ($value as $subValue) {
+                if (!$reference->contains($subValue)) {
+                    $reference[] = $subValue;
+                }
+            }
+        }
+        else {
+            $property->reflection->setValue($entity, $value);
+        }
     }
 }
