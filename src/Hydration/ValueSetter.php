@@ -42,9 +42,10 @@ readonly class ValueSetter
         }
 
         $value = $this->valueCaster->cast($property, $value);
-        $reference = &$entity->{$propertyName};
 
-        if (isset($reference) && $reference instanceof ManagedCollection) {
+        if (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof ManagedCollection) {
+            $reference = &$entity->{$propertyName};
+
             foreach ($value as $subValue) {
                 if (!$reference->contains($subValue)) {
                     $reference[] = $subValue;
