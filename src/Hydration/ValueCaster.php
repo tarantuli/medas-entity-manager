@@ -44,7 +44,9 @@ readonly class ValueCaster
                 }
 
                 if ($phpType === Uuid::class && is_string($value)) {
-                    $value = $this->uuidProvider->fromString($value);
+                    $value = strlen($value) === 16
+                        ? $this->uuidProvider->fromBytes($value)
+                        : $this->uuidProvider->fromString($value);
                 }
 
                 if (enum_exists($phpType)) {
