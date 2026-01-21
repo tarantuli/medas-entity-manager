@@ -5,19 +5,13 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\{
-    Exceptions\IdPropertyNotGiven,
-    Hydration\ValueGetter,
-    MetaData,
-    MetaDataManager
-};
+use Medas\EntityManager\{Exceptions\IdPropertyNotGiven, MetaData, MetaDataManager};
 
 #[Service]
 readonly class IdValue
 {
     public function __construct(
         private MetaDataManager $metaDataManager,
-        private ValueGetter     $valueGetter,
     )
     {
     }

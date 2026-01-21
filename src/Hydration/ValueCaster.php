@@ -72,7 +72,12 @@ readonly class ValueCaster
                         $itemType = $attribute->contentType;
 
                         foreach ($value as $itemValues) {
-                            $collection[] = $initializer->initialize($itemType, $itemValues);
+                            if ($itemValues instanceof $itemType) {
+                                $collection[] = $itemValues;
+                            }
+                            else {
+                                $collection[] = $initializer->initialize($itemType, $itemValues);
+                            }
                         }
 
                         if ($collection instanceof TracksChanges) {

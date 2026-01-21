@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\Core\{Attributes\Service, Interfaces\ManagedCollection};
+use Medas\Core\{
+    Attributes\Service,
+    Collections\GenericCollection,
+    Interfaces\ManagedCollection,
+    Interfaces\SettableCollection
+};
 use Medas\EntityManager\MetaData;
 
 #[Service]
@@ -43,7 +48,14 @@ readonly class ValueSetter
 
         $value = $this->valueCaster->cast($property, $value);
 
-        if (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof ManagedCollection) {
+        if (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof SettableCollection) {
+            /** @var SettableCollection $reference */
+            $reference = &$entity->{$propertyName};
+
+            $reference->setData($value instanceof GenericCollection ? $value->__serialize() : $value);
+        }
+        elseif (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof ManagedCollection) {
+            /** @var ManagedCollection $reference */
             $reference = &$entity->{$propertyName};
 
             foreach ($value as $subValue) {

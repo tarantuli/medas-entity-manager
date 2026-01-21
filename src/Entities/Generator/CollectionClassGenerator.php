@@ -31,9 +31,7 @@ class {{shortClassName}}Collection extends RecordCollection
 PHP;
 
     public function __construct(
-        private ClassNameNormalizer          $classNameNormalizer,
-        private FileNameFinder               $fileNameFinder,
-        private NameConverters\NameConverter $storeNameConverter,
+        private ClassNameNormalizer $classNameNormalizer,
     )
     {
     }

@@ -24,7 +24,6 @@ readonly class Hydrator
         private MetaDataManager               $metaDataManager,
         private OriginalClassFetcherManager   $originalClassFetcherManager,
         private SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
-        private ValueGetter                   $valueGetter,
         private ValueSetter                   $valueSetter,
     )
     {

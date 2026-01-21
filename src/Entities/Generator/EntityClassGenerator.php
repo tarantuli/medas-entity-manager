@@ -67,7 +67,6 @@ PHP;
 
     public function __construct(
         private ClassNameNormalizer          $classNameNormalizer,
-        private FileNameFinder               $fileNameFinder,
         private NameConverters\NameConverter $storeNameConverter,
     )
     {
