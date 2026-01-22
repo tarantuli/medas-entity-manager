@@ -110,9 +110,4 @@ readonly class Hydrator
 
         throw new \Exception('found no original class');
     }
-
-    public function setValues(MetaData $metaData, object $entity, array $values): void
-    {
-        $this->valueSetter->setValues($metaData, $entity, $values);
-    }
 }

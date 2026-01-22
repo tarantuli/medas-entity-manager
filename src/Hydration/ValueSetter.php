@@ -9,7 +9,8 @@ use Medas\Core\{
     Collections\GenericCollection,
     Events\DebugInformation,
     Interfaces\ManagedCollection,
-    Interfaces\SettableCollection
+    Interfaces\SettableCollection,
+    Interfaces\TracksChanges
 };
 use Medas\EntityManager\MetaData;
 
@@ -26,11 +27,19 @@ readonly class ValueSetter
         MetaData $metaData,
         object   $entity,
         array    $values,
-        bool     $ignoreUnknownProperties = false
+        bool     $ignoreUnknownProperties = false,
+        bool     $resetHistory = false,
     ): void
     {
         foreach ($values as $propertyName => $value) {
-            $this->set($metaData, $entity, $propertyName, $value, $ignoreUnknownProperties);
+            $this->set(
+                $metaData,
+                $entity,
+                $propertyName,
+                $value,
+                $ignoreUnknownProperties,
+                $resetHistory
+            );
         }
     }
 
@@ -39,7 +48,8 @@ readonly class ValueSetter
         object   $entity,
         string   $propertyName,
         mixed    $value,
-        bool     $ignoreUnknownProperties = false
+        bool     $ignoreUnknownProperties = false,
+        bool     $resetHistory = false,
     ): void
     {
         dispatch(new DebugInformation(
@@ -75,6 +85,10 @@ readonly class ValueSetter
         }
         else {
             $property->reflection->setValue($entity, $value);
+        }
+
+        if ($value instanceof TracksChanges && $resetHistory) {
+            $value->resetChangeTracking();
         }
     }
 }

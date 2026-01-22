@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Entities;
 
 use Medas\Core\{Attributes\Service, Types\Collection};
-use Medas\EntityManager\{Hydration\Hydrator, MetaData, MetaDataManager};
+use Medas\EntityManager\{Hydration\Hydrator, Hydration\ValueSetter, MetaData, MetaDataManager};
 
 #[Service]
 readonly class Initializer
@@ -13,6 +13,7 @@ readonly class Initializer
     public function __construct(
         private Hydrator        $hydrator,
         private MetaDataManager $metaDataManager,
+        private ValueSetter     $valueSetter,
     )
     {
     }
@@ -25,7 +26,7 @@ readonly class Initializer
         $this->initializeCollections($entity, $metaData);
 
         if ($values) {
-            $this->hydrator->setValues($metaData, $entity, $values);
+            $this->valueSetter->setValues($metaData, $entity, $values, resetHistory: true);
         }
 
         return $entity;
