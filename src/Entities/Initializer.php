@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\{Attributes\Service, Types\Collection};
+use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{Hydration\Hydrator, Hydration\ValueSetter, MetaData, MetaDataManager};
 
 #[Service]
@@ -23,22 +23,11 @@ readonly class Initializer
         $metaData ??= $this->metaDataManager->get($className);
         $entity = new $className();
 
-        $this->initializeCollections($entity, $metaData);
-
         if ($values) {
             $this->valueSetter->setValues($metaData, $entity, $values, resetHistory: true);
         }
 
         return $entity;
-    }
-
-    private function initializeCollections(mixed $entity, MetaData $metaData): void
-    {
-        foreach ($metaData->properties as $property) {
-            if ($property->type instanceof Collection) {
-                $property->reflection->setValue($entity, new $property->type->collectionType);
-            }
-        }
     }
 
     public function initializeAndHydrate(string $className, mixed $id): object
