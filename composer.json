@@ -18,7 +18,8 @@
     "morphp/medas-core": "^2",
     "morphp/medas-file-system": "^2",
     "morphp/medas-object-to-array-serializer": "^2",
-    "morphp/medas-service-manager": "^2"
+    "morphp/medas-service-manager": "^2",
+    "php": "^8.4"
   },
   "require-dev": {
     "morphp/medas-config-manager": "^2",
