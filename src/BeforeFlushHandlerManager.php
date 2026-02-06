@@ -9,7 +9,7 @@ use Medas\Core\{Attributes\Service, Interfaces\ImplementorFinder};
 #[Service]
 readonly class BeforeFlushHandlerManager
 {
-    private const string HANDLERS_CACHE_KEY = 'BeforeFlushHandlerManager::handlers';
+    private const HANDLERS_CACHE_KEY = 'BeforeFlushHandlerManager::handlers';
 
     public function handle(Snapshots\Changes $changes): bool
     {

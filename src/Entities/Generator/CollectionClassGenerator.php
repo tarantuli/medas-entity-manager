@@ -9,7 +9,7 @@ use Medas\Core\Attributes\Service;
 #[Service]
 readonly class CollectionClassGenerator
 {
-    private const string PHP_TEMPLATE
+    private const PHP_TEMPLATE
         = <<<'PHP'
 <?php
 

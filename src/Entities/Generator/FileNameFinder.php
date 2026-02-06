@@ -60,10 +60,13 @@ readonly class FileNameFinder
         $className = $this->classNameNormalizer->normalize($className);
         $psr4Prefixes = $this->getPsr4Prefixes();
 
-        return array_find_key(
-            $psr4Prefixes,
-            fn($paths, $prefix) => str_starts_with($className, $prefix)
-        );
+        foreach ($psr4Prefixes as $prefix => $paths) {
+            if (str_starts_with($className, $prefix)) {
+                return $prefix;
+            }
+        }
+
+        return null;
     }
 
     private function getPsr4Prefixes(): array
