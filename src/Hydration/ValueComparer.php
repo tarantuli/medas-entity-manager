@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Hydration;
 
-use Medas\Core\{Attributes\Service, Interfaces\HasId, Interfaces\Uuid};
+use Medas\Core\{Attributes\Service, Interfaces\HasId, Interfaces\PropertyHandler, Interfaces\Uuid};
 use Medas\EntityManager\MetaData\Property;
 
 #[Service]
@@ -20,25 +20,31 @@ readonly class ValueComparer
     {
         $entityValue = $this->getter->getValue($entity, $property);
 
-        $this->normalize($value);
-        $this->normalize($entityValue);
+        $this->normalize($property, $value);
+        $this->normalize($property, $entityValue);
 
         return $value === $entityValue;
     }
 
-    private function normalize(mixed &$aValue): void
+    private function normalize(Property $property, mixed &$value): void
     {
-        if ($aValue instanceof HasId) {
-            $aValue = $aValue->id();
+        if ($property->handler) {
+            /** @var PropertyHandler $handler */
+            $handler = \service($property->handler);
+            $value = $handler->serialize($value);
+        }
+
+        if ($value instanceof HasId) {
+            $value = $value->id();
         }
 
         // This check MUST be after checking for instances of HasId
-        if ($aValue instanceof Uuid) {
-            $aValue = $aValue->toBytes();
+        if ($value instanceof Uuid) {
+            $value = $value->toBytes();
         }
 
-        if ($aValue instanceof \DateTime) {
-            $aValue = $aValue->getTimestamp();
+        if ($value instanceof \DateTime) {
+            $value = $value->getTimestamp();
         }
     }
 }
