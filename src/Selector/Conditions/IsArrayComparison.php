@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\Conditions;
 
-class WhereNotIn extends WhereIs implements IsArrayComparison
+interface IsArrayComparison
 {
 }
