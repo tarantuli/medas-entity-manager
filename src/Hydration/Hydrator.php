@@ -11,6 +11,8 @@ use Medas\EntityManager\Entities\{
     ValueFetchers\OriginalClassFetcherManager,
     ValueFetchers\SelectorRecordsFetcherManager
 };
+use Medas\EntityManager\EntityManager;
+use Medas\EntityManager\Exceptions\{OriginalClassNotFound, ReferenceFetchFailed};
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
@@ -19,6 +21,7 @@ use Medas\EntityManager\Selector\Selectors\WithValues;
 readonly class Hydrator
 {
     public function __construct(
+        private EntityManager                 $entityManager,
         private EntityValueFetchersManager    $entityValueFetchersManager,
         private IdValue                       $idValue,
         private MetaDataManager               $metaDataManager,
@@ -84,7 +87,7 @@ readonly class Hydrator
         }
 
         if (!$foundRecords) {
-            throw new \Exception('found no references');
+            throw new ReferenceFetchFailed($entity::class, $reference->name, $reference->entity);
         }
 
         $metaData = $this->metaDataManager->get($reference->entity);
@@ -92,7 +95,7 @@ readonly class Hydrator
 
         foreach ($records as $record) {
             $idValue = $this->idValue->get($record, $metaData);
-            $entities[] = em()->get($metaData->className, $idValue);
+            $entities[] = $this->entityManager->get($metaData->className, $idValue);
         }
 
         return $entities;
@@ -108,6 +111,6 @@ readonly class Hydrator
             }
         }
 
-        throw new \Exception('found no original class');
+        throw new OriginalClassNotFound($metaData->className, $id);
     }
 }

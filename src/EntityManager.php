@@ -4,41 +4,32 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{Attributes\Service, Events\DebugInformation, Interfaces\TracksChanges};
+use Medas\Core\{
+    Attributes\Service,
+    Events\DebugInformation,
+    Interfaces\EntityManager as EntityManagerInterface,
+    Interfaces\TracksChanges
+};
 
 #[Service]
-class EntityManager
+readonly class EntityManager implements EntityManagerInterface
 {
-    protected array $entities;
-    protected array $initializing;
-    protected int $entityCount;
-    protected array $entitiesToDelete;
-    protected \SplObjectStorage $savedStates;
-    private bool $autoPersistOnCreate = false;
-    private bool $autoFlushOnCreate = false;
-    private int|null $cachePurgeTriggerSize = null;
-    private int|null $cachePurgeAmount = null;
-
     public function __construct(
-        private readonly Entities\IdValue          $idValue,
-        private readonly Entities\Initializer      $initializer,
-        private readonly Entities\KeyMaker         $keyMaker,
-        private readonly Entities\UuidSetter       $uuidSetter,
-        private readonly FlushManager              $flushManager,
-        private readonly Snapshots\ChangeFinder    $changeFinder,
-        private readonly Snapshots\SnapshotManager $snapshotManager,
+        private Entities\IdValue          $idValue,
+        private Entities\Initializer      $initializer,
+        private Entities\KeyMaker         $keyMaker,
+        private Entities\UuidSetter       $uuidSetter,
+        private EntityManagerContext      $context,
+        private FlushManager              $flushManager,
+        private Snapshots\ChangeFinder    $changeFinder,
+        private Snapshots\SnapshotManager $snapshotManager,
     )
     {
-        $this->entities = [];
-        $this->initializing = [];
-        $this->entityCount = 0;
-        $this->entitiesToDelete = [];
-        $this->savedStates = new \SplObjectStorage();
     }
 
     public function autoPersistOnCreate(bool $value = true, bool $alsoFlush = true): void
     {
-        $this->autoPersistOnCreate = $value;
+        $this->context->autoPersistOnCreate = $value;
 
         if ($value) {
             $this->autoFlushOnCreate($alsoFlush);
@@ -47,18 +38,18 @@ class EntityManager
 
     public function autoFlushOnCreate(bool $value): void
     {
-        $this->autoFlushOnCreate = $value;
+        $this->context->autoFlushOnCreate = $value;
     }
 
     public function setPurgingParameters(int|null $triggerSize, int|null $purgeAmount = null): void
     {
-        $this->cachePurgeTriggerSize = $triggerSize;
-        $this->cachePurgeAmount = $purgeAmount ?: (int) floor($triggerSize / 4);
+        $this->context->cachePurgeTriggerSize = $triggerSize;
+        $this->context->cachePurgeAmount = $purgeAmount ?: (int) floor($triggerSize / 4);
 
-        if ($this->cachePurgeAmount >= $this->cachePurgeTriggerSize) {
+        if ($this->context->cachePurgeAmount >= $this->context->cachePurgeTriggerSize) {
             throw new Exceptions\PurgeAmountShouldBeLessThanTriggerSize(
-                $this->cachePurgeAmount,
-                $this->cachePurgeTriggerSize
+                $this->context->cachePurgeAmount,
+                $this->context->cachePurgeTriggerSize
             );
         }
     }
@@ -67,31 +58,44 @@ class EntityManager
     {
         $this->flush();
 
-        $toClear = array_slice($this->entities, 0, $this->cachePurgeAmount, true);
+        // Sort by access time (LRU)
+        asort($this->context->entityAccessTime);
 
-        foreach ($toClear as $index => $entity) {
-            unset($this->entities[$index]);
+        $keysToRemove = array_slice(
+            array_keys($this->context->entityAccessTime),
+            0,
+            $this->context->cachePurgeAmount,
+            true
+        );
 
-            $this->savedStates->offsetUnset($entity);
+        foreach ($keysToRemove as $key) {
+            if (isset($this->context->entities[$key])) {
+                $entity = $this->context->entities[$key];
+
+                unset($this->context->entities[$key]);
+                unset($this->context->entityAccessTime[$key]);
+
+                $this->context->savedStates->offsetUnset($entity);
+            }
         }
 
-        $this->entityCount = count($this->entities);
+        $this->context->entityCount = count($this->context->entities);
     }
 
     public function clear(): void
     {
-        $this->entities = [];
-        $this->entityCount = 0;
-        $this->entitiesToDelete = [];
-        $this->savedStates = new \SplObjectStorage();
+        $this->context->entities = [];
+        $this->context->entityCount = 0;
+        $this->context->entitiesToDelete = [];
+        $this->context->savedStates = new \SplObjectStorage();
 
         dispatch(new Events\MustClearEntityValueCaches());
     }
 
     public function delete(object $entity): void
     {
-        if (!in_array($entity, $this->entitiesToDelete, true)) {
-            $this->entitiesToDelete[] = $entity;
+        if (!in_array($entity, $this->context->entitiesToDelete, true)) {
+            $this->context->entitiesToDelete[] = $entity;
         }
     }
 
@@ -100,9 +104,9 @@ class EntityManager
         dispatch(new DebugInformation('[entity-manager] flushing'));
 
         $changes = $this->changeFinder->gather(
-            fn() => $this->entities,
-            fn() => $this->savedStates,
-            fn() => $this->entitiesToDelete
+            fn() => $this->context->entities,
+            fn() => $this->context->savedStates,
+            fn() => $this->context->entitiesToDelete
         );
 
         $this->updateEntityStates();
@@ -113,13 +117,13 @@ class EntityManager
 
     public function updateEntityStates(): void
     {
-        foreach ($this->entities as $key => $entity) {
-            if (in_array($entity, $this->entitiesToDelete, true)) {
-                unset($this->entities[$key]);
-                unset($this->savedStates[$entity]);
+        foreach ($this->context->entities as $key => $entity) {
+            if (in_array($entity, $this->context->entitiesToDelete, true)) {
+                unset($this->context->entities[$key]);
+                unset($this->context->savedStates[$entity]);
             }
             else {
-                $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
             }
 
             if ($entity instanceof TracksChanges) {
@@ -127,27 +131,28 @@ class EntityManager
             }
         }
 
-        $this->entitiesToDelete = [];
+        $this->context->entitiesToDelete = [];
     }
 
     public function cacheSize(): int
     {
-        return $this->entityCount;
+        return $this->context->entityCount;
     }
 
     public function persist(object ...$entities): void
     {
         foreach ($entities as $entity) {
-            if (!in_array($entity, $this->entities, true)) {
+            if (!in_array($entity, $this->context->entities, true)) {
                 $key = $entity::class . ':new:' . mt_rand();
 
                 $this->uuidSetter->processEntity($entity);
 
-                $this->entities[$key] = $entity;
+                $this->context->entities[$key] = $entity;
 
-                ++$this->entityCount;
+                ++$this->context->entityCount;
 
-                if ($this->cachePurgeTriggerSize && $this->entityCount >= $this->cachePurgeTriggerSize) {
+                if ($this->context->cachePurgeTriggerSize
+                        && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
                     $this->purge();
                 }
             }
@@ -158,10 +163,10 @@ class EntityManager
     {
         $id = $this->idValue->fromEntity($entity);
         $newKey = $this->keyMaker->get($entity::class, $id);
-        $oldKey = array_search($entity, $this->entities);
-        $this->entities[$newKey] = $entity;
+        $oldKey = array_search($entity, $this->context->entities);
+        $this->context->entities[$newKey] = $entity;
 
-        unset($this->entities[$oldKey]);
+        unset($this->context->entities[$oldKey]);
     }
 
     /**
@@ -173,41 +178,53 @@ class EntityManager
     public function get(string $className, mixed $id): object
     {
         $key = $this->keyMaker->get($className, $id);
+        $this->context->entityAccessTime[$key] = hrtime(true);
 
-        if (!array_key_exists($key, $this->entities)) {
+        if (!array_key_exists($key, $this->context->entities)) {
             $this->doCircularDependencyCheck($className, $id, $key);
 
-            $entity = $this->initializer->initializeAndHydrate($className, $id);
+            try {
+                $entity = $this->initializer->initializeAndHydrate($className, $id);
 
-            $this->updateCircularDependencyCheck($key);
+                $this->updateCircularDependencyCheck($key);
 
-            $this->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
-            $this->entities[$key] = $entity;
+                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+                $this->context->entities[$key] = $entity;
 
-            ++$this->entityCount;
+                ++$this->context->entityCount;
+            }
 
-            if ($this->cachePurgeTriggerSize && $this->entityCount >= $this->cachePurgeTriggerSize) {
+            finally{
+                // Always clean up, even on exception
+                $this->updateCircularDependencyCheck($key);
+            }
+
+            if ($this->context->cachePurgeTriggerSize
+                    && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
                 $this->purge();
             }
         }
 
-        return $this->entities[$key];
+        return $this->context->entities[$key];
     }
 
     private function doCircularDependencyCheck(string $className, mixed $id, string $key): void
     {
         $identifyingName = $className . ':' . $id;
 
-        if (array_key_exists($key, $this->initializing)) {
-            throw new Exceptions\CircularDependencyFound($this->initializing, $identifyingName);
+        if (array_key_exists($key, $this->context->initializing)) {
+            throw new Exceptions\CircularDependencyFound(
+                $this->context->initializing,
+                $identifyingName
+            );
         }
 
-        $this->initializing[$key] = $identifyingName;
+        $this->context->initializing[$key] = $identifyingName;
     }
 
     private function updateCircularDependencyCheck(string $key): void
     {
-        unset($this->initializing[$key]);
+        unset($this->context->initializing[$key]);
     }
 
     /**
@@ -220,10 +237,10 @@ class EntityManager
     {
         $entity = $this->initializer->initialize($className, $values);
 
-        if ($this->autoPersistOnCreate) {
+        if ($this->context->autoPersistOnCreate) {
             $this->persist($entity);
 
-            if ($this->autoFlushOnCreate) {
+            if ($this->context->autoFlushOnCreate) {
                 $this->flush();
             }
         }

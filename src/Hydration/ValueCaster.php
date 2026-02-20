@@ -15,7 +15,14 @@ use Medas\Core\{
 use Medas\EntityManager\{
     Attributes\EntityCollection,
     Entities\Initializer,
+    EntityManager,
+    Exceptions\DataLossOnConversion,
+    Exceptions\IntegerOverflow,
+    Exceptions\InvalidNumericValue,
     Exceptions\InvalidPropertyType,
+    Exceptions\InvalidUuidBytes,
+    Exceptions\InvalidUuidFormat,
+    Exceptions\UnrecognizedUuidFormat,
     MetaData\Property
 };
 use Medas\ObjectToArraySerializer\ArrayToObjectCaster;
@@ -25,6 +32,7 @@ readonly class ValueCaster
 {
     public function __construct(
         private ArrayToObjectCaster $arrayToObjectCaster,
+        private EntityManager       $entityManager,
         private UuidProvider|null   $uuidProvider,
     )
     {
@@ -44,9 +52,28 @@ readonly class ValueCaster
                 }
 
                 if ($phpType === Uuid::class && is_string($value)) {
-                    $value = strlen($value) === 16
-                        ? $this->uuidProvider->fromBytes($value)
-                        : $this->uuidProvider->fromString($value);
+                    // Try UUID string format first (more common)
+                    if (preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $value)) {
+                        try {
+                            $value = $this->uuidProvider->fromString($value);
+                        }
+                        catch (\Exception) {
+                            throw new InvalidUuidFormat($property->name, $value);
+                        }
+                    }
+
+                    // Then try binary format
+                    elseif (strlen($value) === 16) {
+                        try {
+                            $value = $this->uuidProvider->fromBytes($value);
+                        }
+                        catch (\Exception) {
+                            throw new InvalidUuidBytes($property->name, $value);
+                        }
+                    }
+                    else {
+                        throw new UnrecognizedUuidFormat($property->name, $value);
+                    }
                 }
 
                 if (enum_exists($phpType)) {
@@ -90,7 +117,7 @@ readonly class ValueCaster
                         $value = $this->arrayToObjectCaster->cast($value, $phpType);
                     }
                     elseif (!$value instanceof Collection) {
-                        $value = em()->get($phpType, $value);
+                        $value = $this->entityManager->get($phpType, $value);
                     }
 
                     $valueType = $phpType;
@@ -104,8 +131,24 @@ readonly class ValueCaster
                     break;
                 }
 
-                if ($phpType === 'int' && preg_match('/^\d+$/', $value)) {
-                    $value = (int) $value;
+                if ($phpType === 'int') {
+                    if (!is_numeric($value)) {
+                        throw new InvalidNumericValue($property->name, $value);
+                    }
+
+                    // Check for overflow before casting
+                    if ($value > PHP_INT_MAX || $value < PHP_INT_MIN) {
+                        throw new IntegerOverflow($property->name, $value);
+                    }
+
+                    $intValue = (int) $value;
+
+                    // Verify no data loss
+                    if ((string) $intValue !== (string) $value) {
+                        throw new DataLossOnConversion($property->name, $value, $intValue);
+                    }
+
+                    $value = $intValue;
                     $valueType = 'int';
 
                     break;

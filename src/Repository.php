@@ -12,6 +12,7 @@ readonly class Repository
     public function __construct(
         private Entities\IdValue                                     $idValue,
         private Entities\ValueFetchers\SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
+        private EntityManager                                        $entityManager,
         private MetaDataManager                                      $metaDataManager,
     )
     {
@@ -48,7 +49,7 @@ readonly class Repository
 
         foreach ($records as $record) {
             $idValue = $this->idValue->get($record, $metaData);
-            $entities[] = em()->get($metaData->className, $idValue);
+            $entities[] = $this->entityManager->get($metaData->className, $idValue);
         }
 
         return $entities;
@@ -102,16 +103,16 @@ readonly class Repository
             return $object;
         }
 
-        $object = em()->create(
+        $object = $this->entityManager->create(
             $selector->entity(),
             $creationValues ? array_merge($values, $creationValues()) : $values
         );
 
         if ($persistOnCreate) {
-            em()->persist($object);
+            $this->entityManager->persist($object);
 
             if ($flushOnPersist) {
-                em()->flush();
+                $this->entityManager->flush();
             }
         }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\Core\Types\Collection;
-use Medas\EntityManager\{MetaData\Compiler};
+use Medas\EntityManager\{EntityManager, MetaData\Compiler};
 use Medas\EntityManagerTest\BaseTestClass;
 use Medas\EntityManagerTest\MockUps\References\{ChildEntities,ChildEntity,ParentEntity};
 
@@ -13,7 +13,7 @@ class ReferenceTest extends BaseTestClass
 {
     public function testCollectionInitialization(): void
     {
-        $parent = em()->get(ParentEntity::class, 1);
+        $parent = service(EntityManager::class)->get(ParentEntity::class, 1);
 
         self::assertInstanceOf(ChildEntities::class, $parent->children);
         self::assertInstanceOf(ChildEntity::class, $parent->children[0]);

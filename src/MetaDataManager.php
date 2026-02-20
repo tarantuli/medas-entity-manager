@@ -10,20 +10,15 @@ use Medas\Core\Attributes\Service;
 readonly class MetaDataManager
 {
     public function __construct(
-        private MetaData\Compiler     $compiler,
-        private PropertyAccessManager $propertyAccessManager,
+        private MetaData\Compiler $compiler,
     )
     {
     }
 
     public function get(string $className): MetaData
     {
-        $metaData = cache([static::class, $className], function () use ($className) {
+        return cache([static::class, $className], function () use ($className) {
             return $this->compiler->compile($className);
         });
-
-        $this->propertyAccessManager->makeAccessible($metaData);
-
-        return $metaData;
     }
 }

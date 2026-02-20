@@ -4,14 +4,14 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62a73f616c67dc60b3aefb09b4b557f3",
+    "content-hash": "b2e619c15c8e51508427aa8f94187553",
     "packages": [
         {
             "name": "morphp/medas-console",
             "version": "2.0.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:tarantuli/medas-console.git",
+                "url": "https://github.com/tarantuli/medas-console.git",
                 "reference": "d1a4efd112a06514805156c06a76e8ef62978bb2"
             },
             "dist": {
@@ -56,7 +56,7 @@
             "version": "2.0.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:tarantuli/medas-core.git",
+                "url": "https://github.com/tarantuli/medas-core.git",
                 "reference": "da56deaebe1a552bf3c89978c7bf42eba1705c12"
             },
             "dist": {
@@ -147,7 +147,7 @@
             "version": "2.0.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:tarantuli/medas-object-instantiator.git",
+                "url": "https://github.com/tarantuli/medas-object-instantiator.git",
                 "reference": "6c9ad5a0526d20d591315b22aa8a1e93b2797680"
             },
             "dist": {
@@ -330,7 +330,7 @@
             "version": "2.0.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:tarantuli/medas-service-manager.git",
+                "url": "https://github.com/tarantuli/medas-service-manager.git",
                 "reference": "6fc2fc3f96c081eaaa5720df699db126f12c6b3e"
             },
             "dist": {

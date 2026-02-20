@@ -7,6 +7,8 @@ namespace Medas\EntityManager\MetaData\Compiler;
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{
     Attributes,
+    Exceptions\MultipleReferencePropertiesFound,
+    Exceptions\NoReferencePropertyFound,
     Hydration\PropertyTypeNormalizer,
     MetaData,
     MetaData\Property,
@@ -83,7 +85,7 @@ readonly class PropertyProcessor
             isId: !empty($property->getAttributes(Attributes\Id::class, \ReflectionAttribute::IS_INSTANCEOF)),
             isGeneratedValue: !empty($property->getAttributes(Attributes\IsGeneratedValue::class)),
             isCreationTimestamp: !empty($property->getAttributes(Attributes\IsCreationTimestamp::class)),
-            isModificationTimestamp: !empty($property->getAttributes(Attributes\IsModificationTimestmap::class)),
+            isModificationTimestamp: !empty($property->getAttributes(Attributes\IsModificationTimestamp::class)),
             isNullable: $isNullable,
             isUnique: !empty($property->getAttributes(Attributes\IsUnique::class)),
             isIndex: !empty($property->getAttributes(Attributes\IsIndex::class)),
@@ -114,11 +116,20 @@ readonly class PropertyProcessor
             }
 
             if (count($targetProperties) === 0) {
-                throw new \Exception('property ' . $property->name . ' should be referenced by ' . $references->entity . ' but no properties refer to ' . $metaData->className);
+                throw new NoReferencePropertyFound(
+                    $property->name,
+                    $references->entity,
+                    $metaData->className
+                );
             }
 
             if (count($targetProperties) >= 2) {
-                throw new \Exception('property ' . $property->name . ' should be referenced by ' . $references->entity . ' but too many properties refer to ' . $metaData->className);
+                throw new MultipleReferencePropertiesFound(
+                    $property->name,
+                    $references->entity,
+                    $metaData->className,
+                    array_map(fn($p) => $p->name, $targetProperties)
+                );
             }
 
             $references->property = $targetProperties[0]->name;
