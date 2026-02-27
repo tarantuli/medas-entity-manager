@@ -170,6 +170,12 @@ readonly class EntityManager implements EntityManagerInterface
         unset($this->context->entities[$oldKey]);
     }
 
+    #[EventListener]
+    public function handleResetEntityKey(Events\ResetEntityKey $event): void
+    {
+        $this->resetKey($event->entity);
+    }
+
     /**
      * The return value is an object of type `$className`.
      */
