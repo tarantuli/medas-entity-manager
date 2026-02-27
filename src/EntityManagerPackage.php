@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\AsSingleton;
+use Medas\Core\{AsSingleton, BasePackage};
 use Medas\ObjectToArraySerializer\ObjectToArraySerializerPackage;
-use Medas\ServiceManager\BasePackage;
 
 class EntityManagerPackage extends BasePackage
 {

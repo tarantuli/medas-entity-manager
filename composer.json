@@ -28,7 +28,11 @@
   },
   "autoload": {
     "psr-4": {
-      "Medas\\EntityManager\\": "src/",
+      "Medas\\EntityManager\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
       "Medas\\EntityManagerTest\\": "tests/"
     }
   }
