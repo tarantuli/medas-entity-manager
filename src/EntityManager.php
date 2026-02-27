@@ -184,7 +184,7 @@ readonly class EntityManager implements EntityManagerInterface
             $this->doCircularDependencyCheck($className, $id, $key);
 
             try {
-                $entity = $this->initializer->initializeAndHydrate($className, $id);
+                $entity = $this->initializer->initializeAndHydrate($className, $id, $this);
 
                 $this->updateCircularDependencyCheck($key);
 

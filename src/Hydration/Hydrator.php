@@ -21,7 +21,6 @@ use Medas\EntityManager\Selector\Selectors\WithValues;
 readonly class Hydrator
 {
     public function __construct(
-        private EntityManager                 $entityManager,
         private EntityValueFetchersManager    $entityValueFetchersManager,
         private IdValue                       $idValue,
         private MetaDataManager               $metaDataManager,
@@ -32,7 +31,7 @@ readonly class Hydrator
     {
     }
 
-    public function hydrate(MetaData $metaData, object $entity): void
+    public function hydrate(MetaData $metaData, object $entity, EntityManager $entityManager): void
     {
         foreach ($metaData->properties as $property) {
             if ($property->isId) {
@@ -62,12 +61,16 @@ readonly class Hydrator
                 $metaData,
                 $entity,
                 $reference->name,
-                new $collectionClass(fn() => $this->fetchReferences($entity, $reference))
+                new $collectionClass(fn() => $this->fetchReferences($entity, $reference, $entityManager))
             );
         }
     }
 
-    private function fetchReferences(object $entity, MetaData\Reference $reference): array
+    private function fetchReferences(
+        object             $entity,
+        MetaData\Reference $reference,
+        EntityManager      $entityManager
+    ): array
     {
         $foundRecords = false;
         $records = [];
@@ -95,7 +98,7 @@ readonly class Hydrator
 
         foreach ($records as $record) {
             $idValue = $this->idValue->get($record, $metaData);
-            $entities[] = $this->entityManager->get($metaData->className, $idValue);
+            $entities[] = $entityManager->get($metaData->className, $idValue);
         }
 
         return $entities;

@@ -6,6 +6,7 @@ namespace Medas\EntityManager\Entities;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\{
+    EntityManager,
     Exceptions\ClassDoesNotExist,
     Exceptions\UnknownProperties,
     Hydration\Hydrator,
@@ -53,7 +54,7 @@ readonly class Initializer
         return $entity;
     }
 
-    public function initializeAndHydrate(string $className, mixed $id): object
+    public function initializeAndHydrate(string $className, mixed $id, EntityManager $entityManager): object
     {
         $metaData = $this->metaDataManager->get($className);
 
@@ -63,7 +64,7 @@ readonly class Initializer
 
         $entity = $this->initialize($className, [$metaData->idProperty->name => $id], $metaData);
 
-        $this->hydrator->hydrate($metaData, $entity);
+        $this->hydrator->hydrate($metaData, $entity, $entityManager);
 
         return $entity;
     }
