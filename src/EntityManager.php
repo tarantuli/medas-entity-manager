@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\{
+    Attributes\EventListener,
     Attributes\Service,
     Events\DebugInformation,
     Interfaces\EntityManager as EntityManagerInterface,
@@ -225,6 +226,12 @@ readonly class EntityManager implements EntityManagerInterface
     private function updateCircularDependencyCheck(string $key): void
     {
         unset($this->context->initializing[$key]);
+    }
+
+    #[EventListener]
+    public function handleFindEntity(Events\FindEntity $event): void
+    {
+        $event->entity = $this->get($event->type, $event->id);
     }
 
     /**

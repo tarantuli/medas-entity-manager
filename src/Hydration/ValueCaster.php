@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\{
-    Attributes\DumpObject,
     Attributes\Service,
     Interfaces\Collection,
     Interfaces\TracksChanges,
@@ -15,8 +14,9 @@ use Medas\Core\{
 use Medas\EntityManager\{
     Attributes\EntityCollection,
     Entities\Initializer,
-    EntityManager,
+    Events\FindEntity,
     Exceptions\DataLossOnConversion,
+    Exceptions\FailedToFindEntity,
     Exceptions\IntegerOverflow,
     Exceptions\InvalidNumericValue,
     Exceptions\InvalidPropertyType,
@@ -32,7 +32,6 @@ readonly class ValueCaster
 {
     public function __construct(
         private ArrayToObjectCaster $arrayToObjectCaster,
-        private EntityManager       $entityManager,
         private UuidProvider|null   $uuidProvider,
     )
     {
@@ -113,11 +112,16 @@ readonly class ValueCaster
 
                         $value = $collection;
                     }
-                    elseif (attribute(DumpObject::class, $reflectionClass) && is_array($value)) {
-                        $value = $this->arrayToObjectCaster->cast($value, $phpType);
-                    }
                     elseif (!$value instanceof Collection) {
-                        $value = $this->entityManager->get($phpType, $value);
+                        $event = new FindEntity($phpType, $value);
+
+                        dispatch($event);
+
+                        if ($event->entity === null) {
+                            throw new FailedToFindEntity($phpType, $value);
+                        }
+
+                        $value = $event->entity;
                     }
 
                     $valueType = $phpType;
