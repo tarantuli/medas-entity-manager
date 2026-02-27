@@ -20,10 +20,10 @@ readonly class EntityManager implements EntityManagerInterface
         private Entities\Initializer      $initializer,
         private Entities\KeyMaker         $keyMaker,
         private Entities\UuidSetter       $uuidSetter,
-        private EntityManagerContext      $context,
         private FlushManager              $flushManager,
         private Snapshots\ChangeFinder    $changeFinder,
         private Snapshots\SnapshotManager $snapshotManager,
+        private EntityManagerContext      $context = new EntityManagerContext(),
     )
     {
     }
