@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\{
+    Attributes\DataHolder,
     Attributes\Service,
     Interfaces\Collection,
     Interfaces\TracksChanges,
@@ -111,6 +112,9 @@ readonly class ValueCaster
                         }
 
                         $value = $collection;
+                    }
+                    elseif (attribute(DataHolder::class, $reflectionClass) && is_array($value)) {
+                        $value = $this->arrayToObjectCaster->cast($value, $phpType);
                     }
                     elseif (!$value instanceof Collection) {
                         $event = new FindEntity($phpType, $value);
