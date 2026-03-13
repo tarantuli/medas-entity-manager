@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\{
+    Attributes\ConfigValue,
     Attributes\Service,
     Collections\GenericCollection,
+    ConfigOptions\DispatchDebugInformation,
     Events\DebugInformation,
     Interfaces\ManagedCollection,
     Interfaces\SettableCollection,
@@ -19,6 +21,9 @@ readonly class ValueSetter
 {
     public function __construct(
         private ValueCaster $valueCaster,
+
+        #[ConfigValue(DispatchDebugInformation::class)]
+        private bool        $dispatchDebugInformation = false,
     )
     {
     }
@@ -52,13 +57,14 @@ readonly class ValueSetter
         bool     $resetHistory = false,
     ): void
     {
-        dispatch(new DebugInformation(
-            '[value-setter] %s[%s] %s => %s',
-            $entity::class,
-            spl_object_id($entity),
-            $propertyName,
-            $value
-        ));
+        $this->dispatchDebugInformation
+            && dispatch(new DebugInformation(
+                '[value-setter] %s[%s] %s => %s',
+                $entity::class,
+                spl_object_id($entity),
+                $propertyName,
+                $value
+            ));
 
         // If value is null, don't return, but set the value to null
         if (null === $property = $metaData->property($propertyName, $ignoreUnknownProperties)) {
