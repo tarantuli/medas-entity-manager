@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConsoleCommands;
 
-use Medas\Console\Commands\{BaseConsoleCommand, CommandInput, ConsoleCommandGroup, Option};
+use Medas\Console\Commands\{BaseConsoleCommand, CommandInput, ConsoleCommandGroup, Option, Range};
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
 
@@ -39,14 +39,9 @@ readonly class CreateEntityFile extends BaseConsoleCommand
         return 'Creates an entity file for the given fully qualified class name';
     }
 
-    public function minArgumentCount(): int
+    public function allowedArgumentCount(): Range
     {
-        return 1;
-    }
-
-    public function maxArgumentCount(): int
-    {
-        return 1;
+        return new Range(1);
     }
 
     public function options(): array
@@ -56,9 +51,8 @@ readonly class CreateEntityFile extends BaseConsoleCommand
 
     public function process(CommandInput $input): void
     {
-        $className = $input->arguments[1];
-        $useUuid = $input->options['id'] ?? false;
-        $code = $this->entityClassGenerator->generate($className, $useUuid);
+        $className = $input->getArgument(1);
+        $code = $this->entityClassGenerator->generate($className, $input->hasOption('id'));
         $fileName = $this->fileNameFinder->find($className);
 
         $this->fileNameFinder->writeToFile($code, $fileName);
