@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\ConsoleCommands;
 
-use Medas\Console\Commands\{BaseConsoleCommand, ConsoleCommandGroup};
+use Medas\Console\Commands\{Arguments, BaseConsoleCommand, ConsoleCommandGroup, Option};
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\Generator\{EntityClassGenerator, FileNameFinder};
 
@@ -39,10 +39,15 @@ readonly class CreateEntityFile extends BaseConsoleCommand
         return 'Creates an entity file for the given fully qualified class name';
     }
 
-    public function process(array $arguments): void
+    public function options(): array
     {
-        $className = $arguments[1];
-        $useUuid = ($arguments[2] ?? null) !== '--id';
+        return [new Option('id')];
+    }
+
+    public function process(Arguments $arguments): void
+    {
+        $className = $arguments->arguments[1];
+        $useUuid = $arguments->options['id'] ?? false;
         $code = $this->entityClassGenerator->generate($className, $useUuid);
         $fileName = $this->fileNameFinder->find($className);
 

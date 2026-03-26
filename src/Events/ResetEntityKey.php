@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Events;
 
-class ResetEntityKey
+readonly class ResetEntityKey
 {
     public function __construct(
-        public readonly object $entity,
+        public object $entity,
     )
     {
     }
