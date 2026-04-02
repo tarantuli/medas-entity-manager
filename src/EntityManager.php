@@ -100,6 +100,25 @@ readonly class EntityManager implements EntityManagerInterface
         }
     }
 
+    /**
+     * Remove an entity from the identity map without marking it for deletion in the database.
+     * Use this when an entity was created and persisted in memory but the INSERT failed
+     * (e.g., due to a race condition), so it should be dropped rather than retried on the next flush.
+     */
+    public function discard(object $entity): void
+    {
+        $key = array_search($entity, $this->context->entities, true);
+
+        if ($key !== false) {
+            unset($this->context->entities[$key]);
+            unset($this->context->entityAccessTime[$key]);
+
+            --$this->context->entityCount;
+        }
+
+        unset($this->context->savedStates[$entity]);
+    }
+
     public function flush(): void
     {
         dispatch(new DebugInformation('[entity-manager] flushing'));

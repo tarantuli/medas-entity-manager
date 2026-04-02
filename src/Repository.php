@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\{Attributes\Service, Exceptions\StorageExceptionType, Interfaces\StorageException};
 
 #[Service]
 readonly class Repository
@@ -112,7 +112,20 @@ readonly class Repository
             $this->entityManager->persist($object);
 
             if ($flushOnPersist) {
-                $this->entityManager->flush();
+                try {
+                    $this->entityManager->flush();
+                }
+                catch (StorageException $e) {
+                    if ($e->exceptionType !== StorageExceptionType::DuplicateKey) {
+                        throw $e;
+                    }
+
+                    // A concurrent request inserted the same row between our SELECT and INSERT.
+                    // Discard the entity we just created and return the one that won the race.
+                    $this->entityManager->discard($object);
+
+                    return $this->fetchOne($selector, $values) ?? throw $e;
+                }
             }
         }
 
