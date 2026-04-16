@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData\Compiler;
 
-use Medas\Core\Attributes\Service;
+use Medas\Core\Attributes\{ConfigValue, Service};
 use Medas\EntityManager\{
     Attributes,
+    ConfigOptions\DefaultOnDeleteAction,
+    ConfigOptions\DefaultOnUpdateAction,
     Exceptions\MultipleReferencePropertiesFound,
     Exceptions\NoReferencePropertyFound,
     Hydration\PropertyTypeNormalizer,
@@ -21,9 +23,15 @@ use Medas\EntityManager\{
 readonly class PropertyProcessor
 {
     public function __construct(
-        private PropertyManager        $propertyManager,
-        private PropertyTypeNormalizer $propertyTypeNormalizer,
-        private TypeFinder             $typeFinder,
+        private PropertyManager             $propertyManager,
+        private PropertyTypeNormalizer      $propertyTypeNormalizer,
+        private TypeFinder                  $typeFinder,
+
+        #[ConfigValue(DefaultOnDeleteAction::class)]
+        private Attributes\Relations\Action $defaultOnDeleteAction = Attributes\Relations\Action::Restrict,
+
+        #[ConfigValue(DefaultOnUpdateAction::class)]
+        private Attributes\Relations\Action $defaultOnUpdateAction = Attributes\Relations\Action::Cascade,
     )
     {
     }
@@ -89,8 +97,8 @@ readonly class PropertyProcessor
             isNullable: $isNullable,
             isUnique: !empty($property->getAttributes(Attributes\IsUnique::class)),
             isIndex: !empty($property->getAttributes(Attributes\IsIndex::class)),
-            onDelete: $onDelete ? $onDelete->action : Attributes\Relations\Action::NoAction,
-            onUpdate: $onUpdate ? $onUpdate->action : Attributes\Relations\Action::NoAction,
+            onDelete: $onDelete ? $onDelete->action : $this->defaultOnDeleteAction,
+            onUpdate: $onUpdate ? $onUpdate->action : $this->defaultOnUpdateAction,
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property,
             handler: $handler ? $handler::class : null,
