@@ -46,13 +46,13 @@ readonly class CreateEntityFile extends BaseConsoleCommand
 
     public function options(): array
     {
-        return [new Option('id')];
+        return [new Option('auto-id')];
     }
 
     public function process(CommandInput $input): void
     {
         $className = $input->getArgument(1);
-        $code = $this->entityClassGenerator->generate($className, $input->hasOption('id'));
+        $code = $this->entityClassGenerator->generate($className, !$input->hasOption('auto-id'));
         $fileName = $this->fileNameFinder->find($className);
 
         $this->fileNameFinder->writeToFile($code, $fileName);
