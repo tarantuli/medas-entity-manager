@@ -48,7 +48,10 @@ readonly class Initializer
         $entity = new $className();
 
         if ($values) {
-            $this->valueSetter->setValues($metaData, $entity, $values, resetHistory: true);
+            // resetHistory: false is safe because initializeAndHydrate only ever passes the entity ID to initialize(),
+            // never collection values. The hydrator establishes the collection baseline via setData(),
+            // which is independent of this path.
+            $this->valueSetter->setValues($metaData, $entity, $values);
         }
 
         return $entity;
