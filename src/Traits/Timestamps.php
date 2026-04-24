@@ -13,10 +13,10 @@ use Medas\EntityManager\Attributes\{
 trait Timestamps
 {
     #[IsCreationTimestamp, DontLogChanges]
-    private \DateTime $createdAt;
+    public \DateTime $createdAt;
 
     #[IsModificationTimestamp, DontLogChanges]
-    private \DateTime $modifiedAt;
+    public \DateTime $modifiedAt;
 
     public function createdAt(): \DateTime
     {
