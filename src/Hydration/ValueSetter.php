@@ -73,13 +73,7 @@ readonly class ValueSetter
 
         $value = $this->valueCaster->cast($property, $value);
 
-        if (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof SettableCollection) {
-            /** @var SettableCollection $reference */
-            $reference = &$entity->{$propertyName};
-
-            $reference->setData($value instanceof GenericCollection ? $value->__serialize() : $value);
-        }
-        elseif (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof ManagedCollection) {
+        if (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof ManagedCollection) {
             /** @var ManagedCollection $reference */
             $reference = &$entity->{$propertyName};
 
@@ -88,6 +82,12 @@ readonly class ValueSetter
                     $reference[] = $subValue;
                 }
             }
+        }
+        elseif (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof SettableCollection) {
+            /** @var SettableCollection $reference */
+            $reference = &$entity->{$propertyName};
+
+            $reference->setData($value instanceof GenericCollection ? $value->__serialize() : $value);
         }
         else {
             $property->reflection->setValue($entity, $value);

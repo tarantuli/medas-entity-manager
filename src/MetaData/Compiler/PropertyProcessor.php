@@ -54,9 +54,9 @@ readonly class PropertyProcessor
         usort(
             $properties,
             function (\ReflectionProperty $a, \ReflectionProperty $b) use ($parents) {
-            // Parents deeper in the chain have lower values, sorting them in front
-            return $parents[$a->class] - $parents[$b->class];
-        });
+                // Parents deeper in the chain have lower values, sorting them in front
+                return $parents[$a->class] - $parents[$b->class];
+            });
 
         return $properties;
     }

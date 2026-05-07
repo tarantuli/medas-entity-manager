@@ -102,7 +102,7 @@ readonly class EntityManager implements EntityManagerInterface
 
     /**
      * Remove an entity from the identity map without marking it for deletion in the database.
-     * Use this when an entity was created and persisted in memory but the INSERT failed
+     * Use this when an entity was created and persisted in memory, but the INSERT failed
      * (e.g., due to a race condition), so it should be dropped rather than retried on the next flush.
      */
     public function discard(object $entity): void
