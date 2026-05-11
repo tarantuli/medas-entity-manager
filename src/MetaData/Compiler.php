@@ -49,6 +49,7 @@ readonly class Compiler
         $this->checkForStoreOriginalEntityType($metaData, $class);
         $this->checkForUniquePropertySets($metaData, $class);
         $this->checkForCompoudIndexes($metaData, $class);
+        $this->checkForOwnershipFilters($metaData, $class);
 
         return $metaData;
     }
@@ -106,6 +107,16 @@ readonly class Compiler
             /** @var Attributes\CompoundIndex $instance */
             $instance = $attribute->newInstance();
             $metaData->compoundIndexes[] = $instance->properties;
+        }
+    }
+
+    private function checkForOwnershipFilters(MetaData $metaData, \ReflectionClass $class): void
+    {
+        if ($attribute = attribute(Attributes\AddOwnershipFilter::class, $class)) {
+            $metaData->ownershipFilters = $attribute->filters;
+        }
+        else {
+            $metaData->ownershipFilters = [];
         }
     }
 }
