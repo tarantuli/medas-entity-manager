@@ -18,7 +18,10 @@ class MetaData
     public array $compoundIndexes;
     public MetaData\Property|null $idProperty;
     public MetaData\Inheritance $inheritance;
+
+    /** @var class-string<Interfaces\OwnershipFilter>[] */
     public array $ownershipFilters;
+
     public int $sourceFileDate;
 
     public function __construct(
