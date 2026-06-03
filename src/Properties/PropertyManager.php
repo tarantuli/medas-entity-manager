@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Properties;
 
-use Medas\Core\{Attributes\Handler, Attributes\Service, Interfaces\PropertyHandler};
+use Medas\Core\{
+    Attributes\Handler,
+    Attributes\Service,
+    Exceptions\ServiceNotFoundByType,
+    Interfaces\PropertyHandler
+};
 use Medas\EntityManager\Exceptions\InvalidHandler;
-use Medas\ServiceManager\Exceptions\ServiceNotFoundByType;
 
 #[Service]
 readonly class PropertyManager
