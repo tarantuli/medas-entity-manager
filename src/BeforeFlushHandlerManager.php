@@ -7,26 +7,24 @@ namespace Medas\EntityManager;
 use Medas\Core\{Attributes\Service, Interfaces\CacheManager, Interfaces\ImplementorFinder};
 
 #[Service]
-readonly class BeforeFlushHandlerManager
+class BeforeFlushHandlerManager
 {
     /** @var Entities\BeforeFlushHandler[] */
-    private array $handlers;
+    private array|null $handlers = null;
 
     public function __construct(
-        private CacheManager $cacheManager,
-        ImplementorFinder    $implementorFinder,
+        private readonly CacheManager      $cacheManager,
+        private readonly ImplementorFinder $implementorFinder,
     )
     {
-        $classNames = $this->cacheManager->get()->get(
-            __CLASS__,
-            fn() => $implementorFinder->find(Entities\BeforeFlushHandler::class)
-        );
-
-        $this->handlers = namesToServices($classNames);
     }
 
     public function handle(Snapshots\Changes $changes): bool
     {
+        if ($this->handlers === null) {
+            $this->loadHandlers();
+        }
+
         $madeChanges = false;
 
         foreach ($this->handlers as $handler) {
@@ -34,5 +32,15 @@ readonly class BeforeFlushHandlerManager
         }
 
         return $madeChanges;
+    }
+
+    private function loadHandlers(): void
+    {
+        $classNames = $this->cacheManager->get()->get(
+            __CLASS__,
+            fn() => $this->implementorFinder->find(Entities\BeforeFlushHandler::class)
+        );
+
+        $this->handlers = namesToServices($classNames);
     }
 }
