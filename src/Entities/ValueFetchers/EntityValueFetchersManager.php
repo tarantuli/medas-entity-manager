@@ -4,38 +4,21 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities\ValueFetchers;
 
-use Medas\Core\{Attributes\Service, Interfaces\CacheManager, Interfaces\ImplementorFinder};
+use Medas\Core\{Attributes\Service, CachedImplementorList};
 
 #[Service]
-class EntityValueFetchersManager
+readonly class EntityValueFetchersManager
 {
-    /** @var EntityValueFetcher[] */
-    private array|null $fetchers = null;
+    private CachedImplementorList $cachedImplementorList;
 
-    public function __construct(
-        private readonly CacheManager      $cacheManager,
-        private readonly ImplementorFinder $implementorFinder,
-    )
+    public function __construct()
     {
+        $this->cachedImplementorList = new CachedImplementorList(EntityValueFetcher::class);
     }
 
     /** @return EntityValueFetcher[] */
     public function get(): array
     {
-        if ($this->fetchers === null) {
-            $this->loadFetchers();
-        }
-
-        return $this->fetchers;
-    }
-
-    private function loadFetchers(): void
-    {
-        $classNames = $this->cacheManager->get()->get(
-            __CLASS__,
-            fn() => $this->implementorFinder->find(EntityValueFetcher::class)
-        );
-
-        $this->fetchers = namesToServices($classNames);
+        return $this->cachedImplementorList->get();
     }
 }

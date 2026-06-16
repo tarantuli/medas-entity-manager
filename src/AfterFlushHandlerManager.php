@@ -4,43 +4,26 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{Attributes\Service, Interfaces\CacheManager, Interfaces\ImplementorFinder};
+use Medas\Core\{Attributes\Service, CachedImplementorList};
 
 #[Service]
-class AfterFlushHandlerManager
+readonly class AfterFlushHandlerManager
 {
-    /** @var Entities\AfterFlushHandler[] */
-    private array|null $handlers = null;
+    private CachedImplementorList $cachedImplementorList;
 
-    public function __construct(
-        private readonly CacheManager      $cacheManager,
-        private readonly ImplementorFinder $implementorFinder,
-    )
+    public function __construct()
     {
+        $this->cachedImplementorList = new CachedImplementorList(Entities\AfterFlushHandler::class);
     }
 
     public function handle(Snapshots\Changes $changes): bool
     {
-        if ($this->handlers === null) {
-            $this->loadHandlers();
-        }
-
         $madeChanges = false;
 
-        foreach ($this->handlers as $handler) {
+        foreach ($this->cachedImplementorList->get() as $handler) {
             $madeChanges = ($madeChanges or $handler->handle($changes));
         }
 
         return $madeChanges;
-    }
-
-    private function loadHandlers(): void
-    {
-        $classNames = $this->cacheManager->get()->get(
-            __CLASS__,
-            fn() => $this->implementorFinder->find(Entities\AfterFlushHandler::class)
-        );
-
-        $this->handlers = namesToServices($classNames);
     }
 }
