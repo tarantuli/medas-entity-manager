@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad45e429282d129392f7dccabfcfc9c0",
+    "content-hash": "f0e1e3f81e02c440c7afab805d10acfe",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -56,16 +56,16 @@
         },
         {
             "name": "morphp/medas-core",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "20e10473d385a1a375012eef303958412da52984"
+                "reference": "95a3bce35529d7f342f832184e59fd9818e33964"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/20e10473d385a1a375012eef303958412da52984",
-                "reference": "20e10473d385a1a375012eef303958412da52984",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/95a3bce35529d7f342f832184e59fd9818e33964",
+                "reference": "95a3bce35529d7f342f832184e59fd9818e33964",
                 "shasum": ""
             },
             "require": {
@@ -98,10 +98,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.1.0",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.1.1",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-06-16T09:53:41+00:00"
+            "time": "2026-06-16T11:01:48+00:00"
         },
         {
             "name": "morphp/medas-object-to-array-serializer",
@@ -428,16 +428,16 @@
         },
         {
             "name": "morphp/medas-config-options",
-            "version": "v3.0.10",
+            "version": "v3.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-config-options.git",
-                "reference": "fea2ec8d4e9d462a5858133cc59d758d377cd691"
+                "reference": "30f194a837490cf68d7e6bf3060c625ec4413134"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/fea2ec8d4e9d462a5858133cc59d758d377cd691",
-                "reference": "fea2ec8d4e9d462a5858133cc59d758d377cd691",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/30f194a837490cf68d7e6bf3060c625ec4413134",
+                "reference": "30f194a837490cf68d7e6bf3060c625ec4413134",
                 "shasum": ""
             },
             "require": {
@@ -474,10 +474,10 @@
                 "configuration"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-config-options/tree/v3.0.10",
+                "source": "https://github.com/tarantuli/medas-config-options/tree/v3.0.11",
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
-            "time": "2026-06-15T09:48:50+00:00"
+            "time": "2026-06-17T08:05:16+00:00"
         },
         {
             "name": "morphp/medas-events",
