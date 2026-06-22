@@ -15,6 +15,11 @@ use Medas\EntityManager\Selector\{
 
 readonly class WithValues implements Selector, NotCacheable
 {
+    public static function create(string $entity, array $values): static
+    {
+        return new static($entity, $values);
+    }
+
     public function __construct(
         private string $entity,
         private array  $values,
