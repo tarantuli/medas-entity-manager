@@ -56,146 +56,6 @@ readonly class EntityManager implements EntityManagerInterface
         }
     }
 
-    public function purge(): void
-    {
-        $this->flush();
-
-        // Sort by access time (LRU)
-        asort($this->context->entityAccessTime);
-
-        $keysToRemove = array_slice(
-            array_keys($this->context->entityAccessTime),
-            0,
-            $this->context->cachePurgeAmount,
-            true
-        );
-
-        foreach ($keysToRemove as $key) {
-            if (isset($this->context->entities[$key])) {
-                $entity = $this->context->entities[$key];
-
-                unset($this->context->entities[$key]);
-                unset($this->context->entityAccessTime[$key]);
-
-                $this->context->savedStates->offsetUnset($entity);
-            }
-        }
-
-        $this->context->entityCount = count($this->context->entities);
-    }
-
-    public function clear(): void
-    {
-        $this->context->entities = [];
-        $this->context->entityCount = 0;
-        $this->context->entitiesToDelete = [];
-        $this->context->savedStates = new \SplObjectStorage();
-
-        dispatch(new Events\MustClearEntityValueCaches());
-    }
-
-    public function delete(object $entity): void
-    {
-        if (!in_array($entity, $this->context->entitiesToDelete, true)) {
-            $this->context->entitiesToDelete[] = $entity;
-        }
-    }
-
-    /**
-     * Remove an entity from the identity map without marking it for deletion in the database.
-     * Use this when an entity was created and persisted in memory, but the INSERT failed
-     * (e.g., due to a race condition), so it should be dropped rather than retried on the next flush.
-     */
-    public function discard(object $entity): void
-    {
-        $key = array_search($entity, $this->context->entities, true);
-
-        if ($key !== false) {
-            unset($this->context->entities[$key]);
-            unset($this->context->entityAccessTime[$key]);
-
-            --$this->context->entityCount;
-        }
-
-        unset($this->context->savedStates[$entity]);
-    }
-
-    public function flush(): void
-    {
-        dispatch(new DebugInformation('[entity-manager] flushing'));
-
-        $changes = $this->changeFinder->gather(
-            fn() => $this->context->entities,
-            fn() => $this->context->savedStates,
-            fn() => $this->context->entitiesToDelete
-        );
-
-        $this->updateEntityStates();
-        $this->flushManager->flush($changes);
-
-        dispatch(new Events\MustClearEntityValueCaches());
-    }
-
-    public function updateEntityStates(): void
-    {
-        foreach ($this->context->entities as $key => $entity) {
-            if (in_array($entity, $this->context->entitiesToDelete, true)) {
-                unset($this->context->entities[$key]);
-                unset($this->context->savedStates[$entity]);
-            }
-            else {
-                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
-            }
-
-            if ($entity instanceof TracksChanges) {
-                $entity->resetChangeTracking();
-            }
-        }
-
-        $this->context->entitiesToDelete = [];
-    }
-
-    public function cacheSize(): int
-    {
-        return $this->context->entityCount;
-    }
-
-    public function persist(object ...$entities): void
-    {
-        foreach ($entities as $entity) {
-            if (!in_array($entity, $this->context->entities, true)) {
-                $key = $entity::class . ':new:' . mt_rand();
-
-                $this->uuidSetter->processEntity($entity);
-
-                $this->context->entities[$key] = $entity;
-
-                ++$this->context->entityCount;
-
-                if ($this->context->cachePurgeTriggerSize
-                        && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
-                    $this->purge();
-                }
-            }
-        }
-    }
-
-    public function resetKey(object $entity): void
-    {
-        $id = $this->idValue->fromEntity($entity);
-        $newKey = $this->keyMaker->get($entity::class, $id);
-        $oldKey = array_search($entity, $this->context->entities);
-        $this->context->entities[$newKey] = $entity;
-
-        unset($this->context->entities[$oldKey]);
-    }
-
-    #[EventListener]
-    public function handleResetEntityKey(Events\ResetEntityKey $event): void
-    {
-        $this->resetKey($event->entity);
-    }
-
     /**
      * The return value is an object of type `$className`.
      */
@@ -254,19 +114,6 @@ readonly class EntityManager implements EntityManagerInterface
         unset($this->context->initializing[$key]);
     }
 
-    #[EventListener]
-    public function handleFindEntity(Events\FindEntity $event): void
-    {
-        $event->entity = $this->get($event->type, $event->id);
-    }
-
-    /** @noinspection PhpUnusedParameterInspection */
-    #[EventListener]
-    public function handleBeforeResponse(BeforeResponse $event): void
-    {
-        $this->flush();
-    }
-
     /**
      * The return value is an object of type `$className`.
      */
@@ -286,5 +133,158 @@ readonly class EntityManager implements EntityManagerInterface
         }
 
         return $entity;
+    }
+
+    public function persist(object ...$entities): void
+    {
+        foreach ($entities as $entity) {
+            if (!in_array($entity, $this->context->entities, true)) {
+                $key = $entity::class . ':new:' . mt_rand();
+
+                $this->uuidSetter->processEntity($entity);
+
+                $this->context->entities[$key] = $entity;
+
+                ++$this->context->entityCount;
+
+                if ($this->context->cachePurgeTriggerSize
+                        && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
+                    $this->purge();
+                }
+            }
+        }
+    }
+
+    private function purge(): void
+    {
+        $this->flush();
+
+        // Sort by access time (LRU)
+        asort($this->context->entityAccessTime);
+
+        $keysToRemove = array_slice(
+            array_keys($this->context->entityAccessTime),
+            0,
+            $this->context->cachePurgeAmount,
+            true
+        );
+
+        foreach ($keysToRemove as $key) {
+            if (isset($this->context->entities[$key])) {
+                $entity = $this->context->entities[$key];
+
+                unset($this->context->entities[$key]);
+                unset($this->context->entityAccessTime[$key]);
+
+                $this->context->savedStates->offsetUnset($entity);
+            }
+        }
+
+        $this->context->entityCount = count($this->context->entities);
+    }
+
+    public function delete(object $entity): void
+    {
+        if (!in_array($entity, $this->context->entitiesToDelete, true)) {
+            $this->context->entitiesToDelete[] = $entity;
+        }
+    }
+
+    /**
+     * Remove an entity from the identity map without marking it for deletion in the database.
+     * Use this when an entity was created and persisted in memory, but the INSERT failed
+     * (e.g., due to a race condition), so it should be dropped rather than retried on the next flush.
+     */
+    public function discard(object $entity): void
+    {
+        $key = array_search($entity, $this->context->entities, true);
+
+        if ($key !== false) {
+            unset($this->context->entities[$key]);
+            unset($this->context->entityAccessTime[$key]);
+
+            --$this->context->entityCount;
+        }
+
+        unset($this->context->savedStates[$entity]);
+    }
+
+    public function clear(): void
+    {
+        $this->context->entities = [];
+        $this->context->entityCount = 0;
+        $this->context->entitiesToDelete = [];
+        $this->context->savedStates = new \SplObjectStorage();
+
+        dispatch(new Events\MustClearEntityValueCaches());
+    }
+
+    public function flush(): void
+    {
+        dispatch(new DebugInformation('[entity-manager] flushing'));
+
+        $changes = $this->changeFinder->gather(
+            fn() => $this->context->entities,
+            fn() => $this->context->savedStates,
+            fn() => $this->context->entitiesToDelete
+        );
+
+        $this->updateEntityStates();
+        $this->flushManager->flush($changes);
+
+        dispatch(new Events\MustClearEntityValueCaches());
+    }
+
+    private function updateEntityStates(): void
+    {
+        foreach ($this->context->entities as $key => $entity) {
+            if (in_array($entity, $this->context->entitiesToDelete, true)) {
+                unset($this->context->entities[$key]);
+                unset($this->context->savedStates[$entity]);
+            }
+            else {
+                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            }
+
+            if ($entity instanceof TracksChanges) {
+                $entity->resetChangeTracking();
+            }
+        }
+
+        $this->context->entitiesToDelete = [];
+    }
+
+    public function cacheSize(): int
+    {
+        return $this->context->entityCount;
+    }
+
+    #[EventListener]
+    public function handleResetEntityKey(Events\ResetEntityKey $event): void
+    {
+        $this->resetKey($event->entity);
+    }
+
+    public function resetKey(object $entity): void
+    {
+        $id = $this->idValue->fromEntity($entity);
+        $newKey = $this->keyMaker->get($entity::class, $id);
+        $oldKey = array_search($entity, $this->context->entities);
+        $this->context->entities[$newKey] = $entity;
+
+        unset($this->context->entities[$oldKey]);
+    }
+
+    #[EventListener]
+    public function handleFindEntity(Events\FindEntity $event): void
+    {
+        $event->entity = $this->get($event->type, $event->id);
+    }
+
+    /** @noinspection PhpUnusedParameterInspection */
+    #[EventListener]
+    public function handleBeforeResponse(BeforeResponse $event): void
+    {
+        $this->flush();
     }
 }
