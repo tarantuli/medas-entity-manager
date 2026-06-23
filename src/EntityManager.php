@@ -7,6 +7,7 @@ namespace Medas\EntityManager;
 use Medas\Core\{
     Attributes\EventListener,
     Attributes\Service,
+    Events\BeforeResponse,
     Events\DebugInformation,
     Interfaces\EntityManager as EntityManagerInterface,
     Interfaces\TracksChanges
@@ -257,6 +258,13 @@ readonly class EntityManager implements EntityManagerInterface
     public function handleFindEntity(Events\FindEntity $event): void
     {
         $event->entity = $this->get($event->type, $event->id);
+    }
+
+    /** @noinspection PhpUnusedParameterInspection */
+    #[EventListener]
+    public function handleBeforeResponse(BeforeResponse $event): void
+    {
+        $this->flush();
     }
 
     /**
