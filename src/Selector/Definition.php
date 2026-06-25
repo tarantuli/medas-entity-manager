@@ -29,7 +29,7 @@ class Definition
     /** @var OutputValues\OutputValue[] */
     public array $outputValues = [];
 
-    public Pagination|null $pagination = null;
+    public Slice|null $slice = null;
 
     public function __construct(
         public string $entity,
@@ -50,7 +50,8 @@ class Definition
                 $element instanceof Sorting\SortBy => $this->sorts[] = $element,
                 $element instanceof Grouping\GroupBy => $this->groupings[] = $element,
                 $element instanceof Parameter => $this->parameters[] = $element,
-                $element instanceof Pagination => $this->pagination = $element,
+                $element instanceof Pagination => $this->slice = Slice::fromPagination($element),
+                $element instanceof Slice => $this->slice = $element,
                 $element instanceof OutputValues\OutputValue => $this->outputValues[] = $element,
                 default => throw new Exceptions\UnhandledElementType($element),
             };
