@@ -10,11 +10,13 @@ use Medas\Core\{
     Interfaces\ManagedCollection,
     Interfaces\Type,
     Interfaces\Uuid as UuidProperty,
+    Period as PeriodProperty,
     Types\Boolean,
     Types\Collection,
     Types\DateTime,
     Types\FloatingPoint,
     Types\Integer,
+    Types\Period,
     Types\Relation,
     Types\Text,
     Types\Uuid
@@ -61,6 +63,7 @@ readonly class TypeFinder
         return match (true) {
             $baseType->getName() === \DateTime::class => new DateTime(),
             $baseType->getName() === UuidProperty::class => new Uuid(),
+            $baseType->getName() === PeriodProperty::class => new Period(),
             !$baseType->isBuiltin() => $this->findRelationType($property, $baseType),
             $baseType->getName() === 'int' => new Integer(),
             $baseType->getName() === 'float' => new FloatingPoint(),
