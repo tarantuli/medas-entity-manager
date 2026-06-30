@@ -10,6 +10,7 @@ use Medas\EntityManager\{
     Exceptions\ClassIsNotAnEntity,
     Exceptions\EntityHasMultipleIdProperties,
     Exceptions\EntityHasNoIdProperty,
+    Interfaces\HasSoftDeletes,
     MetaData
 };
 
@@ -50,6 +51,7 @@ readonly class Compiler
         $this->checkForUniquePropertySets($metaData, $class);
         $this->checkForCompoudIndexes($metaData, $class);
         $this->checkForOwnershipFilters($metaData, $class);
+        $this->checkForSoftDeletes($metaData, $class);
 
         return $metaData;
     }
@@ -118,5 +120,10 @@ readonly class Compiler
         else {
             $metaData->ownershipFilters = [];
         }
+    }
+
+    private function checkForSoftDeletes(MetaData $metaData, \ReflectionClass $class): void
+    {
+        $metaData->softDeletes = $class->implementsInterface(HasSoftDeletes::class);
     }
 }

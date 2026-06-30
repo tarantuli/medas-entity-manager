@@ -23,6 +23,7 @@ class MetaData
     public array $ownershipFilters;
 
     public int $sourceFileDate;
+    public bool $softDeletes;
 
     public function __construct(
         public string $className,
