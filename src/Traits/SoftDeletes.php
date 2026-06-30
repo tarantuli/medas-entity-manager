@@ -10,6 +10,21 @@ trait SoftDeletes
 
     public function softDelete(): void
     {
-        $this->deletedAt = new \DateTime();
+        $now = new \DateTime();
+        $this->deletedAt = $now;
+
+        foreach ($this->softDeleteUniqueFields() as $property) {
+            $this->$property .= $now->format('YmdHis');
+        }
+    }
+
+    /**
+     * The text properties that should have the deletion timestamp appended to their value
+     * when soft deleting, so that a new entity can reuse the original unique value without
+     * colliding with the soft-deleted one.
+     */
+    protected function softDeleteUniqueFields(): array
+    {
+        return [];
     }
 }
