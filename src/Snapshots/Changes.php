@@ -65,11 +65,4 @@ class Changes
     {
         return $this->deletes;
     }
-
-    public function moveFromDeletedToUpdated(object $entity, array $changes): void
-    {
-        $this->deletes = array_filter($this->deletes, fn($e) => $e !== $entity);
-
-        $this->addUpdate($entity, $changes);
-    }
 }

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Snapshots;
 
 use Medas\Core\Attributes\Service;
-use Medas\EntityManager\BeforeFlushHandlerManager;
+use Medas\EntityManager\{BeforeFlushHandlerManager, Interfaces\HasSoftDeletes, MetaDataManager};
 
 #[Service]
 readonly class ChangeFinder
 {
     public function __construct(
         private BeforeFlushHandlerManager $beforeFlushHandlerManager,
+        private MetaDataManager           $metaDataManager,
         private SnapshotManager           $snapshotManager,
     )
     {
@@ -31,6 +32,17 @@ readonly class ChangeFinder
     private function gatherChanges(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): Changes
     {
         $changes = new Changes();
+
+        foreach ($entitiesToDelete as $i => $entity) {
+            $metaData = $this->metaDataManager->get($entity::class);
+
+            if ($metaData->softDeletes) {
+                /** @var HasSoftDeletes $entity */
+                $entity->softDelete();
+
+                unset($entitiesToDelete[$i]);
+            }
+        }
 
         foreach ($entities as $entity) {
             if ($savedStates[$entity] ?? null) {
