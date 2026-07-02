@@ -24,7 +24,7 @@ class OrIs implements Condition
     }
 
     /** @var Condition[] */
-    private array $conditions;
+    public array $conditions;
 
     /** @param Condition[] $conditions */
     public function __construct(...$conditions)
