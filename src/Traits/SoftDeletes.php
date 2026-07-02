@@ -27,4 +27,9 @@ trait SoftDeletes
     {
         return [];
     }
+
+    public function isSoftDeleted(): bool
+    {
+        return $this->deletedAt !== null;
+    }
 }
