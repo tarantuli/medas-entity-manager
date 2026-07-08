@@ -11,7 +11,8 @@ use Medas\Core\{
     Interfaces\Collection,
     Interfaces\TracksChanges,
     Interfaces\Uuid,
-    Interfaces\UuidProvider
+    Interfaces\UuidProvider,
+    Period
 };
 use Medas\EntityManager\{
     Attributes\EntityCollection,
@@ -61,6 +62,13 @@ readonly class ValueCaster
                         (int) $dateTime->format('d'),
                     );
 
+                    $valueType = $phpType;
+
+                    break;
+                }
+
+                if ($phpType === Period::class) {
+                    $value = Period::fromString($value);
                     $valueType = $phpType;
 
                     break;
