@@ -6,6 +6,7 @@ namespace Medas\EntityManager\Types;
 
 use Medas\Core\{
     Attributes\Service,
+    Date,
     Interfaces\HasId,
     Interfaces\ManagedCollection,
     Interfaces\Type,
@@ -13,6 +14,7 @@ use Medas\Core\{
     Period as PeriodProperty,
     Types\Boolean,
     Types\Collection,
+    Types\Date as DateType,
     Types\DateTime,
     Types\FloatingPoint,
     Types\Integer,
@@ -62,6 +64,7 @@ readonly class TypeFinder
 
         return match (true) {
             $baseType->getName() === \DateTime::class => new DateTime(),
+            $baseType->getName() === Date::class => new DateType(),
             $baseType->getName() === UuidProperty::class => new Uuid(),
             $baseType->getName() === PeriodProperty::class => new Period(),
             !$baseType->isBuiltin() => $this->findRelationType($property, $baseType),

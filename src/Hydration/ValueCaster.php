@@ -7,6 +7,7 @@ namespace Medas\EntityManager\Hydration;
 use Medas\Core\{
     Attributes\DataHolder,
     Attributes\Service,
+    Date,
     Interfaces\Collection,
     Interfaces\TracksChanges,
     Interfaces\Uuid,
@@ -46,6 +47,20 @@ readonly class ValueCaster
             foreach ($property->phpTypes as $phpType) {
                 if ($phpType === \DateTime::class) {
                     $value = new \DateTime($value);
+                    $valueType = $phpType;
+
+                    break;
+                }
+
+                if ($phpType === Date::class) {
+                    $dateTime = new \DateTime($value);
+
+                    $value = new Date(
+                        (int) $dateTime->format('Y'),
+                        (int) $dateTime->format('m'),
+                        (int) $dateTime->format('d'),
+                    );
+
                     $valueType = $phpType;
 
                     break;
