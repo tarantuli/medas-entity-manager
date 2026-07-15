@@ -10,5 +10,5 @@ interface SelectorRecordsFetcher
 {
     public function fetch(Selector $selector, array $arguments = []): FetchResult;
 
-    public function fetchCount(Selector $selector, array $arguments = []): FetchResult;
+    public function fetchCount(Selector $selector, array $arguments = [], bool $ignoreSlice = false): FetchResult;
 }
