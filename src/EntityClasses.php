@@ -70,9 +70,9 @@ readonly class EntityClasses
 
         return array_any(
             $this->entityDirectories,
-            fn($directory) => str_starts_with(
-                $reflectionClass->getFileName(),
-                realpath($directory) . DIRECTORY_SEPARATOR
+            fn($directory)
+                => str_starts_with(
+                    $reflectionClass->getFileName(), realpath($directory) . DIRECTORY_SEPARATOR
             )
         );
     }

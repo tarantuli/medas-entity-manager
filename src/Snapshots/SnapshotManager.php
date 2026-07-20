@@ -4,14 +4,27 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Snapshots;
 
-use Medas\Core\{Attributes\Service, Interfaces\HasId, Interfaces\TracksChanges, Interfaces\Uuid};
+use Medas\Core\{
+    AttributeChecker,
+    Attributes\DataHolder,
+    Attributes\PreferredDefault,
+    Attributes\Service,
+    Interfaces\HasId,
+    Interfaces\Serializer,
+    Interfaces\TracksChanges,
+    Interfaces\Uuid
+};
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
 readonly class SnapshotManager
 {
     public function __construct(
-        private MetaDataManager $metaDataManager,
+        private AttributeChecker $attributeChecker,
+        private MetaDataManager  $metaDataManager,
+
+        #[PreferredDefault('Medas\ObjectToArraySerializer\ObjectToArraySerializer')]
+        private Serializer       $serializer,
     )
     {
     }
@@ -41,6 +54,13 @@ readonly class SnapshotManager
 
         if ($current instanceof Uuid && $initial instanceof Uuid) {
             return $current->toBytes() !== $initial->toBytes();
+        }
+
+        if (is_object($current)
+                && is_object($initial)
+                && $current::class === $initial::class
+                && $this->attributeChecker->hasAttribute($current::class, DataHolder::class)) {
+            return $this->serializer->serialize($current) !== $this->serializer->serialize($initial);
         }
 
         if ($current instanceof HasId && $initial instanceof HasId && $current::class === $initial::class) {
