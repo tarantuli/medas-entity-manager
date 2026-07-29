@@ -82,6 +82,26 @@ readonly class ValueSetter
                     $reference[] = $subValue;
                 }
             }
+
+            // Remove anything the existing collection has that the new
+            // value doesn't - without this, removing an item (down to and
+            // including emptying the collection entirely) never had any
+            // effect, since the loop above only ever adds. Collected into
+            // a separate array first and removed in a second pass, rather
+            // than unset() while iterating $reference directly - mutating
+            // an array during iteration via its internal pointer is not
+            // safe to rely on.
+            $keysToRemove = [];
+
+            foreach ($reference as $key => $existingValue) {
+                if (!$value->contains($existingValue)) {
+                    $keysToRemove[] = $key;
+                }
+            }
+
+            foreach ($keysToRemove as $key) {
+                unset($reference[$key]);
+            }
         }
         elseif (isset($entity->{$propertyName}) && $entity->{$propertyName} instanceof SettableCollection) {
             /** @var SettableCollection $reference */
