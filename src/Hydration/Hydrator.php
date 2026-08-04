@@ -54,22 +54,22 @@ readonly class Hydrator
             }
         }
 
-        foreach ($metaData->references as $reference) {
-            $collectionClass = $metaData->property($reference->name)->phpTypes[0];
+        foreach ($metaData->backReferences as $backReference) {
+            $collectionClass = $metaData->property($backReference->name)->phpTypes[0];
 
             $this->valueSetter->set(
                 $metaData,
                 $entity,
-                $reference->name,
-                new $collectionClass(fn() => $this->fetchReferences($entity, $reference, $entityManager))
+                $backReference->name,
+                new $collectionClass(fn() => $this->fetchBackReferences($entity, $backReference, $entityManager))
             );
         }
     }
 
-    private function fetchReferences(
-        object             $entity,
-        MetaData\Reference $reference,
-        EntityManager      $entityManager
+    private function fetchBackReferences(
+        object                 $entity,
+        MetaData\BackReference $backReference,
+        EntityManager          $entityManager
     ): array
     {
         $foundRecords = false;
@@ -77,8 +77,8 @@ readonly class Hydrator
 
         foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
             $fetchResult = $selectorRecordsFetcher->fetch(new WithValues(
-                $reference->entity,
-                [$reference->property => $entity->id]
+                $backReference->entity,
+                [$backReference->property => $entity->id]
             ));
 
             if ($fetchResult->foundValue) {
@@ -90,10 +90,14 @@ readonly class Hydrator
         }
 
         if (!$foundRecords) {
-            throw new ReferenceFetchFailed($entity::class, $reference->name, $reference->entity);
+            throw new ReferenceFetchFailed(
+                $entity::class,
+                $backReference->name,
+                $backReference->entity
+            );
         }
 
-        $metaData = $this->metaDataManager->get($reference->entity);
+        $metaData = $this->metaDataManager->get($backReference->entity);
         $entities = [];
 
         foreach ($records as $record) {

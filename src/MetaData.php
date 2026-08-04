@@ -11,8 +11,8 @@ class MetaData
     /** @var MetaData\Property[] */
     public array $properties;
 
-    /** @var MetaData\Reference[] */
-    public array $references;
+    /** @var MetaData\BackReference[] */
+    public array $backReferences;
 
     public array $uniquePropertySets;
     public array $compoundIndexes;

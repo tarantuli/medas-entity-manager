@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{AsSingleton, BasePackage};
+use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfigBuilder};
 use Medas\ObjectToArraySerializer\ObjectToArraySerializerPackage;
 
 class EntityManagerPackage extends BasePackage
@@ -21,6 +21,13 @@ class EntityManagerPackage extends BasePackage
     public function sourceDirectory(): string
     {
         return __DIR__;
+    }
+
+    public function initialize(ServiceConfigBuilder $config): void
+    {
+        parent::initialize($config);
+
+        $config->addArgumentProcessor(EntityById::class);
     }
 
     public function hasMarkdownDocumentation(): bool

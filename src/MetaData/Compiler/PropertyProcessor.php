@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData\Compiler;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Collections\ReferenceCollection};
 use Medas\EntityManager\{
     Attributes,
     ConfigOptions\DefaultOnDeleteAction,
     ConfigOptions\DefaultOnUpdateAction,
     Exceptions\MultipleReferencePropertiesFound,
     Exceptions\NoReferencePropertyFound,
+    Exceptions\ReferencedByPropertyMustBeReferenceCollection,
     Hydration\PropertyTypeNormalizer,
     MetaData,
+    MetaData\BackReference,
     MetaData\Property,
-    MetaData\Reference,
     Properties\PropertyManager,
     Types\TypeFinder
 };
@@ -107,14 +108,16 @@ readonly class PropertyProcessor
 
     private function processReferences(\ReflectionProperty $property, MetaData $metaData): void
     {
-        $references = attribute(Attributes\References::class, $property);
+        $referencedBy = attribute(Attributes\ReferencedBy::class, $property);
 
-        if (!$references) {
+        if (!$referencedBy) {
             return;
         }
 
-        if ($references->property === null) {
-            $targetClass = new \ReflectionClass($references->entity);
+        $this->assertReferenceCollectionType($property);
+
+        if ($referencedBy->property === null) {
+            $targetClass = new \ReflectionClass($referencedBy->entity);
             $targetProperties = [];
 
             foreach ($targetClass->getProperties() as $targetProperty) {
@@ -126,7 +129,7 @@ readonly class PropertyProcessor
             if (count($targetProperties) === 0) {
                 throw new NoReferencePropertyFound(
                     $property->name,
-                    $references->entity,
+                    $referencedBy->entity,
                     $metaData->className
                 );
             }
@@ -134,19 +137,33 @@ readonly class PropertyProcessor
             if (count($targetProperties) >= 2) {
                 throw new MultipleReferencePropertiesFound(
                     $property->name,
-                    $references->entity,
+                    $referencedBy->entity,
                     $metaData->className,
                     array_map(fn($p) => $p->name, $targetProperties)
                 );
             }
 
-            $references->property = $targetProperties[0]->name;
+            $referencedBy->property = $targetProperties[0]->name;
         }
 
-        $metaData->references[] = new Reference(
+        $metaData->backReferences[] = new BackReference(
             name: $property->name,
-            entity: $references->entity,
-            property: $references->property,
+            entity: $referencedBy->entity,
+            property: $referencedBy->property,
         );
+    }
+
+    /**
+     * A #[ReferencedBy] property is the inverse side of a relation and is hydrated by handing the
+     * collection a lazy loader closure (see Hydrator). That only works for a ReferenceCollection, so
+     * reject any other declared type here — at compile time — instead of failing later in the Hydrator.
+     */
+    private function assertReferenceCollectionType(\ReflectionProperty $property): void
+    {
+        foreach ($this->propertyTypeNormalizer->names($property) as $typeName) {
+            if (!is_a($typeName, ReferenceCollection::class, true)) {
+                throw new ReferencedByPropertyMustBeReferenceCollection($property, $typeName);
+            }
+        }
     }
 }

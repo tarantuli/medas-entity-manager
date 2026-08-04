@@ -137,11 +137,11 @@ readonly class Repository
         return $this->fetch($selector, $arguments)[0] ?? null;
     }
 
-    public function fetchReferences(object $entity, MetaData\Reference $reference): array
+    public function fetchReferences(object $entity, MetaData\BackReference $backReference): array
     {
         return $this->fetch(new Selector\Selectors\WithValues(
-            $reference->entity,
-            [$reference->property => $entity->id]
+            $backReference->entity,
+            [$backReference->property => $entity->id]
         ));
     }
 }

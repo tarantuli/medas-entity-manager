@@ -42,7 +42,7 @@ readonly class Compiler
         $metaData->entity = $entity;
         $metaData->sourceFileDate = filemtime($class->getFileName());
         $metaData->properties = [];
-        $metaData->references = [];
+        $metaData->backReferences = [];
         $metaData->inheritance = new Inheritance($class->getParentClass() ? $class->getParentClass()->name : null);
 
         $this->propertyProcessor->processProperties($class, $metaData);

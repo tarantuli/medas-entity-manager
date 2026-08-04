@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f0e1e3f81e02c440c7afab805d10acfe",
+    "content-hash": "5428aeed773925eaa7c84a899b204a28",
     "packages": [
         {
             "name": "morphp/medas-console",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-console.git",
-                "reference": "a59d589ca3a00e57cb463e4b3c5bdbe86ddbd48d"
+                "reference": "f620e2c6e67bed3824b7e2c394db8a07ee1d920c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/a59d589ca3a00e57cb463e4b3c5bdbe86ddbd48d",
-                "reference": "a59d589ca3a00e57cb463e4b3c5bdbe86ddbd48d",
+                "url": "https://api.github.com/repos/tarantuli/medas-console/zipball/f620e2c6e67bed3824b7e2c394db8a07ee1d920c",
+                "reference": "f620e2c6e67bed3824b7e2c394db8a07ee1d920c",
                 "shasum": ""
             },
             "require": {
@@ -49,23 +49,23 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-console/tree/v4.0.0",
+                "source": "https://github.com/tarantuli/medas-console/tree/v4.0.1",
                 "issues": "https://github.com/tarantuli/medas-console/issues"
             },
-            "time": "2026-07-28T10:24:33+00:00"
+            "time": "2026-07-29T08:14:53+00:00"
         },
         {
             "name": "morphp/medas-core",
-            "version": "v4.2.5",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-core.git",
-                "reference": "73b30ce9d9bc026993ba1f92859877ff09bb8dfe"
+                "reference": "db30d6f678b087d0bcfea1d84b54c12327026221"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/73b30ce9d9bc026993ba1f92859877ff09bb8dfe",
-                "reference": "73b30ce9d9bc026993ba1f92859877ff09bb8dfe",
+                "url": "https://api.github.com/repos/tarantuli/medas-core/zipball/db30d6f678b087d0bcfea1d84b54c12327026221",
+                "reference": "db30d6f678b087d0bcfea1d84b54c12327026221",
                 "shasum": ""
             },
             "require": {
@@ -98,10 +98,10 @@
                 "medas"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-core/tree/v4.2.5",
+                "source": "https://github.com/tarantuli/medas-core/tree/v4.3.0",
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
-            "time": "2026-07-27T08:10:04+00:00"
+            "time": "2026-08-04T09:43:02+00:00"
         },
         {
             "name": "morphp/medas-object-to-array-serializer",
@@ -428,16 +428,16 @@
         },
         {
             "name": "morphp/medas-config-options",
-            "version": "v3.0.12",
+            "version": "v3.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarantuli/medas-config-options.git",
-                "reference": "1f9577d960bdcdf4828e510376b1b2c4bf188878"
+                "reference": "3f79331391be34fe6750d4c8b49c5a9476863c99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/1f9577d960bdcdf4828e510376b1b2c4bf188878",
-                "reference": "1f9577d960bdcdf4828e510376b1b2c4bf188878",
+                "url": "https://api.github.com/repos/tarantuli/medas-config-options/zipball/3f79331391be34fe6750d4c8b49c5a9476863c99",
+                "reference": "3f79331391be34fe6750d4c8b49c5a9476863c99",
                 "shasum": ""
             },
             "require": {
@@ -476,10 +476,10 @@
                 "configuration"
             ],
             "support": {
-                "source": "https://github.com/tarantuli/medas-config-options/tree/v3.0.12",
+                "source": "https://github.com/tarantuli/medas-config-options/tree/v3.0.13",
                 "issues": "https://github.com/tarantuli/medas-config-options/issues"
             },
-            "time": "2026-07-28T11:01:08+00:00"
+            "time": "2026-07-29T08:29:15+00:00"
         },
         {
             "name": "morphp/medas-events",
@@ -2632,16 +2632,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v7.4.14",
+            "version": "v7.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "f8f328665ace2370d1e10645b807ba1646dc7dcc"
+                "reference": "e101850ded5d2c0d44bf32abb8996404afec2dec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/f8f328665ace2370d1e10645b807ba1646dc7dcc",
-                "reference": "f8f328665ace2370d1e10645b807ba1646dc7dcc",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e101850ded5d2c0d44bf32abb8996404afec2dec",
+                "reference": "e101850ded5d2c0d44bf32abb8996404afec2dec",
                 "shasum": ""
             },
             "require": {
@@ -2684,7 +2684,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v7.4.14"
+                "source": "https://github.com/symfony/yaml/tree/v7.4.15"
             },
             "funding": [
                 {
@@ -2704,7 +2704,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-06-08T20:24:16+00:00"
+            "time": "2026-07-21T15:13:06+00:00"
         },
         {
             "name": "theseer/tokenizer",

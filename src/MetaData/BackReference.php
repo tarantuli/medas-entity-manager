@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData;
 
-class Reference
+class BackReference
 {
     public function __construct(
         public string $name,
