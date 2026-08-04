@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData\Compiler;
 
-use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Collections\ReferenceCollection};
+use Medas\Core\Attributes\{ConfigValue, Service};
+use Medas\Core\Collections\ReferenceCollection;
 use Medas\EntityManager\{
     Attributes,
     ConfigOptions\DefaultOnDeleteAction,
@@ -76,7 +77,12 @@ readonly class PropertyProcessor
 
     private function processProperty(\ReflectionProperty $property, MetaData $metaData): void
     {
-        if (attribute(Attributes\Unmanaged::class, $property)) {
+        // #[ReferencedBy] properties are the inverse side of a relation. They are not stored, so they
+        // must stay out of $metaData->properties entirely - otherwise every consumer that iterates it
+        // (storage fetch/persist, snapshots, schema generation) would mistake them for owned columns or
+        // collections. They are handled exclusively via processReferences() / $metaData->backReferences.
+        if (attribute(Attributes\Unmanaged::class, $property)
+            || attribute(Attributes\ReferencedBy::class, $property)) {
             return;
         }
 
@@ -114,7 +120,7 @@ readonly class PropertyProcessor
             return;
         }
 
-        $this->assertReferenceCollectionType($property);
+        $collectionClass = $this->referenceCollectionClass($property);
 
         if ($referencedBy->property === null) {
             $targetClass = new \ReflectionClass($referencedBy->entity);
@@ -150,20 +156,29 @@ readonly class PropertyProcessor
             name: $property->name,
             entity: $referencedBy->entity,
             property: $referencedBy->property,
+            collectionClass: $collectionClass,
         );
     }
 
     /**
-     * A #[ReferencedBy] property is the inverse side of a relation and is hydrated by handing the
-     * collection a lazy loader closure (see Hydrator). That only works for a ReferenceCollection, so
-     * reject any other declared type here — at compile time — instead of failing later in the Hydrator.
+     * A #[ReferencedBy] property is hydrated by handing the collection a lazy loader closure (see
+     * Hydrator), which only works for a ReferenceCollection. Enforce that here - at compile time -
+     * and return the concrete collection class so the Hydrator can instantiate it without the property
+     * having to live in $metaData->properties.
      */
-    private function assertReferenceCollectionType(\ReflectionProperty $property): void
+    private function referenceCollectionClass(\ReflectionProperty $property): string
     {
-        foreach ($this->propertyTypeNormalizer->names($property) as $typeName) {
-            if (!is_a($typeName, ReferenceCollection::class, true)) {
-                throw new ReferencedByPropertyMustBeReferenceCollection($property, $typeName);
-            }
+        $typeNames = $this->propertyTypeNormalizer->names($property);
+
+        if (count($typeNames) !== 1 || !is_a($typeNames[0], ReferenceCollection::class, true)) {
+            throw new ReferencedByPropertyMustBeReferenceCollection(
+                $property,
+                $typeNames === [] ? 'none' : implode('|', $typeNames)
+            );
         }
+
+        /** @noinspection PhpStrictTypeCheckingInspection */
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $typeNames[0];
     }
 }

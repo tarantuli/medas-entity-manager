@@ -10,6 +10,7 @@ class BackReference
         public string $name,
         public string $entity,
         public string $property,
+        public string $collectionClass,
     )
     {
     }
