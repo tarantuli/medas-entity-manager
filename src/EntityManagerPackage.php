@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager;
 
 use Medas\Core\{AsSingleton, BasePackage, Interfaces\ServiceConfigBuilder};
+use Medas\Json\JsonPackage;
 use Medas\ObjectToArraySerializer\ObjectToArraySerializerPackage;
 
 class EntityManagerPackage extends BasePackage
@@ -14,6 +15,7 @@ class EntityManagerPackage extends BasePackage
     public function dependencies(): array
     {
         return [
+            JsonPackage::instance(),
             ObjectToArraySerializerPackage::instance(),
         ];
     }

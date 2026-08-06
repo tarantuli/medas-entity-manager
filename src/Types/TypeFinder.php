@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManager\Types;
 
 use Medas\Core\{
+    Attributes\DataHolder as DataHolderAttribute,
     Attributes\Service,
     Date,
     Interfaces\HasId,
@@ -14,6 +15,7 @@ use Medas\Core\{
     Period as PeriodProperty,
     Types\Boolean,
     Types\Collection,
+    Types\DataHolder,
     Types\Date as DateType,
     Types\DateTime,
     Types\FloatingPoint,
@@ -121,6 +123,10 @@ readonly class TypeFinder
 
         if ($class->implementsInterface(HasId::class)) {
             return new Relation($relationName);
+        }
+
+        if (attribute(DataHolderAttribute::class, $class)) {
+            return new DataHolder($relationName);
         }
 
         throw new ClassPropertyIsNotARelation($property);

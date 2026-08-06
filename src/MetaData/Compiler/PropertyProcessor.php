@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\MetaData\Compiler;
 
-use Medas\Core\Attributes\{ConfigValue, Service};
-use Medas\Core\Collections\ReferenceCollection;
+use Medas\Core\{Attributes\ConfigValue, Attributes\Service, Collections\ReferenceCollection};
 use Medas\EntityManager\{
     Attributes,
     ConfigOptions\DefaultOnDeleteAction,
@@ -82,7 +81,7 @@ readonly class PropertyProcessor
         // (storage fetch/persist, snapshots, schema generation) would mistake them for owned columns or
         // collections. They are handled exclusively via processReferences() / $metaData->backReferences.
         if (attribute(Attributes\Unmanaged::class, $property)
-            || attribute(Attributes\ReferencedBy::class, $property)) {
+                || attribute(Attributes\ReferencedBy::class, $property)) {
             return;
         }
 

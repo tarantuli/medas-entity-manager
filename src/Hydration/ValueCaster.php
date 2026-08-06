@@ -28,6 +28,7 @@ use Medas\EntityManager\{
     Exceptions\UnrecognizedUuidFormat,
     MetaData\Property
 };
+use Medas\Json\JsonEncoder;
 use Medas\ObjectToArraySerializer\ArrayToObjectCaster;
 
 #[Service]
@@ -35,6 +36,7 @@ readonly class ValueCaster
 {
     public function __construct(
         private ArrayToObjectCaster $arrayToObjectCaster,
+        private JsonEncoder         $jsonEncoder,
         private UuidProvider|null   $uuidProvider,
     )
     {
@@ -136,7 +138,14 @@ readonly class ValueCaster
 
                         $value = $collection;
                     }
-                    elseif (attribute(DataHolder::class, $reflectionClass) && is_array($value)) {
+                    elseif (attribute(DataHolder::class, $reflectionClass)) {
+                        // pdo-storage stores DataHolders as a JSON varchar; other
+                        // backends may hand back a native array. Normalize to an
+                        // array, then cast to the value object.
+                        if (is_string($value)) {
+                            $value = $this->jsonEncoder->decode($value);
+                        }
+
                         $value = $this->arrayToObjectCaster->cast($value, $phpType);
                     }
                     elseif (!$value instanceof Collection) {

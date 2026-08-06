@@ -60,7 +60,11 @@ readonly class Hydrator
             // Back-reference properties are intentionally absent from $metaData->properties, so set the
             // lazy collection straight onto the entity instead of going through the ValueSetter (which
             // resolves through the properties list).
-            new \ReflectionProperty($entity::class, $backReference->name)->setValue(
+            new \ReflectionProperty(
+                $entity::class,
+                $backReference->name
+
+            )->setValue(
                 $entity,
                 new $collectionClass(fn() => $this->fetchReferences($entity, $backReference, $entityManager))
             );
@@ -91,7 +95,11 @@ readonly class Hydrator
         }
 
         if (!$foundRecords) {
-            throw new ReferenceFetchFailed($entity::class, $backReference->name, $backReference->entity);
+            throw new ReferenceFetchFailed(
+                $entity::class,
+                $backReference->name,
+                $backReference->entity
+            );
         }
 
         $metaData = $this->metaDataManager->get($backReference->entity);
