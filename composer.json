@@ -14,7 +14,6 @@
   "require": {
     "ext-pdo": "*",
     "morphp/medas-core": "^4.3",
-    "morphp/medas-json": "^3",
     "morphp/medas-object-to-array-serializer": "^3",
     "php": "^8.4"
   },

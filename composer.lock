@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19eed036f9621f458f505407b189c4a5",
+    "content-hash": "5428aeed773925eaa7c84a899b204a28",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -102,57 +102,6 @@
                 "issues": "https://github.com/tarantuli/medas-core/issues"
             },
             "time": "2026-08-06T09:36:01+00:00"
-        },
-        {
-            "name": "morphp/medas-json",
-            "version": "v3.0.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tarantuli/medas-json.git",
-                "reference": "6ef7a3146d0017775208118a35d430ae14983fa1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tarantuli/medas-json/zipball/6ef7a3146d0017775208118a35d430ae14983fa1",
-                "reference": "6ef7a3146d0017775208118a35d430ae14983fa1",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "morphp/medas-core": "^4",
-                "php": "^8.4"
-            },
-            "require-dev": {
-                "morphp/medas-object-instantiator": "^4",
-                "morphp/medas-service-manager": "^4",
-                "phpunit/phpunit": "^10"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Medas\\Json\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Medas\\JsonTest\\": "tests/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Patrick Morpey",
-                    "email": "patrick@morphp.nl"
-                }
-            ],
-            "description": "Medas JSON",
-            "keywords": [
-                "data manipulation"
-            ],
-            "support": {
-                "source": "https://github.com/tarantuli/medas-json/tree/v3.0.12",
-                "issues": "https://github.com/tarantuli/medas-json/issues"
-            },
-            "time": "2026-07-22T12:45:07+00:00"
         },
         {
             "name": "morphp/medas-object-to-array-serializer",

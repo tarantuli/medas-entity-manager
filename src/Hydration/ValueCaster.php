@@ -18,6 +18,7 @@ use Medas\EntityManager\{
     Attributes\EntityCollection,
     Entities\Initializer,
     Events\FindEntity,
+    Events\NormalizeStorageValueRequest,
     Exceptions\DataLossOnConversion,
     Exceptions\FailedToFindEntity,
     Exceptions\IntegerOverflow,
@@ -28,7 +29,6 @@ use Medas\EntityManager\{
     Exceptions\UnrecognizedUuidFormat,
     MetaData\Property
 };
-use Medas\Json\JsonEncoder;
 use Medas\ObjectToArraySerializer\ArrayToObjectCaster;
 
 #[Service]
@@ -36,7 +36,6 @@ readonly class ValueCaster
 {
     public function __construct(
         private ArrayToObjectCaster $arrayToObjectCaster,
-        private JsonEncoder         $jsonEncoder,
         private UuidProvider|null   $uuidProvider,
     )
     {
@@ -139,14 +138,20 @@ readonly class ValueCaster
                         $value = $collection;
                     }
                     elseif (attribute(DataHolder::class, $reflectionClass)) {
-                        // pdo-storage stores DataHolders as a JSON varchar; other
-                        // backends may hand back a native array. Normalize to an
-                        // array, then cast to the value object.
-                        if (is_string($value)) {
-                            $value = $this->jsonEncoder->decode($value);
-                        }
+                        // The stored representation of a DataHolder is
+                        // backend-specific (pdo stores a JSON varchar; a document
+                        // store might return a native array). Ask the backend that
+                        // produced the value to normalize it back to an array,
+                        // without entity-manager knowing how any backend
+                        // represents it. Unhandled values pass through unchanged.
+                        $request = new NormalizeStorageValueRequest($value);
 
-                        $value = $this->arrayToObjectCaster->cast($value, $phpType);
+                        dispatch($request);
+
+                        $value = $this->arrayToObjectCaster->cast(
+                            $request->normalizedValue,
+                            $phpType
+                        );
                     }
                     elseif (!$value instanceof Collection) {
                         $event = new FindEntity($phpType, $value);
