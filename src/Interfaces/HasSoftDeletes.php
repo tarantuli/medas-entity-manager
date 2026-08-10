@@ -7,4 +7,6 @@ namespace Medas\EntityManager\Interfaces;
 interface HasSoftDeletes
 {
     public function softDelete(): void;
+
+    public function isSoftDeleted(): bool;
 }

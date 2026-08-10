@@ -13,6 +13,7 @@ use Medas\EntityManager\Entities\{
 };
 use Medas\EntityManager\EntityManager;
 use Medas\EntityManager\Exceptions\{OriginalClassNotFound, ReferenceFetchFailed};
+use Medas\EntityManager\Interfaces\HasSoftDeletes;
 use Medas\EntityManager\MetaData;
 use Medas\EntityManager\MetaDataManager;
 use Medas\EntityManager\Selector\Selectors\WithValues;
@@ -107,7 +108,15 @@ readonly class Hydrator
 
         foreach ($records as $record) {
             $idValue = $this->idValue->get($record, $metaData);
-            $entities[] = $entityManager->get($metaData->className, $idValue);
+            $referencedEntity = $entityManager->get($metaData->className, $idValue);
+
+            // Soft-deleted entities are excluded from back-reference collections:
+            // a lazy collection reflects the live set, not tombstoned rows.
+            if ($referencedEntity instanceof HasSoftDeletes && $referencedEntity->isSoftDeleted()) {
+                continue;
+            }
+
+            $entities[] = $referencedEntity;
         }
 
         return $entities;
