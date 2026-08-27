@@ -6,28 +6,22 @@ namespace Medas\EntityManager\Hydration;
 
 use Medas\Core\Attributes\Service;
 use Medas\EntityManager\Entities\{
-    IdValue,
+    ReferenceInitializer,
     ValueFetchers\EntityValueFetchersManager,
-    ValueFetchers\OriginalClassFetcherManager,
-    ValueFetchers\SelectorRecordsFetcherManager
+    ValueFetchers\OriginalClassFetcherManager
 };
 use Medas\EntityManager\EntityManager;
-use Medas\EntityManager\Exceptions\{OriginalClassNotFound, ReferenceFetchFailed};
-use Medas\EntityManager\Interfaces\HasSoftDeletes;
+use Medas\EntityManager\Exceptions\OriginalClassNotFound;
 use Medas\EntityManager\MetaData;
-use Medas\EntityManager\MetaDataManager;
-use Medas\EntityManager\Selector\Selectors\WithValues;
 
 #[Service]
 readonly class Hydrator
 {
     public function __construct(
-        private EntityValueFetchersManager    $entityValueFetchersManager,
-        private IdValue                       $idValue,
-        private MetaDataManager               $metaDataManager,
-        private OriginalClassFetcherManager   $originalClassFetcherManager,
-        private SelectorRecordsFetcherManager $selectorRecordsFetcherManager,
-        private ValueSetter                   $valueSetter,
+        private EntityValueFetchersManager  $entityValueFetchersManager,
+        private OriginalClassFetcherManager $originalClassFetcherManager,
+        private ReferenceInitializer        $referenceInitializer,
+        private ValueSetter                 $valueSetter,
     )
     {
     }
@@ -55,71 +49,7 @@ readonly class Hydrator
             }
         }
 
-        foreach ($metaData->backReferences as $backReference) {
-            $collectionClass = $backReference->collectionClass;
-
-            // Back-reference properties are intentionally absent from $metaData->properties, so set the
-            // lazy collection straight onto the entity instead of going through the ValueSetter (which
-            // resolves through the properties list).
-            new \ReflectionProperty(
-                $entity::class,
-                $backReference->name
-
-            )->setValue(
-                $entity,
-                new $collectionClass(fn() => $this->fetchReferences($entity, $backReference, $entityManager))
-            );
-        }
-    }
-
-    private function fetchReferences(
-        object                 $entity,
-        MetaData\BackReference $backReference,
-        EntityManager          $entityManager
-    ): array
-    {
-        $foundRecords = false;
-        $records = [];
-
-        foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
-            $fetchResult = $selectorRecordsFetcher->fetch(new WithValues(
-                $backReference->entity,
-                [$backReference->property => $entity->id]
-            ));
-
-            if ($fetchResult->foundValue) {
-                $records = $fetchResult->value;
-                $foundRecords = true;
-
-                break;
-            }
-        }
-
-        if (!$foundRecords) {
-            throw new ReferenceFetchFailed(
-                $entity::class,
-                $backReference->name,
-                $backReference->entity
-            );
-        }
-
-        $metaData = $this->metaDataManager->get($backReference->entity);
-        $entities = [];
-
-        foreach ($records as $record) {
-            $idValue = $this->idValue->get($record, $metaData);
-            $referencedEntity = $entityManager->get($metaData->className, $idValue);
-
-            // Soft-deleted entities are excluded from back-reference collections:
-            // a lazy collection reflects the live set, not tombstoned rows.
-            if ($referencedEntity instanceof HasSoftDeletes && $referencedEntity->isSoftDeleted()) {
-                continue;
-            }
-
-            $entities[] = $referencedEntity;
-        }
-
-        return $entities;
+        $this->referenceInitializer->initialize($entity, $entityManager);
     }
 
     public function fetchOriginalClass(MetaData $metaData, mixed $id): string

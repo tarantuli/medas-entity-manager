@@ -13,7 +13,7 @@ use Medas\Core\{
 use Medas\EntityManager\MetaDataManager;
 
 #[Service]
-readonly class UuidSetter
+readonly class UuidInitializer
 {
     public function __construct(
         private MetaDataManager   $metaDataManager,
@@ -23,14 +23,14 @@ readonly class UuidSetter
     }
 
     /** @param object[] $entities */
-    public function processEntities(array $entities): void
+    public function initializeAll(array $entities): void
     {
         foreach ($entities as $entity) {
-            $this->processEntity($entity);
+            $this->initialize($entity);
         }
     }
 
-    public function processEntity(object $entity): void
+    public function initialize(object $entity): void
     {
         $metaData = $this->metaDataManager->get($entity::class);
 
