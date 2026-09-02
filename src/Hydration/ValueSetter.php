@@ -48,6 +48,36 @@ readonly class ValueSetter
         }
     }
 
+    /**
+     * Applies a payload through the entity's writable contract, keyed by each
+     * field's source. Distinct from setValues() (raw property hydration, e.g.
+     * loading from storage): here a field's source may be a method or route
+     * through a setter, so it can't just be assigned. Values are expected
+     * pre-filtered by the normalizer to the fields allowed for the operation.
+     */
+    public function applyWritable(MetaData $metaData, object $entity, array $values): void
+    {
+        foreach ($metaData->writableFields as $field) {
+            if (!array_key_exists($field->source, $values)) {
+                continue;
+            }
+
+            $value = $values[$field->source];
+
+            if ($field->isMethod) {
+                $entity->{$field->source}($value);
+            }
+            elseif ($field->setter !== null) {
+                $entity->{$field->setter}($value);
+            }
+            else {
+                // Plain property: reuse set() for its casting and collection
+                // handling.
+                $this->set($metaData, $entity, $field->source, $value);
+            }
+        }
+    }
+
     public function set(
         MetaData $metaData,
         object   $entity,
