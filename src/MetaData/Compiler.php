@@ -52,6 +52,7 @@ readonly class Compiler
         $this->checkForCompoudIndexes($metaData, $class);
         $this->checkForOwnershipFilters($metaData, $class);
         $this->checkForSoftDeletes($metaData, $class);
+        $this->checkForReadableWritableFields($metaData, $class);
 
         return $metaData;
     }
@@ -125,5 +126,53 @@ readonly class Compiler
     private function checkForSoftDeletes(MetaData $metaData, \ReflectionClass $class): void
     {
         $metaData->softDeletes = $class->implementsInterface(HasSoftDeletes::class);
+    }
+
+    // Resolves the read/write contract from #[IsReadable]/#[IsWritable] on the
+    // entity's properties and methods. attribute() matches on IS_INSTANCEOF, so
+    // #[Id] and the timestamp attributes count as readable once they extend
+    // IsReadable, without being listed here.
+    private function checkForReadableWritableFields(MetaData $metaData, \ReflectionClass $class): void
+    {
+        $metaData->readableFields = [];
+        $metaData->writableFields = [];
+
+        foreach ($class->getProperties() as $property) {
+            $this->addFields($metaData, $property, $property->name, isMethod: false);
+        }
+
+        foreach ($class->getMethods() as $method) {
+            $this->addFields($metaData, $method, $method->name, isMethod: true);
+        }
+    }
+
+    private function addFields(
+        MetaData                              $metaData,
+        \ReflectionProperty|\ReflectionMethod $member,
+        string                                $source,
+        bool                                  $isMethod,
+    ): void
+    {
+        if ($readable = attribute(Attributes\IsReadable::class, $member)) {
+            $metaData->readableFields[] = new ReadableField(
+                $source,
+                $isMethod,
+                $readable->name ?? $source
+            );
+        }
+
+        if ($writable = attribute(Attributes\IsWritable::class, $member)) {
+            $metaData->writableFields[] = new WritableField(
+                $source,
+                $isMethod,
+                $writable->name ?? $source,
+
+                // A method target is itself the setter; a $setter only applies
+                // when routing a property's value through a method.
+                $isMethod ? null : $writable->setter,
+                $writable->onCreate,
+                $writable->onUpdate,
+            );
+        }
     }
 }

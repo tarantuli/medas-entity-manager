@@ -14,6 +14,12 @@ class MetaData
     /** @var MetaData\BackReference[] */
     public array $backReferences;
 
+    /** @var MetaData\ReadableField[] */
+    public array $readableFields;
+
+    /** @var MetaData\WritableField[] */
+    public array $writableFields;
+
     public array $uniquePropertySets;
     public array $compoundIndexes;
     public MetaData\Property|null $idProperty;
