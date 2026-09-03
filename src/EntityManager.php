@@ -228,7 +228,7 @@ readonly class EntityManager implements EntityManagerInterface
         dispatch(new DebugInformation('[entity-manager] flushing'));
 
         dispatch(new DebugInformation(
-            '[entity-manager] flush over %d tracked entities',
+            '[entity-manager] flush over %s tracked entities',
             count($this->context->entities)
         ));
 
