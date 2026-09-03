@@ -149,6 +149,8 @@ readonly class EntityManager implements EntityManagerInterface
 
                 ++$this->context->entityCount;
 
+                dispatch(new DebugInformation('[entity-manager] persist %s', $entity::class));
+
                 if ($this->context->cachePurgeTriggerSize
                         && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
                     $this->purge();
@@ -224,6 +226,11 @@ readonly class EntityManager implements EntityManagerInterface
     public function flush(): void
     {
         dispatch(new DebugInformation('[entity-manager] flushing'));
+
+        dispatch(new DebugInformation(
+            '[entity-manager] flush over %d tracked entities',
+            count($this->context->entities)
+        ));
 
         $changes = $this->changeFinder->gather(
             fn() => $this->context->entities,
