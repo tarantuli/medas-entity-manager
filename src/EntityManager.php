@@ -146,6 +146,7 @@ readonly class EntityManager implements EntityManagerInterface
                 $this->referenceInitializer->initialize($entity, $this);
 
                 $this->context->entities[$key] = $entity;
+                $this->context->entityAccessTime[$key] = hrtime(true);
 
                 ++$this->context->entityCount;
 
@@ -282,6 +283,12 @@ readonly class EntityManager implements EntityManagerInterface
         $this->context->entities[$newKey] = $entity;
 
         unset($this->context->entities[$oldKey]);
+
+        if (isset($this->context->entityAccessTime[$oldKey])) {
+            $this->context->entityAccessTime[$newKey] = $this->context->entityAccessTime[$oldKey];
+
+            unset($this->context->entityAccessTime[$oldKey]);
+        }
     }
 
     #[EventListener]
