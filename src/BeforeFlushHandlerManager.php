@@ -21,7 +21,9 @@ readonly class BeforeFlushHandlerManager
         $madeChanges = false;
 
         foreach ($this->cachedImplementorList->get() as $handler) {
-            $madeChanges = ($madeChanges or $handler->handle($changes));
+            if ($handler->handle($changes)) {
+                $madeChanges = true;
+            }
         }
 
         return $madeChanges;

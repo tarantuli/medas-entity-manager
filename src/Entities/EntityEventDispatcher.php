@@ -13,7 +13,7 @@ use Medas\EntityManager\{
 };
 
 /**
- * Turns the categorized persistence changes of a flush into generic domain
+ * Turns the categorised persistence changes of a flush into generic domain
  * events - EntityCreated / EntityChanged / EntityDeleted - one per affected
  * entity. Runs as an AfterFlushHandler, so it fires post-commit and covers every
  * write path (REST, console, cron, seed) without a dispatch at each call site.
