@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{
-    Exceptions\ServiceNotFoundByType,
-    Exceptions\UuidProviderIsNotAvailable,
-    Interfaces\ArgumentProcessor,
-    Interfaces\EntityManager as EntityManagerInterface,
-    Interfaces\UuidProvider
-};
+use Medas\Core\Interfaces\{ArgumentProcessor, EntityManager as EntityManagerInterface};
 
 // Turns a scalar id into the entity it identifies. When a parameter is typed as
-// an entity class but the resolved argument is a scalar - e.g., a #[ConfigValue]
+// an entity class but the resolved argument is a scalar - e.g. a #[ConfigValue]
 // that produced an id string - the scalar can only mean one thing there, an id,
 // since a bare scalar is otherwise an invalid value for an entity-typed
 // parameter. So it's fetched and replaced by the instance.
@@ -42,7 +36,11 @@ readonly class EntityById implements ArgumentProcessor
             return $argument;
         }
 
-        return service(EntityManagerInterface::class)->get($entityClass, $this->toId($argument));
+        // The entity decides its own id type; IdCaster coerces the scalar to it.
+        return service(EntityManagerInterface::class)->get(
+            $entityClass,
+            service(Entities\IdCaster::class)->cast($entityClass, $argument)
+        );
     }
 
     // The first entity-typed declaration on the parameter, or null when it isn't
@@ -68,25 +66,5 @@ readonly class EntityById implements ArgumentProcessor
         }
 
         return null;
-    }
-
-    private function toId(int|float|string|bool $argument): mixed
-    {
-        // Entities are keyed by a Uuid id, so a string id (as config and request
-        // input deliver it) has to become the Uuid the entity manager looks up
-        // by. A non-string scalar is passed through unchanged for the manager to
-        // key on or reject.
-        if (!is_string($argument)) {
-            return $argument;
-        }
-
-        try {
-            $uuidProvider = service(UuidProvider::class);
-        }
-        catch (ServiceNotFoundByType) {
-            throw new UuidProviderIsNotAvailable();
-        }
-
-        return $uuidProvider->fromString($argument);
     }
 }
