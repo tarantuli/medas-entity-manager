@@ -239,8 +239,28 @@ readonly class EntityManager implements EntityManagerInterface
             fn() => $this->context->entitiesToDelete
         );
 
-        $this->updateEntityStates();
-        $this->flushManager->flush($changes);
+        do {
+            $this->updateEntityStates();
+            $this->flushManager->flush($changes);
+
+            // After-flush handlers (e.g. the change log) may persist new entities.
+            // Those newcomers have no saved state yet - every pre-existing entity was
+            // snapshotted by updateEntityStates() above - so gather over just them and
+            // flush again, writing them within this flush rather than deferring to a
+            // later one. Limiting the re-gather to newcomers is deliberate: re-diffing
+            // settled entities would never terminate, because gather() stamps a fresh
+            // modification timestamp on anything it still sees as changed.
+            $newEntities = array_filter(
+                $this->context->entities,
+                fn(object $entity) => !$this->context->savedStates->contains($entity)
+            );
+
+            $changes = $this->changeFinder->gather(
+                fn() => $newEntities,
+                fn() => $this->context->savedStates,
+                fn() => $this->context->entitiesToDelete
+            );
+        } while ($changes->hasChanges());
 
         dispatch(new Events\MustClearEntityValueCaches());
     }

@@ -65,4 +65,9 @@ class Changes
     {
         return $this->deletes;
     }
+
+    public function hasChanges(): bool
+    {
+        return $this->creates || $this->updates || $this->deletes;
+    }
 }

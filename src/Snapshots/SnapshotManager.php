@@ -75,6 +75,10 @@ readonly class SnapshotManager
             }
         }
 
+        if ($current instanceof \DateTimeInterface && $initial instanceof \DateTimeInterface) {
+            return $current->getTimestamp() !== $initial->getTimestamp();
+        }
+
         return $current !== $initial;
     }
 
