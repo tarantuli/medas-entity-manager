@@ -18,8 +18,9 @@ use Medas\EntityManager\{
 readonly class Compiler
 {
     public function __construct(
-        private Compiler\PropertyProcessor $propertyProcessor,
-        private EntityCompiler             $entityCompiler,
+        private Compiler\AttributeCollector $attributeCollector,
+        private Compiler\PropertyProcessor  $propertyProcessor,
+        private EntityCompiler              $entityCompiler,
     )
     {
     }
@@ -53,6 +54,8 @@ readonly class Compiler
         $this->checkForOwnershipFilters($metaData, $class);
         $this->checkForSoftDeletes($metaData, $class);
         $this->checkForReadableWritableFields($metaData, $class);
+
+        $metaData->attributes = $this->attributeCollector->collect($class);
 
         return $metaData;
     }

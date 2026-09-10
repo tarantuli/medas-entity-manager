@@ -24,6 +24,7 @@ use Medas\EntityManager\{
 readonly class PropertyProcessor
 {
     public function __construct(
+        private AttributeCollector          $attributeCollector,
         private PropertyManager             $propertyManager,
         private PropertyTypeNormalizer      $propertyTypeNormalizer,
         private TypeFinder                  $typeFinder,
@@ -108,6 +109,7 @@ readonly class PropertyProcessor
             phpTypes: $this->propertyTypeNormalizer->names($property),
             reflection: $property,
             handler: $handler ? $handler::class : null,
+            attributes: $this->attributeCollector->collect($property),
         );
     }
 

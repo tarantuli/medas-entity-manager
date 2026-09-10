@@ -31,6 +31,15 @@ class MetaData
     public int $sourceFileDate;
     public bool $softDeletes;
 
+    /**
+     * User-land attributes on the entity class that the metadata compiler does not
+     * itself interpret - anything it does not own (see Compiler\AttributeCollector).
+     * Held as constructed instances so consumers read their values directly.
+     *
+     * @var object[]
+     */
+    public array $attributes = [];
+
     public function __construct(
         public string $className,
     )
@@ -50,5 +59,12 @@ class MetaData
         }
 
         return null;
+    }
+
+    // The first class-level attribute that is an instance of $class, or null. Reads
+    // from the additional-attributes bag - owned attributes have their own accessors.
+    public function attribute(string $class): object|null
+    {
+        return array_find($this->attributes ?? [], fn($attribute) => $attribute instanceof $class);
     }
 }

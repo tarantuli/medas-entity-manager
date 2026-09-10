@@ -26,6 +26,9 @@ class Property
         public array               $phpTypes,
         public \ReflectionProperty $reflection,
         public string|null         $handler,
+
+        /** @var object[] */
+        public array               $attributes = [],
     )
     {
     }
@@ -50,11 +53,14 @@ class Property
             'reflectionClass' => $this->reflection->class,
             'reflectionName' => $this->reflection->name,
             'handler' => $this->handler,
+            'attributes' => $this->attributes,
         ];
     }
 
     public function __unserialize(array $data): void
     {
+        $values = array_values($data);
+
         [
             $this->name,
             $this->type,
@@ -73,9 +79,18 @@ class Property
             $reflectionClass,
             $reflectionName,
             $this->handler,
-        ] = array_values($data);
+        ] = $values;
 
+        // Tolerate metadata cached before this field existed.
+        $this->attributes = $values[17] ?? [];
         $this->reflection = new \ReflectionProperty($reflectionClass, $reflectionName);
+    }
+
+    // The first attribute on this property that is an instance of $class, or null.
+    // Reads from the additional-attributes bag - owned attributes have typed fields.
+    public function attribute(string $class): object|null
+    {
+        return array_find($this->attributes ?? [], fn($attribute) => $attribute instanceof $class);
     }
 
     public function allowsPhpType(string $type): bool
