@@ -29,7 +29,7 @@ readonly class ChangeFinder
         return $changes;
     }
 
-    private function gatherChanges(array $entities, \SplObjectStorage $savedStates, array $entitiesToDelete): Changes
+    private function gatherChanges(array $entities, \WeakMap $savedStates, array $entitiesToDelete): Changes
     {
         $changes = new Changes();
 

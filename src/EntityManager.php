@@ -59,11 +59,24 @@ readonly class EntityManager implements EntityManagerInterface
 
     /**
      * The return value is an object of type `$className`.
+     *
+     * $trackChanges: false skips change-diffing for this entity entirely -- use it for a fetch
+     * that's known to be read-only (an existence check, a lookup you won't mutate). The entity is
+     * still returned from and cached in the identity map as usual, so a repeated get() for the
+     * same id doesn't re-hydrate; it just never gets a saved-state snapshot, so it costs nothing
+     * at flush() time no matter how many flushes happen while it's tracked.
+     *
+     * Tracking is one-way. On a cache hit for an entity that's already tracked, $trackChanges is
+     * ignored -- once something is being diffed, this can't silently turn that back off and risk
+     * dropping a real pending change. On a cache hit for a currently-untracked entity, passing
+     * true here promotes it: a snapshot is taken right now as the new baseline, so anything about
+     * it that changed *before* this call is invisible (there was nothing to compare against), but
+     * anything changed from this point on is picked up normally.
      */
     /*
      * This is specified in PhpStorm in .phpstorm.meta.php
      */
-    public function get(string $className, mixed $id): object
+    public function get(string $className, mixed $id, bool $trackChanges = true): object
     {
         $key = $this->keyMaker->get($className, $id);
         $this->context->entityAccessTime[$key] = hrtime(true);
@@ -76,7 +89,13 @@ readonly class EntityManager implements EntityManagerInterface
 
                 $this->updateCircularDependencyCheck($key);
 
-                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+                if ($trackChanges) {
+                    $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+                }
+                else {
+                    $this->context->untrackedEntities[$entity] = true;
+                }
+
                 $this->context->entities[$key] = $entity;
 
                 ++$this->context->entityCount;
@@ -91,6 +110,13 @@ readonly class EntityManager implements EntityManagerInterface
                     && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
                 $this->purge();
             }
+        }
+        elseif ($trackChanges && isset($this->context->untrackedEntities[$this->context->entities[$key]])) {
+            $entity = $this->context->entities[$key];
+
+            unset($this->context->untrackedEntities[$entity]);
+
+            $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
         }
 
         return $this->context->entities[$key];
@@ -180,8 +206,8 @@ readonly class EntityManager implements EntityManagerInterface
 
                 unset($this->context->entities[$key]);
                 unset($this->context->entityAccessTime[$key]);
-
-                $this->context->savedStates->offsetUnset($entity);
+                unset($this->context->savedStates[$entity]);
+                unset($this->context->untrackedEntities[$entity]);
             }
         }
 
@@ -212,6 +238,7 @@ readonly class EntityManager implements EntityManagerInterface
         }
 
         unset($this->context->savedStates[$entity]);
+        unset($this->context->untrackedEntities[$entity]);
     }
 
     public function clear(): void
@@ -219,7 +246,8 @@ readonly class EntityManager implements EntityManagerInterface
         $this->context->entities = [];
         $this->context->entityCount = 0;
         $this->context->entitiesToDelete = [];
-        $this->context->savedStates = new \SplObjectStorage();
+        $this->context->savedStates = new \WeakMap();
+        $this->context->untrackedEntities = new \WeakMap();
 
         dispatch(new Events\MustClearEntityValueCaches());
     }
@@ -234,7 +262,7 @@ readonly class EntityManager implements EntityManagerInterface
         ));
 
         $changes = $this->changeFinder->gather(
-            fn() => $this->context->entities,
+            fn() => $this->trackableEntities(),
             fn() => $this->context->savedStates,
             fn() => $this->context->entitiesToDelete
         );
@@ -251,8 +279,8 @@ readonly class EntityManager implements EntityManagerInterface
             // settled entities would never terminate, because gather() stamps a fresh
             // modification timestamp on anything it still sees as changed.
             $newEntities = array_filter(
-                $this->context->entities,
-                fn(object $entity) => !$this->context->savedStates->contains($entity)
+                $this->trackableEntities(),
+                fn(object $entity) => !isset($this->context->savedStates[$entity])
             );
 
             $changes = $this->changeFinder->gather(
@@ -287,6 +315,22 @@ readonly class EntityManager implements EntityManagerInterface
         }
 
         $this->context->entitiesToDelete = [];
+    }
+
+    /**
+     * $this->context->entities minus anything fetched with get(trackChanges: false) -- those are
+     * cached in the identity map (so repeated get() calls don't re-hydrate) but must never reach
+     * ChangeFinder::gather(): having no saved state would otherwise make gatherChanges() treat
+     * them as brand new and re-insert them, rather than simply leaving them undiffed.
+     *
+     * @return object[]
+     */
+    private function trackableEntities(): array
+    {
+        return array_filter(
+            $this->context->entities,
+            fn(object $entity) => !isset($this->context->untrackedEntities[$entity])
+        );
     }
 
     public function cacheSize(): int
