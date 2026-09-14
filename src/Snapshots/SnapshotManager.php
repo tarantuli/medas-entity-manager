@@ -32,14 +32,35 @@ readonly class SnapshotManager
     /** @return PropertyChange[] */
     public function findPropertyChanges(object $entity, Snapshot|null $initial): array
     {
+        return $this->diff($this->forEntity($entity), $initial);
+    }
+
+    /**
+     * Same as findPropertyChanges(), but for callers that also need the freshly built Snapshot
+     * itself, not just the diff against $initial -- e.g. ChangeFinder, which hands the Snapshot
+     * on to Changes so EntityManager::updateEntityStates() can reuse it as the entity's new saved
+     * state instead of calling forEntity() a second time for the same entity in the same flush.
+     *
+     * @return array{0: Snapshot, 1: PropertyChange[]}
+     */
+    public function snapshotAndFindChanges(object $entity, Snapshot|null $initial): array
+    {
+        $snapshot = $this->forEntity($entity);
+
+        return [$snapshot, $this->diff($snapshot, $initial)];
+    }
+
+    /** @return PropertyChange[] */
+    private function diff(Snapshot $current, Snapshot|null $initial): array
+    {
         $changes = [];
         $initialValues = $initial === null ? [] : $initial->data;
 
-        foreach ($this->forEntity($entity)->data as $property => $current) {
+        foreach ($current->data as $property => $currentValue) {
             $initialValue = $initialValues[$property] ?? null;
 
-            if ($this->valueHasChanged($current, $initialValue)) {
-                $changes[$property] = new PropertyChange($initialValue, $current);
+            if ($this->valueHasChanged($currentValue, $initialValue)) {
+                $changes[$property] = new PropertyChange($initialValue, $currentValue);
             }
         }
 

@@ -45,15 +45,20 @@ readonly class ChangeFinder
         }
 
         foreach ($entities as $entity) {
-            if ($savedStates[$entity] ?? null) {
-                if ($diff = $this->snapshotManager->findPropertyChanges($entity, $savedStates[$entity])) {
-                    $changes->addUpdate($entity, $diff);
+            $initial = $savedStates[$entity] ?? null;
+
+            // snapshotAndFindChanges() also hands back the fresh Snapshot it had to build to
+            // compute the diff, so it can be stored on $changes -- see updateEntityStates(),
+            // which reuses it instead of reflecting over the same entity a second time.
+            [$snapshot, $diff] = $this->snapshotManager->snapshotAndFindChanges($entity, $initial);
+
+            if ($initial) {
+                if ($diff) {
+                    $changes->addUpdate($entity, $diff, $snapshot);
                 }
             }
             else {
-                $diff = $this->snapshotManager->findPropertyChanges($entity, null);
-
-                $changes->addCreate($entity, $diff);
+                $changes->addCreate($entity, $diff, $snapshot);
             }
         }
 

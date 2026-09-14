@@ -198,7 +198,7 @@ readonly class EntityManager implements EntityManagerInterface
     /**
      * Remove an entity from the identity map without marking it for deletion in the database.
      * Use this when an entity was created and persisted in memory, but the INSERT failed
-     * (e.g., due to a race condition), so it should be dropped rather than retried on the next flush.
+     * (e.g. due to a race condition), so it should be dropped rather than retried on the next flush.
      */
     public function discard(object $entity): void
     {
@@ -240,7 +240,7 @@ readonly class EntityManager implements EntityManagerInterface
         );
 
         do {
-            $this->updateEntityStates();
+            $this->updateEntityStates($changes);
             $this->flushManager->flush($changes);
 
             // After-flush handlers (e.g. the change log) may persist new entities.
@@ -265,15 +265,20 @@ readonly class EntityManager implements EntityManagerInterface
         dispatch(new Events\MustClearEntityValueCaches());
     }
 
-    private function updateEntityStates(): void
+    private function updateEntityStates(Snapshots\Changes $changes): void
     {
         foreach ($this->context->entities as $key => $entity) {
             if (in_array($entity, $this->context->entitiesToDelete, true)) {
                 unset($this->context->entities[$key]);
                 unset($this->context->savedStates[$entity]);
             }
-            else {
-                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            elseif ($snapshot = $changes->entitySnapshot($entity)) {
+                // $changes already holds the Snapshot ChangeFinder built while diffing this
+                // entity, so reuse it here instead of paying for a second full reflection pass
+                // via snapshotManager->forEntity(). An entity with no snapshot on $changes had
+                // no changes this round (or wasn't part of it), so its existing saved state is
+                // still correct as-is and needs no work at all.
+                $this->context->savedStates[$entity] = $snapshot;
             }
 
             if ($entity instanceof TracksChanges) {

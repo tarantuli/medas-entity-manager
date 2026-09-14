@@ -21,10 +21,14 @@ class Changes
     /** @var object[] */
     private array $deletes = [];
 
-    public function addCreate(object $entity, array $values): void
+    /** @var Snapshot[] keyed by spl_object_id() -- the fresh Snapshot taken while diffing a create/update */
+    private array $snapshots = [];
+
+    public function addCreate(object $entity, array $values, Snapshot $snapshot): void
     {
         $this->creates[] = $entity;
         $this->createValues[spl_object_id($entity)] = $values;
+        $this->snapshots[spl_object_id($entity)] = $snapshot;
     }
 
     public function createdEntities(): array
@@ -39,10 +43,11 @@ class Changes
     }
 
     /** @param PropertyChange[] $changes */
-    public function addUpdate(object $entity, array $changes): void
+    public function addUpdate(object $entity, array $changes, Snapshot $snapshot): void
     {
         $this->updates[] = $entity;
         $this->diffs[spl_object_id($entity)] = $changes;
+        $this->snapshots[spl_object_id($entity)] = $snapshot;
     }
 
     public function updatedEntities(): array
@@ -54,6 +59,16 @@ class Changes
     public function entityChanges(object $entity): array
     {
         return $this->diffs[spl_object_id($entity)] ?? [];
+    }
+
+    /**
+     * The Snapshot taken of $entity while it was being diffed into this Changes, if it was seen
+     * as a create or an update. Null for an entity that had no changes this round (its existing
+     * saved state is therefore still correct and needs no update) or wasn't part of this gather.
+     */
+    public function entitySnapshot(object $entity): Snapshot|null
+    {
+        return $this->snapshots[spl_object_id($entity)] ?? null;
     }
 
     public function addDelete(object $entity): void
