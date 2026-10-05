@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\{Attributes\Service, Exceptions\StorageExceptionType, Interfaces\StorageException};
+use Medas\Core\{
+    Attributes\EventListener,
+    Attributes\Service,
+    Exceptions\StorageExceptionType,
+    Interfaces\StorageException
+};
 
 #[Service]
 readonly class Repository
@@ -180,6 +185,12 @@ readonly class Repository
             new Selector\Selectors\WithValues($entity, [$idProperty => $id]),
             trackChanges: $trackChanges
         );
+    }
+
+    #[EventListener]
+    public function handleFetchEntityById(Events\FetchEntityById $event): void
+    {
+        $event->entity = $this->fetchById($event->type, $event->id);
     }
 
     public function fetchReferences(
