@@ -132,9 +132,10 @@ readonly class Compiler
     }
 
     // Resolves the read/write contract from #[IsReadable]/#[IsWritable] on the
-    // entity's properties and methods. attribute() matches on IS_INSTANCEOF, so
-    // #[Id] and the timestamp attributes count as readable once they extend
-    // IsReadable, without being listed here.
+    // entity's properties and methods, plus the #[Id] property, whose contract is
+    // fixed (see addIdFields). attribute() matches on IS_INSTANCEOF, so the
+    // timestamp attributes count as readable because they extend IsReadable,
+    // without being listed here.
     private function checkForReadableWritableFields(MetaData $metaData, \ReflectionClass $class): void
     {
         $metaData->readableFields = [];
@@ -156,6 +157,12 @@ readonly class Compiler
         bool                                  $isMethod,
     ): void
     {
+        if (attribute(Attributes\Id::class, $member)) {
+            $this->addIdFields($metaData, $source);
+
+            return;
+        }
+
         if ($readable = attribute(Attributes\IsReadable::class, $member)) {
             $metaData->readableFields[] = new ReadableField(
                 $source,
@@ -177,5 +184,23 @@ readonly class Compiler
                 $writable->onUpdate,
             );
         }
+    }
+
+    // The id's contract is the same for every entity, so it is not declared per
+    // property: always readable, and writable on creation only. An IsReadable or
+    // IsWritable next to #[Id] is ignored rather than merged, so the id cannot be
+    // made writable on update by accident.
+    private function addIdFields(MetaData $metaData, string $source): void
+    {
+        $metaData->readableFields[] = new ReadableField($source, false, $source);
+
+        $metaData->writableFields[] = new WritableField(
+            $source,
+            false,
+            $source,
+            null,
+            onCreate: true,
+            onUpdate: false,
+        );
     }
 }
