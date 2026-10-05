@@ -159,6 +159,29 @@ readonly class Repository
         return $this->fetch($selector, $arguments, $trackChanges)[0] ?? null;
     }
 
+    /**
+     * The entity with the given id, or null when no such row exists.
+     *
+     * Unlike EntityManager::get(), this checks: get() never looks whether the row
+     * is there and, for an unknown id, returns an entity holding only that id. Use
+     * this wherever the id comes from outside - a request, a message, a file -
+     * and "it does not exist" has to be noticed.
+     *
+     * $trackChanges: false skips change-diffing for the returned entity -- see EntityManager::get().
+     */
+    /*
+     * The return type is specified in PhpStorm in .phpstorm.meta.php
+     */
+    public function fetchById(string $entity, mixed $id, bool $trackChanges = true): object|null
+    {
+        $idProperty = $this->metaDataManager->get($entity)->idProperty->name;
+
+        return $this->fetchOne(
+            new Selector\Selectors\WithValues($entity, [$idProperty => $id]),
+            trackChanges: $trackChanges
+        );
+    }
+
     public function fetchReferences(
         object                 $entity,
         MetaData\BackReference $backReference,

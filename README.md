@@ -12,7 +12,7 @@ The ORM layer of the Medas framework. Entity classes are plain PHP objects annot
 - **Change tracking** — on `persist()` a snapshot of the entity's property values is saved. On `flush()` the snapshot is diffed to detect which properties changed, and only modified entities are written.
 - **Lifecycle hooks** — `BeforeFlushHandler` and `AfterFlushHandler` implementations are called during every flush. Both `medas-entity-events` and `medas-entity-change-log` plug in through these hooks.
 - **Selectors** — a `Selector` describes a query as a `Definition` containing conditions, sorts, joins, groupings, pagination, and output values. The storage backend translates it to SQL or any other query language.
-- **Repository** — `Repository` wraps `EntityManager` with higher-level fetch methods including `fetchAll`, `fetch`, `fetchOne`, `getOrCreate`, and `fetchOrCreate` (with built-in duplicate-key race-condition handling).
+- **Repository** — `Repository` wraps `EntityManager` with higher-level fetch methods including `fetchAll`, `fetch`, `fetchOne`, `fetchById` (null when the id does not exist, where `EntityManager::get()` does not check), `getOrCreate`, and `fetchOrCreate` (with built-in duplicate-key race-condition handling).
 
 **Entity attributes:**
 
