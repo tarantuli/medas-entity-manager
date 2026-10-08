@@ -7,13 +7,13 @@ namespace Medas\EntityManager\Attributes;
 use Medas\EntityManager\Interfaces\OwnershipFilter;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
-class AddOwnershipFilter
+readonly class AddOwnershipFilter
 {
     /** @var class-string<OwnershipFilter>[] */
-    private array $classNames;
+    public array $filters;
 
-    public function __construct(...$classNames)
+    public function __construct(...$filters)
     {
-        $this->classNames = $classNames;
+        $this->filters = $filters;
     }
 }
