@@ -27,6 +27,15 @@ class EntityManagerContext
         public int|null $cachePurgeTriggerSize = null,
         public int|null $cachePurgeAmount = null,
         public array    $entityAccessTime = [],
+
+        /**
+         * Lazy ghosts in $entities that haven't been loaded yet (see EntityManager::reference()). They can't have
+         * changed - any write loads them first - so flushing skips them, which also keeps it from loading them.
+         * Used as a weak set (value is always true).
+         *
+         * @var \WeakMap<object, true>
+         */
+        public \WeakMap $unloadedEntities = new \WeakMap(),
     )
     {
     }

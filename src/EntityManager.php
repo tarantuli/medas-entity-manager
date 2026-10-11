@@ -143,6 +143,56 @@ readonly class EntityManager implements EntityManagerInterface
 
     /**
      * The return value is an object of type `$className`.
+     *
+     * Returns the entity for a relation. An entity that's in the identity map already is returned as with get().
+     * Otherwise it's returned as a lazy ghost with only its id set, which is loaded on first access to any other
+     * property - so a relation that is never followed costs no query, and reading its id doesn't either. The ghost
+     * is registered in the identity map right away, so a later get() for the same id returns the same instance.
+     *
+     * Entities whose actual class has to be read from storage first (inheritance with a stored original class) can't
+     * be lazy, and are loaded right away.
+     */
+    /*
+     * This is specified in PhpStorm in .phpstorm.meta.php
+     */
+    public function reference(string $className, mixed $id): object
+    {
+        $key = $this->keyMaker->get($className, $id);
+
+        if (array_key_exists($key, $this->context->entities)) {
+            return $this->get($className, $id);
+        }
+
+        $entity = $this->initializer->initializeLazily(
+            $className,
+            $id,
+            $this,
+            function (object $entity): void {
+                unset($this->context->unloadedEntities[$entity]);
+
+                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            });
+
+        if ($entity === null) {
+            return $this->get($className, $id);
+        }
+
+        $this->context->entities[$key] = $entity;
+        $this->context->entityAccessTime[$key] = hrtime(true);
+        $this->context->unloadedEntities[$entity] = true;
+
+        ++$this->context->entityCount;
+
+        if ($this->context->cachePurgeTriggerSize
+                && $this->context->entityCount >= $this->context->cachePurgeTriggerSize) {
+            $this->purge();
+        }
+
+        return $entity;
+    }
+
+    /**
+     * The return value is an object of type `$className`.
      */
     /*
      * This is specified in PhpStorm in .phpstorm.meta.php
@@ -248,6 +298,7 @@ readonly class EntityManager implements EntityManagerInterface
         $this->context->entitiesToDelete = [];
         $this->context->savedStates = new \WeakMap();
         $this->context->untrackedEntities = new \WeakMap();
+        $this->context->unloadedEntities = new \WeakMap();
 
         dispatch(new Events\MustClearEntityValueCaches());
     }
@@ -309,7 +360,8 @@ readonly class EntityManager implements EntityManagerInterface
                 $this->context->savedStates[$entity] = $snapshot;
             }
 
-            if ($entity instanceof TracksChanges) {
+            // Calling a method on a ghost that hasn't been loaded would load it, and it has nothing to reset anyway
+            if ($entity instanceof TracksChanges && !isset($this->context->unloadedEntities[$entity])) {
                 $entity->resetChangeTracking();
             }
         }
@@ -323,13 +375,21 @@ readonly class EntityManager implements EntityManagerInterface
      * ChangeFinder::gather(): having no saved state would otherwise make gatherChanges() treat
      * them as brand new and re-insert them, rather than simply leaving them undiffed.
      *
+     * Lazy ghosts that haven't been loaded are left out for the same reason: they have no saved
+     * state either, they can't have changed (any write loads them first), and snapshotting them
+     * would load them.
+     *
      * @return object[]
      */
     private function trackableEntities(): array
     {
         return array_filter(
             $this->context->entities,
-            fn(object $entity) => !isset($this->context->untrackedEntities[$entity])
+            fn(object $entity)
+                => !isset($this->context->untrackedEntities[$entity])
+                    && !isset($this->context->unloadedEntities[$entity
+                ]
+            )
         );
     }
 
@@ -348,7 +408,10 @@ readonly class EntityManager implements EntityManagerInterface
     {
         $id = $this->idValue->fromEntity($entity);
         $newKey = $this->keyMaker->get($entity::class, $id);
-        $oldKey = array_search($entity, $this->context->entities);
+
+        // Strict: a loose comparison compares the properties of every entity of the same class, which loads lazy
+        // ghosts and could match a different entity with equal values
+        $oldKey = array_search($entity, $this->context->entities, true);
         $this->context->entities[$newKey] = $entity;
 
         unset($this->context->entities[$oldKey]);
@@ -363,7 +426,9 @@ readonly class EntityManager implements EntityManagerInterface
     #[EventListener]
     public function handleFindEntity(Events\FindEntity $event): void
     {
-        $event->entity = $this->get($event->type, $event->id);
+        $event->entity = $event->lazy
+            ? $this->reference($event->type, $event->id)
+            : $this->get($event->type, $event->id);
     }
 
     /** @noinspection PhpUnusedParameterInspection */

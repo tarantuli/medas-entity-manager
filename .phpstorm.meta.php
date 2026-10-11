@@ -9,6 +9,10 @@ namespace PHPSTORM_META {
         '' => '@',
     ]));
 
+    override(EntityManager::reference(), map([
+        '' => '@',
+    ]));
+
     override(EntityManager::create(), map([
         '' => '@',
     ]));
