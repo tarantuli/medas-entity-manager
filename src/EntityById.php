@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager;
 
-use Medas\Core\Interfaces\{ArgumentProcessor, EntityManager as EntityManagerInterface};
+use Medas\Core\{
+    CompiledValue,
+    Interfaces\CompilableArgumentProcessor,
+    Interfaces\EntityManager as EntityManagerInterface,
+    ProcessesByCompiling
+};
 
 // Turns a scalar id into the entity it identifies. When a parameter is typed as
 // an entity class but the resolved argument is a scalar - e.g. a #[ConfigValue]
@@ -15,38 +20,27 @@ use Medas\Core\Interfaces\{ArgumentProcessor, EntityManager as EntityManagerInte
 // Runs after resolution as an argument processor (not a parameter resolver), so
 // it composes with whatever produced the id - config, a given argument, another
 // resolver - rather than owning resolution itself.
-readonly class EntityById implements ArgumentProcessor
+readonly class EntityById implements CompilableArgumentProcessor
 {
+    use ProcessesByCompiling;
+
     public function priority(): int
     {
         return -50;
     }
 
-    public function process(\ReflectionParameter|\ReflectionProperty $parameter, mixed $argument): mixed
+    // Only parameters typed as an entity are compiled; for all others this
+    // processor never changes the argument.
+    public function compile(\ReflectionParameter|\ReflectionProperty $parameter): CompiledValue|null
     {
-        // Only a scalar can stand in for an entity as its id; leave nulls,
-        // already-hydrated objects and everything else untouched.
-        if (!is_scalar($argument)) {
-            return $argument;
-        }
-
         $entityClass = $this->entityType($parameter);
 
-        if ($entityClass === null) {
-            return $argument;
-        }
-
-        // The entity decides its own id type; IdCaster coerces the scalar to it.
-        return service(EntityManagerInterface::class)->get(
-            $entityClass,
-            service(Entities\IdCaster::class)->cast($entityClass, $argument)
-        );
+        return $entityClass === null ? null : new CompiledValue($entityClass);
     }
 
     // The first entity-typed declaration on the parameter, or null when it isn't
     // typed as an entity. Builtins are filtered before any reflection on the
-    // class, so this stays cheap for the overwhelming majority of arguments
-    // (strings, ints, ...), whose types are never entities.
+    // class.
     private function entityType(\ReflectionParameter|\ReflectionProperty $parameter): string|null
     {
         $types = $parameter instanceof \ReflectionProperty
@@ -66,5 +60,25 @@ readonly class EntityById implements ArgumentProcessor
         }
 
         return null;
+    }
+
+    /**
+     * @param CompiledValue $compiled
+     */
+    public function processCompiled(object $compiled, mixed $argument): mixed
+    {
+        // Only a scalar can stand in for an entity as its id; leave nulls,
+        // already-hydrated objects and everything else untouched.
+        if (!is_scalar($argument)) {
+            return $argument;
+        }
+
+        $entityClass = $compiled->value;
+
+        // The entity decides its own id type; IdCaster coerces the scalar to it.
+        return service(EntityManagerInterface::class)->get(
+            $entityClass,
+            service(Entities\IdCaster::class)->cast($entityClass, $argument)
+        );
     }
 }
