@@ -16,6 +16,8 @@ use Medas\EntityManager\Exceptions\CannotCastValueToId;
 #[Service]
 readonly class IdSerializer implements StringSerializer
 {
+    private const string UUID_PATTERN = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i';
+
     public function serialize(mixed $value): string
     {
         if ($value instanceof HasId) {
@@ -24,6 +26,13 @@ readonly class IdSerializer implements StringSerializer
 
         if ($value instanceof Uuid) {
             $value = $value->toBytes();
+        }
+
+        // A Uuid's text form, as an id from a URL or request body arrives, keys the same entity as the Uuid itself.
+        // Without this, get() with the text and get() with the Uuid returned two instances of the same row, which
+        // breaks identity checks and lets one instance's changes overwrite the other's.
+        if (is_string($value) && preg_match(self::UUID_PATTERN, $value)) {
+            $value = hex2bin(str_replace('-', '', $value));
         }
 
         if ($value === null || is_scalar($value) || $value instanceof \Stringable) {
