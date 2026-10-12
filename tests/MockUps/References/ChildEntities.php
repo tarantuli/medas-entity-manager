@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps\References;
 
-use Medas\Core\Collections\LazyGenericCollection;
-use Medas\EntityManager\Attributes\EntityCollection;
+use Medas\Core\Collections\ReferenceCollection;
 
 /**
- * @extends LazyGenericCollection<ChildEntity>
+ * @extends ReferenceCollection<ChildEntity>
  */
-#[EntityCollection(ChildEntity::class)]
-class ChildEntities extends LazyGenericCollection
+class ChildEntities extends ReferenceCollection
 {
 }

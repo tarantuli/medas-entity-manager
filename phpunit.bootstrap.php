@@ -8,7 +8,8 @@ use Medas\Core\Interfaces\ConfigManager;
 use Medas\EntityManager\EntityManagerPackage;
 use Medas\EntityManagerTest\MockUps\MockUpPackage;
 use Medas\Events\EventsPackage;
-use Medas\ObjectInstantiator\ObjectInstantiator;
+use Medas\FileSystem\FileSystemPackage;
+use Medas\ObjectInstantiator\{ObjectInstantiator, ObjectInstantiatorPackage};
 use Medas\ServiceManager\{ServiceConfigBuilder, ServiceManager};
 
 chdir(__DIR__);
@@ -21,6 +22,8 @@ new ServiceManager(function (): ServiceConfigBuilder {
         ConfigOptionsPackage::instance(),
         EntityManagerPackage::instance(),
         EventsPackage::instance(),
+        FileSystemPackage::instance(),
+        ObjectInstantiatorPackage::instance(),
         MockUpPackage::instance(),
     ]);
 

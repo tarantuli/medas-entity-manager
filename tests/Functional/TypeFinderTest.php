@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\Functional;
 
-use Medas\Core\Types\Binary;
-use Medas\Core\Types\DateTime;
-use Medas\Core\Types\Integer;
-use Medas\Core\Types\Relation;
-use Medas\Core\Types\Text;
-use Medas\Core\Types\Uuid;
-use Medas\EntityManager\{Exceptions\PropertyHasMultipleImplicitTypes,Exceptions\PropertyHasNoImplicitType,Types\TypeFinder};
-use Medas\EntityManagerTest\{BaseTestClass,MockUps\MockEntityTypes};
+use Medas\Core\Types\{Binary, DateTime, Integer, Relation, Text, Uuid};
+use Medas\EntityManager\{
+    Exceptions\PropertyHasMultipleImplicitTypes,
+    Exceptions\PropertyHasNoImplicitType,
+    Types\TypeFinder
+};
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntityTypes};
 
 class TypeFinderTest extends BaseTestClass
 {
@@ -51,9 +50,9 @@ class TypeFinderTest extends BaseTestClass
     {
         $finder = service(TypeFinder::class);
         $class = new \ReflectionClass(MockEntityTypes::class);
-
         $type = $finder->find($class->getProperty('onCascadeDelete'));
-        self::assertInstanceOf(Relation::class, $type);;
+
+        self::assertInstanceOf(Relation::class, $type);
     }
 
     public function testUuidType(): void

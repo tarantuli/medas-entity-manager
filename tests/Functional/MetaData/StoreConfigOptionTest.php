@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Functional\MetaData;
+namespace Medas\EntityManagerTest\Functional\MetaData;
 
 use Medas\EntityManager\MetaData\Compiler;
 use Medas\EntityManagerTest\BaseTestClass;

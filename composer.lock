@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1767548a8dc0fac10716297cc0ff43bf",
+    "content-hash": "ed243de67275df522f3b08f03c3bc5aa",
     "packages": [
         {
             "name": "morphp/medas-console",
@@ -531,6 +531,57 @@
                 "issues": "https://github.com/tarantuli/medas-events/issues"
             },
             "time": "2026-10-08T08:12:17+00:00"
+        },
+        {
+            "name": "morphp/medas-file-system",
+            "version": "v3.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tarantuli/medas-file-system.git",
+                "reference": "2801a63f8683e924dbb2785796a169a1148a8ae6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tarantuli/medas-file-system/zipball/2801a63f8683e924dbb2785796a169a1148a8ae6",
+                "reference": "2801a63f8683e924dbb2785796a169a1148a8ae6",
+                "shasum": ""
+            },
+            "require": {
+                "morphp/medas-core": "^4",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "morphp/medas-object-instantiator": "^4",
+                "morphp/medas-service-manager": "^4",
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Medas\\FileSystem\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Medas\\FileSystemTest\\": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Patrick Morpey",
+                    "email": "patrick@morphp.nl"
+                }
+            ],
+            "description": "Medas file system",
+            "keywords": [
+                "backend",
+                "storage"
+            ],
+            "support": {
+                "source": "https://github.com/tarantuli/medas-file-system/tree/v3.0.6",
+                "issues": "https://github.com/tarantuli/medas-file-system/issues"
+            },
+            "time": "2026-10-11T12:35:31+00:00"
         },
         {
             "name": "morphp/medas-object-instantiator",

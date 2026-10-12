@@ -6,16 +6,11 @@ namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\{
     EntityManager,
+    EntityManagerContext,
     Exceptions\ClassIsNotAnEntity,
-    Exceptions\InvalidPropertyType,
-    FlushManager
+    Exceptions\InvalidNumericValue
 };
-use Medas\EntityManagerTest\{
-    BaseTestClass,
-    MockUps\MockEntity,
-    MockUps\MockFlusher,
-    MockUps\MockNotAnEntity
-};
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntity, MockUps\MockNotAnEntity};
 
 class EntityManagerTest extends BaseTestClass
 {
@@ -48,7 +43,7 @@ class EntityManagerTest extends BaseTestClass
     {
         $entityManager = $this->entityManager();
 
-        $this->expectException(InvalidPropertyType::class);
+        $this->expectException(InvalidNumericValue::class);
 
         $entityManager->get(MockEntity::class, 'string value');
     }
@@ -61,29 +56,28 @@ class EntityManagerTest extends BaseTestClass
         self::assertInstanceOf(MockEntity::class, $entity);
     }
 
+    // Flushes go to MockFlusher, which the FlushManager service is given as the only
+    // Flusher there is.
     public function testDeleteEntity(): void
     {
-        $entityManager = $this->entityManager();
-        $flusher = medas()->objectInstantiator()->instantiate(MockFlusher::class);
-
-        service(FlushManager::class)->setFlusher($flusher);
-
+        $context = new EntityManagerContext();
+        $entityManager = $this->entityManager($context);
         $entity1 = $entityManager->get(MockEntity::class, 1);
 
         $entityManager->get(MockEntity::class, 2);
 
-        self::assertCount(2, $entityManager->getEntities());
+        self::assertCount(2, $context->entities);
 
         $entityManager->flush();
 
-        self::assertCount(2, $entityManager->getEntities());
+        self::assertCount(2, $context->entities);
 
         $entityManager->delete($entity1);
 
-        self::assertCount(2, $entityManager->getEntities());
+        self::assertCount(2, $context->entities);
 
         $entityManager->flush();
 
-        self::assertCount(1, $entityManager->getEntities());
+        self::assertCount(1, $context->entities);
     }
 }

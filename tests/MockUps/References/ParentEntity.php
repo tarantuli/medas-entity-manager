@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManagerTest\MockUps\References;
 
-use Medas\EntityManager\Attributes\{Entity, Id, References};
+use Medas\EntityManager\Attributes\{Entity, Id, ReferencedBy};
 
 #[Entity]
 class ParentEntity
@@ -12,7 +12,7 @@ class ParentEntity
     #[Id]
     public int $id;
 
-    #[References(ChildEntity::class)]
+    #[ReferencedBy(ChildEntity::class)]
     public ChildEntities $children;
 
     public ChildEntity $mostImportantChild;

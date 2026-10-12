@@ -6,6 +6,7 @@ namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\Snapshots\{Snapshot, SnapshotManager};
 use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntity};
+use PHPUnit\Framework\Attributes\Depends;
 
 class SnapshotTest extends BaseTestClass
 {
@@ -22,7 +23,7 @@ class SnapshotTest extends BaseTestClass
         return $entity;
     }
 
-    /** @depends testCreateSnapshot */
+    #[Depends('testCreateSnapshot')]
     public function testMakeDiff(MockEntity $entity): void
     {
         $snapshotManager = service(SnapshotManager::class);
@@ -31,6 +32,6 @@ class SnapshotTest extends BaseTestClass
         $diff = $snapshotManager->findPropertyChanges($entity, $initialSnapshot);
 
         self::assertIsArray($diff);
-        self::assertEquals('changed name', $diff[0]->current);
+        self::assertEquals('changed name', $diff['name']->current);
     }
 }
