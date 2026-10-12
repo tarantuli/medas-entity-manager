@@ -18,6 +18,14 @@ class FlushManager
 
     public function flush(Snapshots\Changes $changes): void
     {
+        // Without changes there is nothing to write, and nothing for the after-flush
+        // handlers either: each of them only reacts to created, updated or deleted
+        // entities. A read-only request ends with such a flush, so this spares it the
+        // flusher and every after-flush handler.
+        if (!$changes->hasChanges()) {
+            return;
+        }
+
         $this->flusher?->flush($changes);
         $this->afterFlushHandlerManager->handle($changes);
     }
