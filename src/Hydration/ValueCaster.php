@@ -17,10 +17,9 @@ use Medas\Core\{
 use Medas\EntityManager\{
     Attributes\EntityCollection,
     Entities\Initializer,
-    Events\FindEntity,
+    EntityManager,
     Events\NormalizeStorageValueRequest,
     Exceptions\DataLossOnConversion,
-    Exceptions\FailedToFindEntity,
     Exceptions\IntegerOverflow,
     Exceptions\InvalidNumericValue,
     Exceptions\InvalidPropertyType,
@@ -36,6 +35,7 @@ readonly class ValueCaster
 {
     public function __construct(
         private ArrayToObjectCaster $arrayToObjectCaster,
+        private EntityManager       $entityManager,
         private UuidProvider|null   $uuidProvider,
     )
     {
@@ -154,15 +154,7 @@ readonly class ValueCaster
                         );
                     }
                     elseif (!$value instanceof Collection) {
-                        $event = new FindEntity($phpType, $value);
-
-                        dispatch($event);
-
-                        if ($event->entity === null) {
-                            throw new FailedToFindEntity($phpType, $value);
-                        }
-
-                        $value = $event->entity;
+                        $value = $this->entityManager->reference($phpType, $value);
                     }
 
                     $valueType = $phpType;
