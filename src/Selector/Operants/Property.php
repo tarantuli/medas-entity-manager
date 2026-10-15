@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Selector\Operants;
 
-class Property implements Operant
+use Medas\EntityManager\Selector\Calculations\Calculation;
+
+/**
+ * Also a calculation, so it can be aggregated: Max::c(Property::c('role'))
+ */
+class Property implements Operant, Calculation
 {
     public static function c(string $name, string|null $entity = null): static
     {
