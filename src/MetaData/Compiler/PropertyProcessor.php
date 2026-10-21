@@ -91,6 +91,8 @@ readonly class PropertyProcessor
         $onDelete = attribute(Attributes\Relations\OnDelete::class, $property);
         $onUpdate = attribute(Attributes\Relations\OnUpdate::class, $property);
         $handler = $this->propertyManager->getHandler($property);
+        $phpTypes = $this->propertyTypeNormalizer->names($property);
+        [$collectionClass, $collectionContentType] = Property::entityCollectionIn($phpTypes);
 
         $metaData->properties[] = new Property(
             name: $property->name,
@@ -106,10 +108,12 @@ readonly class PropertyProcessor
             isIndex: !empty($property->getAttributes(Attributes\IsIndex::class)),
             onDelete: $onDelete ? $onDelete->action : $this->defaultOnDeleteAction,
             onUpdate: $onUpdate ? $onUpdate->action : $this->defaultOnUpdateAction,
-            phpTypes: $this->propertyTypeNormalizer->names($property),
+            phpTypes: $phpTypes,
             reflection: $property,
             handler: $handler ? $handler::class : null,
             attributes: $this->attributeCollector->collect($property),
+            collectionClass: $collectionClass,
+            collectionContentType: $collectionContentType,
         );
     }
 

@@ -17,15 +17,16 @@ use Medas\Core\{
 readonly class EntityManager implements EntityManagerInterface
 {
     public function __construct(
-        private Entities\IdValue              $idValue,
-        private Entities\Initializer          $initializer,
-        private Entities\KeyMaker             $keyMaker,
-        private Entities\ReferenceInitializer $referenceInitializer,
-        private Entities\UuidInitializer      $uuidInitializer,
-        private FlushManager                  $flushManager,
-        private Snapshots\ChangeFinder        $changeFinder,
-        private Snapshots\SnapshotManager     $snapshotManager,
-        private EntityManagerContext          $context = new EntityManagerContext(),
+        private Entities\CollectionInitializer $collectionInitializer,
+        private Entities\IdValue               $idValue,
+        private Entities\Initializer           $initializer,
+        private Entities\KeyMaker              $keyMaker,
+        private Entities\ReferenceInitializer  $referenceInitializer,
+        private Entities\UuidInitializer       $uuidInitializer,
+        private FlushManager                   $flushManager,
+        private Snapshots\ChangeFinder         $changeFinder,
+        private Snapshots\SnapshotManager      $snapshotManager,
+        private EntityManagerContext           $context = new EntityManagerContext(),
     )
     {
     }
@@ -201,6 +202,9 @@ readonly class EntityManager implements EntityManagerInterface
     {
         $entity = $this->initializer->initialize($className, $values);
 
+        // A collection the values left out starts empty, also before a persist.
+        $this->collectionInitializer->initialize($entity);
+
         if ($this->context->autoPersistOnCreate) {
             $this->persist($entity);
 
@@ -219,6 +223,7 @@ readonly class EntityManager implements EntityManagerInterface
                 $key = $entity::class . ':new:' . mt_rand();
 
                 $this->uuidInitializer->initialize($entity);
+                $this->collectionInitializer->initialize($entity);
                 $this->referenceInitializer->initialize($entity, $this);
 
                 $this->context->entities[$key] = $entity;

@@ -5,10 +5,29 @@ declare(strict_types=1);
 namespace Medas\EntityManager\MetaData;
 
 use Medas\Core\Interfaces\Type;
-use Medas\EntityManager\Attributes\Relations\Action;
+use Medas\EntityManager\Attributes\{EntityCollection, Relations\Action};
 
 class Property
 {
+    /**
+     * The first of these PHP types that is an #[EntityCollection] class, with the
+     * entity class it holds, or [null, null].
+     *
+     * @param string[] $phpTypes
+     * @return array{0: string|null, 1: string|null}
+     */
+    public static function entityCollectionIn(array $phpTypes): array
+    {
+        foreach ($phpTypes as $phpType) {
+            if (class_exists($phpType)
+                    && $attribute = attribute(EntityCollection::class, new \ReflectionClass($phpType))) {
+                return [$phpType, $attribute->contentType];
+            }
+        }
+
+        return [null, null];
+    }
+
     public function __construct(
         public string              $name,
         public Type                $type,
@@ -29,6 +48,11 @@ class Property
 
         /** @var object[] */
         public array               $attributes = [],
+
+        // The property's #[EntityCollection] class and the entity class it holds, or null
+        // for a property that is not such a collection.
+        public string|null         $collectionClass = null,
+        public string|null         $collectionContentType = null,
     )
     {
     }
@@ -54,6 +78,8 @@ class Property
             'reflectionName' => $this->reflection->name,
             'handler' => $this->handler,
             'attributes' => $this->attributes,
+            'collectionClass' => $this->collectionClass,
+            'collectionContentType' => $this->collectionContentType,
         ];
     }
 
@@ -84,6 +110,13 @@ class Property
         // Tolerate metadata cached before this field existed.
         $this->attributes = $values[17] ?? [];
         $this->reflection = new \ReflectionProperty($reflectionClass, $reflectionName);
+
+        // Metadata cached before these fields existed has no answer, and the cache is not
+        // rebuilt when this class changes. Reading "no collection" there would silently
+        // leave a new entity's collections uninitialised, so it is worked out instead.
+        [$this->collectionClass, $this->collectionContentType] = array_key_exists(18, $values)
+            ? [$values[18], $values[19]]
+            : self::entityCollectionIn($this->phpTypes);
     }
 
     // The first attribute on this property that is an instance of $class, or null.

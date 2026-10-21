@@ -15,7 +15,6 @@ use Medas\Core\{
     Period
 };
 use Medas\EntityManager\{
-    Attributes\EntityCollection,
     Entities\Initializer,
     EntityManager,
     Events\NormalizeStorageValueRequest,
@@ -113,35 +112,39 @@ readonly class ValueCaster
                     break;
                 }
 
+                if ($phpType === $property->collectionClass) {
+                    // We cannot inject the Initializer in the constructor because that already depends on this class
+                    $initializer = service(Initializer::class);
+                    $collection = new $phpType();
+                    $itemType = $property->collectionContentType;
+
+                    foreach ($value as $itemValues) {
+                        if ($itemValues instanceof $itemType) {
+                            $collection[] = $itemValues;
+                        }
+                        else {
+                            $collection[] = $initializer->initialize($itemType, $itemValues);
+                        }
+                    }
+
+                    if ($collection instanceof TracksChanges) {
+                        $collection->resetChangeTracking();
+                    }
+
+                    $value = $collection;
+                    $valueType = $phpType;
+
+                    break;
+                }
+
                 if (class_exists($phpType)) {
                     $reflectionClass = new \ReflectionClass($phpType);
 
-                    if ($attribute = attribute(EntityCollection::class, $reflectionClass)) {
-                        // We cannot inject the Initializer in the constructor because that already depends on this class
-                        $initializer = service(Initializer::class);
-                        $collection = new $phpType();
-                        $itemType = $attribute->contentType;
-
-                        foreach ($value as $itemValues) {
-                            if ($itemValues instanceof $itemType) {
-                                $collection[] = $itemValues;
-                            }
-                            else {
-                                $collection[] = $initializer->initialize($itemType, $itemValues);
-                            }
-                        }
-
-                        if ($collection instanceof TracksChanges) {
-                            $collection->resetChangeTracking();
-                        }
-
-                        $value = $collection;
-                    }
-                    elseif (attribute(DataHolder::class, $reflectionClass)) {
+                    if (attribute(DataHolder::class, $reflectionClass)) {
                         // The stored representation of a DataHolder is
                         // backend-specific (pdo stores a JSON varchar; a document
                         // store might return a native array). Ask the backend that
-                        // produced the value to normalize it back to an array,
+                        // produced the value to normalise it back to an array,
                         // without entity-manager knowing how any backend
                         // represents it. Unhandled values pass through unchanged.
                         $request = new NormalizeStorageValueRequest($value);
