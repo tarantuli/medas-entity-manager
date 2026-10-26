@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Medas\EntityManager\Entities;
 
-use Medas\Core\{Attributes\Service, Interfaces\TracksChanges};
+use Medas\Core\{Attributes\Service, Interfaces\IsLazyLoaded, Interfaces\TracksChanges};
 use Medas\EntityManager\MetaDataManager;
 
 /**
@@ -38,6 +38,11 @@ readonly class CollectionInitializer
             }
 
             $collection = new $collectionClass();
+
+            // A lazy collection without a loader throws on first access
+            if ($collection instanceof IsLazyLoaded) {
+                $collection->setLoader(fn() => []);
+            }
 
             // Empty from the start, so there is nothing for a flush to record as changed.
             if ($collection instanceof TracksChanges) {

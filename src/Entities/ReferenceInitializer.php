@@ -49,11 +49,13 @@ readonly class ReferenceInitializer
             }
 
             $collectionClass = $backReference->collectionClass;
+            $collection = new $collectionClass();
 
-            $reflection->setValue(
-                $entity,
-                new $collectionClass(fn() => $this->fetchReferences($entity, $backReference, $entityManager))
-            );
+            // Set as a loader rather than passed to the constructor: the fetched references
+            // are the existing state, not additions
+            $collection->setLoader(fn() => $this->fetchReferences($entity, $backReference, $entityManager));
+
+            $reflection->setValue($entity, $collection);
         }
     }
 
