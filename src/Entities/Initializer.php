@@ -65,6 +65,11 @@ readonly class Initializer
 
         if ($metaData->inheritance->storeOriginalClass && $className === $metaData->inheritance->sharedParentClass) {
             $className = $this->hydrator->fetchOriginalClass($metaData, $id);
+
+            // Hydrate as the class it really is: with the shared parent's metadata only the
+            // parent's properties were filled in, and those of the subclass kept their
+            // defaults.
+            $metaData = $this->metaDataManager->get($className);
         }
 
         $entity = $this->initialize($className, [$metaData->idProperty->name => $id], $metaData);
