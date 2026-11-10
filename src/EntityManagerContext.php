@@ -36,6 +36,17 @@ class EntityManagerContext
          * @var \WeakMap<object, true>
          */
         public \WeakMap $unloadedEntities = new \WeakMap(),
+
+        /**
+         * Work to run once the current unit of work is stored (see EntityManager::afterFlush()), keyed by the
+         * caller's key or by a generated one.
+         *
+         * @var array<string, \Closure>
+         */
+        public array    $afterFlushCallbacks = [],
+
+        /** Whether the outermost flush() is in progress: a flush() started inside it only writes. */
+        public bool     $flushing = false,
     )
     {
     }

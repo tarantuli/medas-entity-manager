@@ -325,11 +325,80 @@ readonly class EntityManager implements EntityManagerInterface
         $this->context->savedStates = new \WeakMap();
         $this->context->untrackedEntities = new \WeakMap();
         $this->context->unloadedEntities = new \WeakMap();
+        $this->context->afterFlushCallbacks = [];
 
         dispatch(new Events\MustClearEntityValueCaches());
     }
 
+    /**
+     * Runs $callback once the current unit of work is stored: at the end of the outermost flush() in progress, or of
+     * the next one when none is. Use it for work that belongs to this unit of work but reads what it changed from
+     * storage, such as an event listener that queries entities its event's flush has not written yet. What the
+     * callback changes is written by that same flush.
+     *
+     * A $key given twice before the callbacks run keeps the first callback only, so work asked for by several
+     * changes runs once.
+     */
+    public function afterFlush(\Closure $callback, string|null $key = null): void
+    {
+        $key ??= 'callback:' . spl_object_id($callback);
+
+        if (!array_key_exists($key, $this->context->afterFlushCallbacks)) {
+            $this->context->afterFlushCallbacks[$key] = $callback;
+        }
+    }
+
     public function flush(): void
+    {
+        // A flush started inside another, by a listener, only writes: the after-flush callbacks wait for the
+        // outermost one, so they run once everything is stored
+        if ($this->context->flushing) {
+            $this->writeChanges();
+
+            return;
+        }
+
+        $this->context->flushing = true;
+
+        try {
+            $this->writeChanges();
+
+            $round = 0;
+
+            while ($callbacks = $this->takeAfterFlushCallbacks()) {
+                if (++$round >= self::MAX_FLUSH_ROUNDS) {
+                    throw new Exceptions\AfterFlushCallbacksDoNotSettle(
+                        self::MAX_FLUSH_ROUNDS,
+                        array_keys($callbacks)
+                    );
+                }
+
+                foreach ($callbacks as $callback) {
+                    $callback();
+                }
+
+                $this->writeChanges();
+            }
+        }
+
+        finally{
+            $this->context->flushing = false;
+
+            // The callbacks of a unit of work that failed must not run on the next flush
+            $this->context->afterFlushCallbacks = [];
+        }
+    }
+
+    /** @return array<string, \Closure> */
+    private function takeAfterFlushCallbacks(): array
+    {
+        $callbacks = $this->context->afterFlushCallbacks;
+        $this->context->afterFlushCallbacks = [];
+
+        return $callbacks;
+    }
+
+    private function writeChanges(): void
     {
         dispatch(new DebugInformation('[entity-manager] flushing'));
 
