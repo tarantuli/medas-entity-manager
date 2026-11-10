@@ -16,6 +16,12 @@ use Medas\Core\{
 #[Service]
 readonly class EntityManager implements EntityManagerInterface
 {
+    /**
+     * How many times one flush() writes what its after-flush handlers changed, before it gives up. Only reached when
+     * handlers keep reacting to each other's changes without end.
+     */
+    private const int MAX_FLUSH_ROUNDS = 100;
+
     public function __construct(
         private Entities\CollectionInitializer $collectionInitializer,
         private Entities\IdValue               $idValue,
@@ -338,24 +344,24 @@ readonly class EntityManager implements EntityManagerInterface
             fn() => $this->context->entitiesToDelete
         );
 
+        $round = 0;
+
         do {
             $this->updateEntityStates($changes);
-            $this->flushManager->flush($changes);
 
-            // After-flush handlers (e.g. the change log) may persist new entities.
-            // Those newcomers have no saved state yet - every pre-existing entity was
-            // snapshotted by updateEntityStates() above - so gather over just them and
-            // flush again, writing them within this flush rather than deferring to a
-            // later one. Limiting the re-gather to newcomers is deliberate: re-diffing
-            // settled entities would never terminate, because gather() stamps a fresh
-            // modification timestamp on anything it still sees as changed.
-            $newEntities = array_filter(
-                $this->trackableEntities(),
-                fn(object $entity) => !isset($this->context->savedStates[$entity])
-            );
+            // After-flush handlers (e.g. the change log, and the listeners of entity events) may create entities
+            // and change existing ones. All of that is written within this same flush, so a listener never has to
+            // flush itself just to get its changes stored. Nothing more can have changed when no handler did anything.
+            if (!$this->flushManager->flush($changes)) {
+                break;
+            }
+
+            if (++$round >= self::MAX_FLUSH_ROUNDS) {
+                throw new Exceptions\FlushDoesNotSettle(self::MAX_FLUSH_ROUNDS, $changes);
+            }
 
             $changes = $this->changeFinder->gather(
-                fn() => $newEntities,
+                fn() => $this->trackableEntities(),
                 fn() => $this->context->savedStates,
                 fn() => $this->context->entitiesToDelete
             );

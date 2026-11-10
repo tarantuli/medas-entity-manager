@@ -110,6 +110,20 @@ readonly class SnapshotManager
         return $current !== $initial;
     }
 
+    /**
+     * Brings a saved snapshot up to date with what the flusher wrote. Writing can set values the snapshot was taken
+     * without, such as timestamps and generated ids; left out of date, the next diff would see them as changes.
+     */
+    public function refresh(object $entity, Snapshot $snapshot): void
+    {
+        // An append-only entity is untracked once written, so nothing diffs against its snapshot any more
+        if ($this->metaDataManager->get($entity::class)->appendOnly) {
+            return;
+        }
+
+        $snapshot->data = $this->forEntity($entity)->data;
+    }
+
     public function forEntity(object $entity): Snapshot
     {
         $snapshot = new Snapshot();
