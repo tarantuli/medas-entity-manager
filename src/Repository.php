@@ -161,7 +161,11 @@ readonly class Repository
         bool              $trackChanges = true
     ): object|null
     {
-        return $this->fetch($selector, $arguments, $trackChanges)[0] ?? null;
+        return $this->fetch(
+            new Selector\Selectors\FirstOf($selector),
+            $arguments,
+            $trackChanges
+        )[0] ?? null;
     }
 
     /**
