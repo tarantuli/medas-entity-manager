@@ -24,6 +24,7 @@ readonly class EntityManager implements EntityManagerInterface
         private Entities\ReferenceInitializer  $referenceInitializer,
         private Entities\UuidInitializer       $uuidInitializer,
         private FlushManager                   $flushManager,
+        private MetaDataManager                $metaDataManager,
         private Snapshots\ChangeFinder         $changeFinder,
         private Snapshots\SnapshotManager      $snapshotManager,
         private EntityManagerContext           $context = new EntityManagerContext(),
@@ -91,7 +92,7 @@ readonly class EntityManager implements EntityManagerInterface
                 $this->updateCircularDependencyCheck($key);
 
                 if ($trackChanges) {
-                    $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+                    $this->startTracking($entity);
                 }
                 else {
                     $this->context->untrackedEntities[$entity] = true;
@@ -117,7 +118,7 @@ readonly class EntityManager implements EntityManagerInterface
 
             unset($this->context->untrackedEntities[$entity]);
 
-            $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+            $this->startTracking($entity);
         }
 
         return $this->context->entities[$key];
@@ -171,7 +172,7 @@ readonly class EntityManager implements EntityManagerInterface
             function (object $entity): void {
                 unset($this->context->unloadedEntities[$entity]);
 
-                $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+                $this->startTracking($entity);
             });
 
         if ($entity === null) {
@@ -190,6 +191,20 @@ readonly class EntityManager implements EntityManagerInterface
         }
 
         return $entity;
+    }
+
+    /**
+     * Takes the current state of $entity as the baseline that flush() diffs against. An append-only entity is never
+     * changed once stored, so it is left untracked instead: flush() then skips it, as for get(trackChanges: false).
+     */
+    private function startTracking(object $entity): void
+    {
+        if ($this->metaDataManager->get($entity::class)->appendOnly) {
+            $this->context->untrackedEntities[$entity] = true;
+        }
+        else {
+            $this->context->savedStates[$entity] = $this->snapshotManager->forEntity($entity);
+        }
     }
 
     /**
@@ -362,7 +377,14 @@ readonly class EntityManager implements EntityManagerInterface
                 // via snapshotManager->forEntity(). An entity with no snapshot on $changes had
                 // no changes this round (or wasn't part of it), so its existing saved state is
                 // still correct as-is and needs no work at all.
-                $this->context->savedStates[$entity] = $snapshot;
+                if ($this->metaDataManager->get($entity::class)->appendOnly) {
+                    // Only a new append-only entity is tracked, and after this insert it can't change any more, so
+                    // later flushes have nothing to diff on it
+                    $this->context->untrackedEntities[$entity] = true;
+                }
+                else {
+                    $this->context->savedStates[$entity] = $snapshot;
+                }
             }
 
             // Calling a method on a ghost that hasn't been loaded would load it, and it has nothing to reset anyway

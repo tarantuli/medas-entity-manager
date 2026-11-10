@@ -53,6 +53,7 @@ readonly class Compiler
         $this->checkForCompoudIndexes($metaData, $class);
         $this->checkForOwnershipFilters($metaData, $class);
         $this->checkForSoftDeletes($metaData, $class);
+        $this->checkForAppendOnly($metaData, $class);
         $this->checkForReadableWritableFields($metaData, $class);
 
         $metaData->attributes = $this->attributeCollector->collect($class);
@@ -129,6 +130,11 @@ readonly class Compiler
     private function checkForSoftDeletes(MetaData $metaData, \ReflectionClass $class): void
     {
         $metaData->softDeletes = $class->implementsInterface(HasSoftDeletes::class);
+    }
+
+    private function checkForAppendOnly(MetaData $metaData, \ReflectionClass $class): void
+    {
+        $metaData->appendOnly = attribute(Attributes\AppendOnly::class, $class) !== null;
     }
 
     // Resolves the read/write contract from #[IsReadable]/#[IsWritable] on the

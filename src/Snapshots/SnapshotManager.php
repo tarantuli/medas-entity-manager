@@ -77,13 +77,13 @@ readonly class SnapshotManager
             return $current->toBytes() !== $initial->toBytes();
         }
 
-        if (is_object($current)
-                && is_object($initial)
-                && $current::class === $initial::class
-                && $this->attributeChecker->hasAttribute($current::class, DataHolder::class)) {
-            return $this->serializer->serialize($current) !== $this->serializer->serialize($initial);
+        // Enum cases are singletons, so identity is equality
+        if ($current instanceof \UnitEnum) {
+            return $current !== $initial;
         }
 
+        // References and dates are checked before the DataHolder test below: they are the most common objects in an
+        // entity, and that test is a cache lookup per value, while these are plain type checks
         if ($current instanceof HasId && $initial instanceof HasId && $current::class === $initial::class) {
             $currentId = $current->id();
             $initialId = $initial->id();
@@ -98,6 +98,13 @@ readonly class SnapshotManager
 
         if ($current instanceof \DateTimeInterface && $initial instanceof \DateTimeInterface) {
             return $current->getTimestamp() !== $initial->getTimestamp();
+        }
+
+        if (is_object($current)
+                && is_object($initial)
+                && $current::class === $initial::class
+                && $this->attributeChecker->hasAttribute($current::class, DataHolder::class)) {
+            return $this->serializer->serialize($current) !== $this->serializer->serialize($initial);
         }
 
         return $current !== $initial;

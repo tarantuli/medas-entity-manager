@@ -30,6 +30,7 @@ class MetaData
 
     public int $sourceFileDate;
     public bool $softDeletes;
+    public bool $appendOnly;
 
     /**
      * User-land attributes on the entity class that the metadata compiler does not

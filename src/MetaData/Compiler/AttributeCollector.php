@@ -29,6 +29,7 @@ readonly class AttributeCollector
         Attributes\UniquePropertySet::class,
         Attributes\CompoundIndex::class,
         Attributes\AddOwnershipFilter::class,
+        Attributes\AppendOnly::class,
         Attributes\Id::class,
         Attributes\IsGeneratedValue::class,
         Attributes\IsCreationTimestamp::class,
