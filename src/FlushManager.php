@@ -17,17 +17,12 @@ class FlushManager
     {
     }
 
-    /** Whether the after-flush handlers may have created or changed entities -- see AfterFlushHandler::handle(). */
-    public function flush(Snapshots\Changes $changes): bool
+    /**
+     * Writes $changes, and takes what was written as the baseline the snapshots diff against. When the flusher throws,
+     * the write was rolled back and the snapshots are left as they were.
+     */
+    public function write(Snapshots\Changes $changes): void
     {
-        // Without changes there is nothing to write, and nothing for the after-flush
-        // handlers either: each of them only reacts to created, updated or deleted
-        // entities. A read-only request ends with such a flush, so this spares it the
-        // flusher and every after-flush handler.
-        if (!$changes->hasChanges()) {
-            return false;
-        }
-
         $this->flusher?->flush($changes);
 
         // Before the handlers: a flush one of them starts must already diff against what was written
@@ -36,7 +31,11 @@ class FlushManager
                 $this->snapshotManager->refresh($entity, $snapshot);
             }
         }
+    }
 
+    /** Whether the after-flush handlers may have created or changed entities -- see AfterFlushHandler::handle(). */
+    public function handle(Snapshots\Changes $changes): bool
+    {
         return $this->afterFlushHandlerManager->handle($changes);
     }
 

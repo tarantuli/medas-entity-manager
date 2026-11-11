@@ -416,12 +416,22 @@ readonly class EntityManager implements EntityManagerInterface
         $round = 0;
 
         do {
+            // Without changes there is nothing to write, and nothing for the after-flush handlers either: each of
+            // them only reacts to created, updated or deleted entities. A read-only request ends with such a flush.
+            if (!$changes->hasChanges()) {
+                break;
+            }
+
+            $this->flushManager->write($changes);
+
+            // Only once the write has succeeded: a write that fails was rolled back, so its entities keep their
+            // previous state and the next flush writes them again (#307)
             $this->updateEntityStates($changes);
 
             // After-flush handlers (e.g. the change log, and the listeners of entity events) may create entities
             // and change existing ones. All of that is written within this same flush, so a listener never has to
             // flush itself just to get its changes stored. Nothing more can have changed when no handler did anything.
-            if (!$this->flushManager->flush($changes)) {
+            if (!$this->flushManager->handle($changes)) {
                 break;
             }
 

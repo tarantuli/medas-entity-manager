@@ -9,16 +9,26 @@ use Medas\EntityManager\{Entities\Flusher, Snapshots\Changes};
 
 // The only Flusher in the test package, so the FlushManager service is given this one. It writes
 // nothing, but keeps what each write was handed, so a test can see what a flush() wrote and in how
-// many writes. Kept statically, as every test shares the service instance: clear() it first.
+// many writes. failNextWrite() makes the next write fail, as a storage whose transaction was rolled
+// back; a failed write is not recorded. Kept statically, as every test shares the service
+// instance: clear() it first.
 #[Service]
 class RecordingFlusher implements Flusher
 {
     /** @var Changes[] */
     private static array $writes = [];
 
+    private static \Throwable|null $nextFailure = null;
+
     public static function clear(): void
     {
         self::$writes = [];
+        self::$nextFailure = null;
+    }
+
+    public static function failNextWrite(\Throwable $failure): void
+    {
+        self::$nextFailure = $failure;
     }
 
     /** @return Changes[] */
@@ -29,6 +39,12 @@ class RecordingFlusher implements Flusher
 
     public function flush(Changes $changes): void
     {
+        if ($failure = self::$nextFailure) {
+            self::$nextFailure = null;
+
+            throw $failure;
+        }
+
         self::$writes[] = $changes;
     }
 }
