@@ -56,7 +56,7 @@ class EntityManagerTest extends BaseTestClass
         self::assertInstanceOf(MockEntity::class, $entity);
     }
 
-    // Flushes go to MockFlusher, which the FlushManager service is given as the only
+    // Flushes go to RecordingFlusher, which the FlushManager service is given as the only
     // Flusher there is.
     public function testDeleteEntity(): void
     {
