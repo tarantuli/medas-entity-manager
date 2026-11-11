@@ -9,7 +9,7 @@ use Medas\EntityManager\{Entities\Flusher, Snapshots\Changes};
 
 // The only Flusher in the test package, so the FlushManager service is given this one. It writes
 // nothing, but keeps what each write was handed, so a test can see what a flush() wrote and in how
-// many writes. Kept statically, as the service instance is shared by every test: clear() it first.
+// many writes. Kept statically, as every test shares the service instance: clear() it first.
 #[Service]
 class RecordingFlusher implements Flusher
 {
