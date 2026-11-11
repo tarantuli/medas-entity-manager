@@ -11,7 +11,7 @@ The ORM layer of the Medas framework. Entity classes are plain PHP objects annot
 - **Identity map** — `EntityManager::get()` always returns the same object instance for a given class and id pair within a request. Subsequent calls for the same id are served from the in-memory map without hitting storage.
 - **Lazy relations** — a property typed with an entity class is hydrated as a lazy object with only its id set. Reading its id costs no query; any other property access loads it. A relation that is never followed is never loaded. See [Relations](documentation/relations.md).
 - **Change tracking** — on `persist()` a snapshot of the entity's property values is saved. On `flush()` the snapshot is diffed to detect which properties changed, and only modified entities are written.
-- **Lifecycle hooks** — `BeforeFlushHandler` and `AfterFlushHandler` implementations are called during every flush. Both `medas-entity-events` and `medas-entity-change-log` plug in through these hooks.
+- **Lifecycle hooks** — `BeforeFlushHandler` and `AfterFlushHandler` implementations are called during every flush. Both `medas-entity-events` and `medas-entity-change-log` plug in through these hooks. What they create or change is written in the same flush, and `afterFlush()` runs work once the flush has stored everything. See [The flush](documentation/flush.md).
 - **Selectors** — a `Selector` describes a query as a `Definition` containing conditions, sorts, joins, groupings, pagination, and output values. The storage backend translates it to SQL or any other query language.
 - **Repository** — `Repository` wraps `EntityManager` with higher-level fetch methods including `fetchAll`, `fetch`, `fetchOne`, `fetchById` (null when the id does not exist, where `EntityManager::get()` does not check), `getOrCreate`, and `fetchOrCreate` (with built-in duplicate-key race-condition handling).
 
@@ -31,6 +31,7 @@ The ORM layer of the Medas framework. Entity classes are plain PHP objects annot
 | `#[CompoundIndex]`                   | Class    | Multi-column index                                                                                             |
 | `#[UniquePropertySet]`               | Class    | Multi-column unique constraint                                                                                 |
 | `#[StoreOriginalEntityType]`         | Class    | Stores the original class name for polymorphic relations                                                       |
+| `#[AppendOnly]`                      | Class    | Written once and never changed: no longer diffed after its insert or on `get()`; see [The flush](documentation/flush.md) |
 | `#[Unmanaged]`                       | Property | Excludes a property from persistence                                                                           |
 | `#[AddOwnershipFilter]`              | Class    | Applies an ownership filter to all queries                                                                     |
 
