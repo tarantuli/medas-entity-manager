@@ -107,9 +107,12 @@ readonly class Initializer
             return null;
         }
 
-        $entity = $class->newLazyGhost(
-            function (object $entity) use ($metaData, $id, $entityManager, $afterHydration)
-            : void {
+        $entity = $class->newLazyGhost(function (object $entity) use (
+            $metaData,
+            $id,
+            $entityManager,
+            $afterHydration
+        ): void {
             // The same as initialize(): constructor first, so it can't overwrite the id or hydrated values
             if (method_exists($entity, '__construct')) {
                 $entity->__construct();

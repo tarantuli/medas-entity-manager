@@ -108,8 +108,7 @@ readonly class EntityManager implements EntityManagerInterface
 
                 ++$this->context->entityCount;
             }
-
-            finally{
+            finally {
                 // Always clean up, even on exception
                 $this->updateCircularDependencyCheck($key);
             }
@@ -380,8 +379,7 @@ readonly class EntityManager implements EntityManagerInterface
                 $this->writeChanges();
             }
         }
-
-        finally{
+        finally {
             $this->context->flushing = false;
 
             // The callbacks of a unit of work that failed must not run on the next flush
@@ -499,9 +497,7 @@ readonly class EntityManager implements EntityManagerInterface
             $this->context->entities,
             fn(object $entity)
                 => !isset($this->context->untrackedEntities[$entity])
-                    && !isset($this->context->unloadedEntities[$entity
-                ]
-            )
+                    && !isset($this->context->unloadedEntities[$entity])
         );
     }
 

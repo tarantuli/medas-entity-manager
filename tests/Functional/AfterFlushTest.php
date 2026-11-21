@@ -55,9 +55,12 @@ class AfterFlushTest extends FlushTestClass
             $log[] = 'callback';
         });
 
-        ScriptedAfterFlushHandler::script(
-            function (Changes $changes) use ($created, $entityManager, $stored, &$log)
-            : bool {
+        ScriptedAfterFlushHandler::script(function (Changes $changes) use (
+            $created,
+            $entityManager,
+            $stored,
+            &$log
+        ): bool {
             if (!in_array($created, $changes->createdEntities(), true)) {
                 return false;
             }
