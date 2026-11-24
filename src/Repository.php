@@ -46,27 +46,54 @@ readonly class Repository
      */
     public function fetch(Selector\Selector $selector, array $arguments = [], bool $trackChanges = true): array
     {
-        $entities = [];
-        $records = [];
+        return array_map(
+            fn(EntityWithDerivedValues $row) => $row->entity,
+            $this->fetchWithDerivedValues($selector, $arguments, $trackChanges)
+        );
+    }
+
+    /**
+     * As fetch(), with per entity the derived values the selector's definition selects
+     * (Selector\DerivedValues\DerivedValue). They are not set on the entity: they belong to
+     * this query, and an entity already in the identity map is not hydrated again.
+     *
+     * @return EntityWithDerivedValues[]
+     */
+    public function fetchWithDerivedValues(
+        Selector\Selector $selector,
+        array             $arguments = [],
+        bool              $trackChanges = true
+    ): array
+    {
+        $rows = [];
+        $fetchResult = null;
 
         foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
-            $fetchResult = $selectorRecordsFetcher->fetch($selector, $arguments);
+            $result = $selectorRecordsFetcher->fetch($selector, $arguments);
 
-            if ($fetchResult->foundValue) {
-                $records = $fetchResult->value;
+            if ($result->foundValue) {
+                $fetchResult = $result;
 
                 break;
             }
         }
 
-        $metaData = $this->metaDataManager->get($selector->entity());
-
-        foreach ($records as $record) {
-            $idValue = $this->idValue->get($record, $metaData);
-            $entities[] = $this->entityManager->get($metaData->className, $idValue, $trackChanges);
+        if ($fetchResult === null) {
+            return [];
         }
 
-        return $entities;
+        $metaData = $this->metaDataManager->get($selector->entity());
+
+        foreach ($fetchResult->value as $i => $record) {
+            $idValue = $this->idValue->get($record, $metaData);
+
+            $rows[] = new EntityWithDerivedValues(
+                $this->entityManager->get($metaData->className, $idValue, $trackChanges),
+                $fetchResult->derivedValues[$i] ?? [],
+            );
+        }
+
+        return $rows;
     }
 
     public function fetchCount(Selector\Selector $selector, array $arguments = []): int|null

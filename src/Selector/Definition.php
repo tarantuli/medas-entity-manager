@@ -29,6 +29,13 @@ class Definition
     /** @var OutputValues\OutputValue[] */
     public array $outputValues = [];
 
+    /**
+     * Selected beside the entity's columns, unlike the output values, which replace them
+     *
+     * @var DerivedValues\DerivedValue[]
+     */
+    public array $derivedValues = [];
+
     public Slice|null $slice = null;
 
     public function __construct(
@@ -53,6 +60,7 @@ class Definition
                 $element instanceof Pagination => $this->slice = Slice::fromPagination($element),
                 $element instanceof Slice => $this->slice = $element,
                 $element instanceof OutputValues\OutputValue => $this->outputValues[] = $element,
+                $element instanceof DerivedValues\DerivedValue => $this->derivedValues[] = $element,
                 default => throw new Exceptions\UnhandledElementType($element),
             };
         }

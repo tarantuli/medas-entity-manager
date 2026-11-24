@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Medas\EntityManagerTest\Functional;
 
 use Medas\EntityManager\{EntityClasses, EntityClassFinder};
-use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntity};
+use Medas\EntityManagerTest\{BaseTestClass, MockUps\MockEntity, PackageEntities\PackageEntity};
 
 class EntityClassesTest extends BaseTestClass
 {
@@ -14,6 +14,13 @@ class EntityClassesTest extends BaseTestClass
         $classes = service(EntityClasses::class)->get();
 
         self::assertIsInt(array_search(MockEntity::class, $classes));
+    }
+
+    public function testIncludesTheEntitiesOfPackages(): void
+    {
+        $classes = service(EntityClasses::class)->get();
+
+        self::assertContains(PackageEntity::class, $classes);
     }
 
     public function testFindByStore(): void
