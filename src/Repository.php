@@ -42,6 +42,15 @@ readonly class Repository
      * EntityManager::get(). Use it for a fetch you know won't be mutated (an existence check, a
      * lookup used only to read or to decide whether to create something).
      *
+     * A selector with output values or groupings is refused, as its rows are not the entity's:
+     * output values replace the entity's columns, and with a grouping a row is a group
+     * (OutputValuesThroughRepository, GroupingsThroughRepository). The storage implementation
+     * refuses it, not this class: it builds its query from the selector's definition anyway,
+     * and can cache that work, where a check here would build the definition once more for
+     * every fetch and count. A storage's SelectorRecordsFetcher, or the builder it hands the
+     * selector to, must therefore make this check. Example: pdo-storage's SelectorQueryBuilder.
+     * Such rows come from a store-level query instead (DefinitionQueryBuilder in pdo-storage).
+     *
      * @return object[]
      */
     public function fetch(Selector\Selector $selector, array $arguments = [], bool $trackChanges = true): array
@@ -96,6 +105,8 @@ readonly class Repository
         return $rows;
     }
 
+    // A selector fetch() refuses is refused here too, by the storage (see fetch()): with a grouping
+    // the count is one per group, and a list and its total come from the same selector
     public function fetchCount(Selector\Selector $selector, array $arguments = []): int|null
     {
         foreach ($this->selectorRecordsFetcherManager->get() as $selectorRecordsFetcher) {
