@@ -64,7 +64,8 @@ readonly class Repository
     /**
      * As fetch(), with per entity the derived values the selector's definition selects
      * (Selector\DerivedValues\DerivedValue). They are not set on the entity: they belong to
-     * this query, and an entity already in the identity map is not hydrated again.
+     * this query. An entity already in the identity map is not hydrated again; a lazy
+     * reference to it is loaded (loaded()).
      *
      * @return EntityWithDerivedValues[]
      */
@@ -92,17 +93,35 @@ readonly class Repository
         }
 
         $metaData = $this->metaDataManager->get($selector->entity());
+        $class = new \ReflectionClass($metaData->className);
 
         foreach ($fetchResult->value as $i => $record) {
             $idValue = $this->idValue->get($record, $metaData);
 
             $rows[] = new EntityWithDerivedValues(
-                $this->entityManager->get($metaData->className, $idValue, $trackChanges),
+                $this->loaded(
+                    $class,
+                    $this->entityManager->get($metaData->className, $idValue, $trackChanges)
+                ),
                 $fetchResult->derivedValues[$i] ?? [],
             );
         }
 
         return $rows;
+    }
+
+    // An entity already in the identity map as a lazy reference, such as a relation of one
+    // loaded before, is loaded now, as a fetched row is expected to come back with its
+    // values. Found in an account-backend list (#395): its normaliser, which skips
+    // properties ReflectionProperty::isInitialized() calls uninitialised, gave such a row
+    // with its id only.
+    private function loaded(\ReflectionClass $class, object $entity): object
+    {
+        if ($class->isUninitializedLazyObject($entity)) {
+            $class->initializeLazyObject($entity);
+        }
+
+        return $entity;
     }
 
     // A selector fetch() refuses is refused here too, by the storage (see fetch()): with a grouping

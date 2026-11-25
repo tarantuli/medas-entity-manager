@@ -11,7 +11,9 @@ use Medas\EntityManager\Selector\{Calculations\Calculation, Definition};
  * aggregate (CountOf, SumOf, ValueOf).
  *
  * The rows are those of $definition whose $referringProperty equals the selected
- * row's $property (its id when left out). The definition is a scope of its own: a
+ * row's $property (its id when left out). A $referringProperty that is a collection
+ * (a many-to-many relation, such as an account's groups) refers to the selected row when
+ * it holds it. The definition is a scope of its own: a
  * property without an entity is one of the definition's entity, as anywhere else, so
  * an existing selector's definition can be passed in as it is. Only its conditions,
  * and for ValueOf its sorts, are used; anything else in it is refused when the query
