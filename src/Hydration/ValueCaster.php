@@ -47,14 +47,19 @@ readonly class ValueCaster
         if (!$property->allowsPhpType($valueType) && $value !== null) {
             foreach ($property->phpTypes as $phpType) {
                 if ($phpType === \DateTime::class) {
-                    $value = new \DateTime($value);
+                    $value = $value instanceof \DateTimeInterface
+                        ? \DateTime::createFromInterface($value)
+                        : new \DateTime($value);
+
                     $valueType = $phpType;
 
                     break;
                 }
 
                 if ($phpType === Date::class) {
-                    $dateTime = new \DateTime($value);
+                    $dateTime = $value instanceof \DateTimeInterface
+                        ? $value
+                        : new \DateTime($value);
 
                     $value = new Date(
                         (int) $dateTime->format('Y'),
@@ -155,6 +160,13 @@ readonly class ValueCaster
                             $request->normalizedValue,
                             $phpType
                         );
+                    }
+
+                    // An object other than a Uuid is never an id: an entity of an unrelated
+                    // class is left for the type check below to refuse, rather than taken
+                    // as the id of a reference, which can't turn it into a key
+                    elseif (is_object($value) && !$value instanceof Uuid && !$value instanceof Collection) {
+                        break;
                     }
                     elseif (!$value instanceof Collection) {
                         $value = $this->entityManager->reference($phpType, $value);

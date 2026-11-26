@@ -128,8 +128,22 @@ class Property
 
     public function allowsPhpType(string $type): bool
     {
-        return ($type === 'null' && $this->isNullable)
-            || in_array($type, $this->phpTypes)
-            || in_array('mixed', $this->phpTypes);
+        if (($type === 'null' && $this->isNullable)
+                || in_array($type, $this->phpTypes)
+                || in_array('mixed', $this->phpTypes)) {
+            return true;
+        }
+
+        // An object of a subclass is of its parent's type too: a relation typed as an
+        // abstract parent entity takes an entity of a concrete subclass, as PHP does
+        if (class_exists($type)) {
+            foreach ($this->phpTypes as $phpType) {
+                if (is_a($type, $phpType, true)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
